@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:trkar/core/components/custom_new_dialog.dart';
+import 'package:trkar/core/helper/helper.dart';
 import '../../../core/extensions/string.dart';
 import '../../repo/login_repo.dart';
 
@@ -11,6 +15,8 @@ class LoginCubit extends Cubit<LoginState> {
   LoginCubit() : super(LoginInitial());
 
   Future<void> login(context) async {
+    FocusManager.instance.primaryFocus?.unfocus();
+
     var dialog = CustomDialog();
     var validate = formKey.currentState!.validate();
 
@@ -18,6 +24,7 @@ class LoginCubit extends Cubit<LoginState> {
       return;
     }
     emit(LoginLoading());
+
     var loginData = await LoginRepo.loginUser(
       context,
       body: {
@@ -34,15 +41,28 @@ class LoginCubit extends Cubit<LoginState> {
       emit(LoginNetworkError());
       return;
     }
-    if (loginData.statusCode == 200) {
+    if (loginData.status == true) {
       Fluttertoast.showToast(
         msg: loginData.message ?? '',
       );
+      await Helper.storeNewUserData(loginData);
       emit(LoginDone());
     } else {
+      var errorMessage = '';
+      if (loginData.erroressages != null) {
+        loginData.erroressages?.forEach((key, value) {
+          if (value.isNotEmpty) {
+            errorMessage.isEmpty
+                ? errorMessage += value.first
+                : errorMessage += '\n ${value.first}';
+          }
+        });
+      } else {
+        errorMessage = loginData.message ?? '';
+      }
       dialog.showWarningDialog(
         context: context,
-        msg: loginData.message ?? '',
+        msg: errorMessage,
         btnOnPress: () {},
       );
       emit(LoginError());

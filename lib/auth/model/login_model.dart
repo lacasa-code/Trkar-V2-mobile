@@ -11,24 +11,46 @@ String loginModelToJson(LoginModel data) => json.encode(data.toJson());
 
 class LoginModel {
   LoginModel({
-    this.statusCode,
+    this.status,
     this.message,
+    this.code,
+    this.accessToken,
+    this.tokenType,
+    this.expiresIn,
     this.data,
+    this.errorMessage,
   });
 
-  int? statusCode;
+  bool? status;
   String? message;
+  int? code;
+  String? accessToken;
+  String? tokenType;
+  int? expiresIn;
   UserData? data;
+  Message? errorMessage;
 
   factory LoginModel.fromJson(Map<String, dynamic> json) => LoginModel(
-        statusCode: json["status_code"],
-        message: json["message"],
-        data: UserData.fromJson(json["data"] ?? {}),
+        status: json["status"],
+        message: json["message"].runtimeType == String ? json["message"] : null,
+        code: json["code"],
+        accessToken: json["access_token"],
+        tokenType: json["token_type"],
+        expiresIn: json["expires_in"],
+        data: json["data"] == null ? null : UserData.fromJson(json["data"]),
+        errorMessage:
+            json["message"].runtimeType != String && json["message"] != null
+                ? Message.fromJson(json["message"])
+                : null,
       );
 
   Map<String, dynamic> toJson() => {
-        "status_code": statusCode,
+        "status": status,
         "message": message,
+        "code": code,
+        "access_token": accessToken,
+        "token_type": tokenType,
+        "expires_in": expiresIn,
         "data": data?.toJson(),
       };
 }
@@ -36,90 +58,116 @@ class LoginModel {
 class UserData {
   UserData({
     this.id,
+    this.uuid,
     this.name,
-    this.lastName,
+    this.username,
     this.email,
     this.emailVerifiedAt,
-    this.phoneNo,
-    this.birthdate,
-    this.gender,
+    this.phone,
+    this.phoneVerifiedAt,
+    this.image,
+    this.countryId,
+    this.cityId,
+    this.areaId,
+    this.address,
+    this.longitude,
+    this.latitude,
+    this.lastLogin,
+    this.inBlock,
+    this.deletedAt,
     this.createdAt,
-    this.token,
-    this.roles,
+    this.updatedAt,
   });
 
   int? id;
+  String? uuid;
   String? name;
-  String? lastName;
+  String? username;
   String? email;
-  DateTime? emailVerifiedAt;
-  String? phoneNo;
-  DateTime? birthdate;
-  String? gender;
+  dynamic emailVerifiedAt;
+  String? phone;
+  dynamic phoneVerifiedAt;
+  String? image;
+  String? countryId;
+  String? cityId;
+  String? areaId;
+  String? address;
+  String? longitude;
+  String? latitude;
+  dynamic lastLogin;
+  dynamic inBlock;
+  dynamic deletedAt;
   DateTime? createdAt;
-  String? token;
-  List<Role>? roles;
+  DateTime? updatedAt;
 
   factory UserData.fromJson(Map<String, dynamic> json) => UserData(
         id: json["id"],
+        uuid: json["uuid"],
         name: json["name"],
-        lastName: json["last_name"],
+        username: json["username"],
         email: json["email"],
-        emailVerifiedAt: DateTime.parse(json["email_verified_at"]),
-        phoneNo: json["phone_no"],
-        birthdate: DateTime.parse(json["birthdate"]),
-        gender: json["gender"],
+        emailVerifiedAt: json["email_verified_at"],
+        phone: json["phone"],
+        phoneVerifiedAt: json["phone_verified_at"],
+        image: json["image"],
+        countryId: json["country_id"],
+        cityId: json["city_id"],
+        areaId: json["area_id"],
+        address: json["address"],
+        longitude: json["longitude"],
+        latitude: json["latitude"],
+        lastLogin: json["last_login"],
+        inBlock: json["in_block"],
+        deletedAt: json["deleted_at"],
         createdAt: DateTime.parse(json["created_at"]),
-        token: json["token"],
-        roles: List<Role>.from(json["roles"].map((x) => Role.fromJson(x))),
+        updatedAt: DateTime.parse(json["updated_at"]),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "uuid": uuid,
         "name": name,
-        "last_name": lastName,
+        "username": username,
         "email": email,
-        "email_verified_at": emailVerifiedAt?.toIso8601String(),
-        "phone_no": phoneNo,
-        "birthdate":
-            "${birthdate?.year.toString().padLeft(4, '0')}-${birthdate?.month.toString().padLeft(2, '0')}-${birthdate?.day.toString().padLeft(2, '0')}",
-        "gender": gender,
+        "email_verified_at": emailVerifiedAt,
+        "phone": phone,
+        "phone_verified_at": phoneVerifiedAt,
+        "image": image,
+        "country_id": countryId,
+        "city_id": cityId,
+        "area_id": areaId,
+        "address": address,
+        "longitude": longitude,
+        "latitude": latitude,
+        "last_login": lastLogin,
+        "in_block": inBlock,
+        "deleted_at": deletedAt,
         "created_at": createdAt?.toIso8601String(),
-        "token": token,
-        "roles": roles == null
-            ? []
-            : List<dynamic>.from(roles!.map((x) => x.toJson())),
+        "updated_at": updatedAt?.toIso8601String(),
       };
 }
 
-class Role {
-  Role({
-    this.id,
-    this.title,
-    this.createdAt,
-    this.lang,
-    this.nameEn,
+class Message {
+  Message({
+    this.email,
+    this.password,
   });
 
-  int? id;
-  String? title;
-  DateTime? createdAt;
-  String? lang;
-  dynamic nameEn;
+  List<String>? email;
+  List<String>? password;
 
-  factory Role.fromJson(Map<String, dynamic> json) => Role(
-        id: json["id"],
-        title: json["title"],
-        createdAt: DateTime.parse(json["created_at"]),
-        lang: json["lang"],
-        nameEn: json["name_en"],
+  factory Message.fromJson(Map<String, dynamic> json) => Message(
+        email: json["email"] == null
+            ? null
+            : List<String>.from(json["email"].map((x) => x)),
+        password: json["password"] == null
+            ? null
+            : List<String>.from(json["password"].map((x) => x)),
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "title": title,
-        "created_at": createdAt?.toIso8601String(),
-        "lang": lang,
-        "name_en": nameEn,
+        "email": email == null ? [] : List<dynamic>.from(email!.map((x) => x)),
+        "password":
+            password == null ? [] : List<dynamic>.from(password!.map((x) => x)),
       };
 }

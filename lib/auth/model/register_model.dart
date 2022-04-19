@@ -1,104 +1,151 @@
 // To parse this JSON data, do
 //
-//     final registerModel = registerModelFromJson(jsonString);
+//     final userRegisterModel = userRegisterModelFromJson(jsonString);
 
 import 'dart:convert';
 
-UserRegisterModel registerModelFromJson(String str) =>
-    UserRegisterModel.fromJson(json.decode(str));
+UserAuthModel userRegisterModelFromJson(String str) =>
+    UserAuthModel.fromJson(json.decode(str));
 
-String registerModelToJson(UserRegisterModel data) => json.encode(data.toJson());
+String userRegisterModelToJson(UserAuthModel data) =>
+    json.encode(data.toJson());
 
-class UserRegisterModel {
-  UserRegisterModel({
-    this.statusCode,
+class UserAuthModel {
+  UserAuthModel({
+    this.status,
     this.message,
+    this.code,
+    this.accessToken,
+    this.tokenType,
+    this.expiresIn,
     this.data,
+    this.erroressages,
   });
 
-  int? statusCode;
+  bool? status;
   String? message;
-  Data? data;
+  int? code;
+  String? accessToken;
+  String? tokenType;
+  int? expiresIn;
+  UserData? data;
+  Map<String, List<String>>? erroressages;
 
-  factory UserRegisterModel.fromJson(Map<String, dynamic> json) => UserRegisterModel(
-        statusCode: json["status_code"],
-        message: json["message"],
-        data: Data.fromJson(json["data"]),
+  factory UserAuthModel.fromJson(Map<String, dynamic> json) =>
+      UserAuthModel(
+        status: json["status"],
+        message: json["message"].runtimeType == String ? json["message"] : null,
+        code: json["code"],
+        accessToken: json["access_token"],
+        tokenType: json["token_type"],
+        expiresIn: json["expires_in"],
+        data: json["data"] == null ? null : UserData.fromJson(json["data"]),
+        erroressages: json["message"].runtimeType == String
+            ? null
+            : Map.from(json["message"]).map((k, v) =>
+                MapEntry<String, List<String>>(
+                    k, List<String>.from(v.map((x) => x)))),
       );
 
   Map<String, dynamic> toJson() => {
-        "status_code": statusCode,
+        "status": status,
         "message": message,
+        "code": code,
+        "access_token": accessToken,
+        "token_type": tokenType,
+        "expires_in": expiresIn,
         "data": data?.toJson(),
       };
 }
 
-class Data {
-  Data({
+class UserData {
+  UserData({
     this.id,
+    this.uuid,
     this.name,
+    this.username,
     this.email,
     this.emailVerifiedAt,
-    this.token,
-    this.serialId,
+    this.phone,
+    this.phoneVerifiedAt,
+    this.image,
+    this.countryId,
+    this.cityId,
+    this.areaId,
+    this.address,
+    this.longitude,
+    this.latitude,
+    this.lastLogin,
+    this.inBlock,
+    this.deletedAt,
     this.createdAt,
-    this.roles,
+    this.updatedAt,
   });
 
   int? id;
+  String? uuid;
   String? name;
+  String? username;
   String? email;
   dynamic emailVerifiedAt;
-  String? token;
-  String? serialId;
+  String? phone;
+  dynamic phoneVerifiedAt;
+  String? image;
+  String? countryId;
+  String? cityId;
+  String? areaId;
+  String? address;
+  String? longitude;
+  String? latitude;
+  dynamic lastLogin;
+  dynamic inBlock;
+  dynamic deletedAt;
   DateTime? createdAt;
-  List<Role>? roles;
+  DateTime? updatedAt;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory UserData.fromJson(Map<String, dynamic> json) => UserData(
         id: json["id"],
+        uuid: json["uuid"],
         name: json["name"],
+        username: json["username"],
         email: json["email"],
         emailVerifiedAt: json["email_verified_at"],
-        token: json["token"],
-        serialId: json["serial_id"],
+        phone: json["phone"],
+        phoneVerifiedAt: json["phone_verified_at"],
+        image: json["image"],
+        countryId: json["country_id"],
+        cityId: json["city_id"],
+        areaId: json["area_id"],
+        address: json["address"],
+        longitude: json["longitude"],
+        latitude: json["latitude"],
+        lastLogin: json["last_login"],
+        inBlock: json["in_block"],
+        deletedAt: json["deleted_at"],
         createdAt: DateTime.parse(json["created_at"]),
-        roles: List<Role>.from(json["roles"].map((x) => Role.fromJson(x))),
+        updatedAt: DateTime.parse(json["updated_at"]),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "uuid": uuid,
         "name": name,
+        "username": username,
         "email": email,
         "email_verified_at": emailVerifiedAt,
-        "token": token,
-        "serial_id": serialId,
+        "phone": phone,
+        "phone_verified_at": phoneVerifiedAt,
+        "image": image,
+        "country_id": countryId,
+        "city_id": cityId,
+        "area_id": areaId,
+        "address": address,
+        "longitude": longitude,
+        "latitude": latitude,
+        "last_login": lastLogin,
+        "in_block": inBlock,
+        "deleted_at": deletedAt,
         "created_at": createdAt?.toIso8601String(),
-        "roles": roles == null
-            ? []
-            : List<dynamic>.from(roles!.map((x) => x.toJson())),
-      };
-}
-
-class Role {
-  Role({
-    this.id,
-    this.title,
-    this.createdAt,
-  });
-
-  int? id;
-  String? title;
-  DateTime? createdAt;
-
-  factory Role.fromJson(Map<String, dynamic> json) => Role(
-        id: json["id"],
-        title: json["title"],
-        createdAt: DateTime.parse(json["created_at"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "title": title,
-        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
       };
 }

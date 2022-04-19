@@ -26,12 +26,12 @@ class NetworkUtil {
     String url, {
     @required BuildContext? context,
     Map? headers,
-    bool withHeader = false,
+    bool withHeader = true,
   }) async {
     Response? response;
 
     try {
-      dio.options.baseUrl = "https://development.lacasacode.dev/api/v1/";
+      dio.options.baseUrl = "http://trkar-v2.lacasacode.com/api/";
       (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
           (HttpClient client) {
         client.badCertificateCallback =
@@ -42,19 +42,21 @@ class NetworkUtil {
           options: Options(
               headers: withHeader
                   ? {
-                      // if (Helper.currentUser != null) ...{
-                      //   HttpHeaders.authorizationHeader:
-                      //       'Bearer ${Helper.currentUser!.token}',
-                      // },
-                      HttpHeaders.contentTypeHeader: 'application/json',
-                      HttpHeaders.acceptHeader: 'application/json',
-                      HttpHeaders.acceptLanguageHeader: Helper.currentLanguage,
+                      if (Helper.currentUser != null) ...{
+                        HttpHeaders.authorizationHeader:
+                            'Bearer ${Helper.currentUser!.accessToken}',
+                      },
+                      // HttpHeaders.contentTypeHeader: 'application/json',
+                      // HttpHeaders.acceptHeader: 'application/json',
+                      'lang': Helper.currentLanguage,
                     }
                   : headers == null
                       ? null
                       : headers as Map<String, dynamic>));
     } on DioError catch (e) {
       log('Error is : ${e.message}');
+      response = e.response;
+
       // var prefs = context.read(sharedPreferences).prefs;
       // var _prefs = prefs;
       // if (e.response != null) {
@@ -79,12 +81,12 @@ class NetworkUtil {
       {@required BuildContext? context,
       Map? headers,
       FormData? body,
-      bool withHeader = false,
+      bool withHeader = true,
       encoding}) async {
     Response? response;
 
-    dio.options.baseUrl = "https://development.lacasacode.dev/api/v1/";
-    print(dio.options.baseUrl);
+    dio.options.baseUrl = "http://trkar-v2.lacasacode.com/api/";
+
     (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (HttpClient client) {
       client.badCertificateCallback =
@@ -98,13 +100,13 @@ class NetworkUtil {
           options: Options(
               headers: withHeader
                   ? {
-                      // if (Helper.currentUser != null) ...{
-                      //   HttpHeaders.authorizationHeader:
-                      //       'Bearer ${Helper.currentUser!.token}',
-                      // },
-                      HttpHeaders.contentTypeHeader: 'application/json',
-                      HttpHeaders.acceptHeader: 'application/json',
-                      HttpHeaders.acceptLanguageHeader: Helper.currentLanguage,
+                      if (Helper.currentUser != null) ...{
+                        HttpHeaders.authorizationHeader:
+                            'Bearer ${Helper.currentUser!.accessToken}',
+                      },
+                      // HttpHeaders.contentTypeHeader: 'application/json',
+                      // HttpHeaders.acceptHeader: 'application/json',
+                      'lang': Helper.currentLanguage,
                     }
                   : headers == null
                       ? null
@@ -114,6 +116,7 @@ class NetworkUtil {
       log(' from post ${e.error} + message ${e.message}');
       if (e.response != null) {
         log('response : => ${e.response?.data}');
+        response = e.response;
       }
       // var prefs = context.read(sharedPreferences).prefs;
 

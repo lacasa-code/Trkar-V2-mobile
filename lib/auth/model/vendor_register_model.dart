@@ -15,17 +15,20 @@ class VendorRegisterModel {
     this.statusCode,
     this.message,
     this.data,
+    this.errors,
   });
 
   int? statusCode;
   String? message;
   Data? data;
+  Errors? errors;
 
   factory VendorRegisterModel.fromJson(Map<String, dynamic> json) =>
       VendorRegisterModel(
         statusCode: json["status_code"],
         message: json["message"],
         data: Data.fromJson(json["data"] ?? {}),
+        errors: Errors.fromJson(json["errors"] ?? {}),
       );
 
   Map<String, dynamic> toJson() => {
@@ -214,5 +217,30 @@ class VendorDetails {
         "bankDocs": bankDocs,
         "vendorStatus": vendorStatus,
         "media": media == null ? [] : List<dynamic>.from(media!.map((x) => x)),
+      };
+}
+
+class Errors {
+  Errors({
+    this.name,
+    this.email,
+    this.password,
+  });
+
+  List<String>? name;
+  List<String>? email;
+  List<String>? password;
+
+  factory Errors.fromJson(Map<String, dynamic> json) => Errors(
+        name: List<String>.from(json["name"].map((x) => x)),
+        email: List<String>.from(json["email"].map((x) => x)),
+        password: List<String>.from(json["password"].map((x) => x)),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "name": name == null ? [] : List<dynamic>.from(name!.map((x) => x)),
+        "email": email == null ? [] : List<dynamic>.from(email!.map((x) => x)),
+        "password":
+            password == null ? [] : List<dynamic>.from(password!.map((x) => x)),
       };
 }

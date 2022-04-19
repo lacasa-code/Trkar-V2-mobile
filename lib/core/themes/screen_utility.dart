@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MainStyle {
-  static const mainColor = Color(0xff00a1ff);
+  static const mainColor = Colors.orangeAccent;
   static const greyColor = Color(0xffb5b5b5);
   static const darkGreyColor = Color(0xff757575);
   static const lightGreyColor = Color(0xffb5b5b5);

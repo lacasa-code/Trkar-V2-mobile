@@ -1,14 +1,15 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trkar/auth/view/choose_user_type_screen.dart';
+import 'package:trkar/auth/view/forget_password_screen.dart';
 import 'package:trkar/auth/viewModel/login/login_cubit.dart';
+import 'package:trkar/core/components/or_widget.dart';
 import 'package:trkar/core/components/register_button.dart';
 import 'package:trkar/core/components/register_field.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
-import 'package:trkar/core/helper/helper.dart';
-import 'package:trkar/core/extensions/string.dart';
+import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/core/themes/themes.dart';
+import '../../core/extensions/string.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -20,6 +21,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   late LoginCubit loginCubit;
+  var securePassword = true;
   @override
   void initState() {
     loginCubit = context.read<LoginCubit>();
@@ -28,7 +30,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    log('lan ${Helper.currentLanguage}');
     return Scaffold(
       body: SingleChildScrollView(
         child: Form(
@@ -54,12 +55,46 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               RegisterField(
                 hintText: 'password',
-                obsecureText: true,
+                obsecureText: securePassword,
                 controller: loginCubit.passwordController,
                 validator: loginCubit.passwordValidator,
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    securePassword ? Icons.visibility_off : Icons.visibility,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      securePassword = !securePassword;
+                    });
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        NavigationService.push(
+                          page: ForgetPasswordScreen.routeName,
+                        );
+                      },
+                      child: Text(
+                        'forgot_password'.translate,
+                        style: MainTheme.subTextStyle.copyWith(
+                          decoration: TextDecoration.underline,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const BoxHelper(
-                height: 20,
+                height: 10,
               ),
               BlocBuilder<LoginCubit, LoginState>(
                 builder: (context, state) {
@@ -81,47 +116,17 @@ class _LoginScreenState extends State<LoginScreen> {
               const OrWidget(),
               RegisterButton(
                 title: 'create_new_acc',
-                onPressed: () => loginCubit.login(context),
+                onPressed: () {
+                  NavigationService.push(
+                    page: ChooseUserTypeScreen.routeName,
+                  );
+                },
                 color: Colors.deepOrange,
                 radius: 10,
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class OrWidget extends StatelessWidget {
-  const OrWidget({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      child: Row(
-        children: [
-          Expanded(
-            child: Divider(
-              thickness: 1.5,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(
-              'or'.translate,
-              style: MainTheme.subTextStyleBold,
-            ),
-          ),
-          Expanded(
-            child: Divider(
-              thickness: 1.5,
-            ),
-          ),
-        ],
       ),
     );
   }

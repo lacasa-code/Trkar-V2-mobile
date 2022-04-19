@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 
 import '../model/vendor_register_model.dart';
@@ -19,7 +21,10 @@ class VendorRegisterRepo {
     if (response == null) {
       return null;
     }
-    var model = VendorRegisterModel.fromJson(response.data);
+    dynamic data = response.data.runtimeType == String
+        ? jsonDecode(response.data)
+        : response.data;
+    var model = VendorRegisterModel.fromJson(data);
     return model;
   }
 }

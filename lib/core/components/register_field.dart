@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../extensions/string.dart';
 import '../themes/screen_utility.dart';
@@ -16,7 +17,9 @@ class RegisterField extends StatelessWidget {
     this.validator,
     this.autovalidateMode,
     this.maxLines = 1,
+    this.maxLength,
     this.onChanged,
+    this.formatters,
   }) : super(key: key);
   final String? labelText;
   final String? hintText;
@@ -27,8 +30,9 @@ class RegisterField extends StatelessWidget {
   final TextEditingController? controller;
   final AutovalidateMode? autovalidateMode;
   final int? maxLines;
+  final int? maxLength;
   final void Function(String?)? onChanged;
-
+  final List<TextInputFormatter>? formatters;
   final String? Function(String?)? validator;
 
   @override
@@ -36,7 +40,9 @@ class RegisterField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: TextFormField(
+        maxLength: maxLength,
         maxLines: maxLines,
+        inputFormatters: formatters,
         onChanged: onChanged,
         autovalidateMode: autovalidateMode,
         controller: controller,
@@ -44,6 +50,7 @@ class RegisterField extends StatelessWidget {
         obscureText: obsecureText,
         keyboardType: keyboardType,
         decoration: InputDecoration(
+          counterText: '',
           filled: true,
           fillColor: Colors.white,
           labelText: labelText?.translate,
