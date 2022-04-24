@@ -10,6 +10,11 @@ part 'countries_state.dart';
 
 class AddressDataCubit extends Cubit<AddressDataState> {
   AddressDataCubit() : super(AddressDataInitial());
+  initialProfileScreen(context, {countryId, cityId}) async {
+    await getCountries(context);
+    await getCities(context, countryId: countryId);
+    await getArea(context, cityId: cityId);
+  }
 
   Future<void> getCountries(context) async {
     emit(CountryLoading());
@@ -63,6 +68,16 @@ class AddressDataCubit extends Cubit<AddressDataState> {
     } else {
       emit(AddressDataError());
     }
+  }
+
+  Country? getCountryById(int countryId) {
+    return countries.firstWhere((element) => element.id == countryId);
+  }
+  City? getCityById(int cityId) {
+    return cities.firstWhere((element) => element.id == cityId);
+  }
+  Area? getAreaById(int cityId) {
+    return areas.firstWhere((element) => element.id == cityId);
   }
 
   List<Country>? _countries = [];

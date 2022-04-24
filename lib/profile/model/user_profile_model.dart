@@ -43,7 +43,6 @@ class ProfileData {
   ProfileData({
     this.id,
     this.uuid,
-    this.name,
     this.username,
     this.email,
     this.emailVerifiedAt,
@@ -65,7 +64,6 @@ class ProfileData {
 
   int? id;
   String? uuid;
-  String? name;
   String? username;
   String? email;
   dynamic emailVerifiedAt;
@@ -87,7 +85,6 @@ class ProfileData {
   factory ProfileData.fromJson(Map<String, dynamic> json) => ProfileData(
         id: json["id"],
         uuid: json["uuid"],
-        name: json["name"],
         username: json["username"],
         email: json["email"],
         emailVerifiedAt: json["email_verified_at"],
@@ -103,14 +100,17 @@ class ProfileData {
         lastLogin: json["last_login"],
         inBlock: json["in_block"],
         deletedAt: json["deleted_at"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "uuid": uuid,
-        "name": name,
         "username": username,
         "email": email,
         "email_verified_at": emailVerifiedAt,

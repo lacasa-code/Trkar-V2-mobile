@@ -3,6 +3,7 @@ import 'dart:io';
 // import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:trkar/core/helper/helper.dart';
 import './image_picker_dialog.dart';
 
 class ProfilePictureWidget extends StatefulWidget {
@@ -38,12 +39,17 @@ class _ProfilePictureWidgetState extends State<ProfilePictureWidget> {
                 backgroundColor: Colors.transparent,
                 radius: ScreenUtil().radius(49),
                 backgroundImage: pickedImage == null
-                    ? (const AssetImage(
-                        'assets/images/profile2.png',
-                      ))
+                    ? (Helper.currentUser?.data?.image == null
+                        ? const AssetImage(
+                            'assets/images/profile2.png',
+                          )
+                        : NetworkImage(
+                            Helper.appBaseUrl +
+                                (Helper.currentUser?.data?.image ?? ''),
+                          ) as ImageProvider)
                     : FileImage(
                         pickedImage!,
-                      ) as ImageProvider,
+                      ),
               ),
             ),
           ),

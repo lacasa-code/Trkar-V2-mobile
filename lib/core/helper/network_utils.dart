@@ -143,17 +143,18 @@ class NetworkUtil {
     log("response: ..." + response.toString());
     if (response.statusCode! >= 500 || response.data['success'] != null) {
       log('ssdsdsdsd yup');
-      if ((response.data['message'] as String)
-          .toLowerCase()
-          .contains('token')) {
-        await GetStorage().remove('user');
-        Phoenix.rebirth(context!);
-        NavigationService.pushAndRemoveUntil(
-          page: const SplashScreen(),
-          predicate: (_) => false,
-        );
-        return null;
-      }
+      // if (response.data.runtimeType == String &&
+      //     (response.data['message'] as String)
+      //         .toLowerCase()
+      //         .contains('token')) {
+      //   await GetStorage().remove('user');
+      //   Phoenix.rebirth(context!);
+      //   NavigationService.pushAndRemoveUntil(
+      //     page: const SplashScreen(),
+      //     predicate: (_) => false,
+      //   );
+      //   return null;
+      // }
     }
     // Future.delayed(const Duration(milliseconds: 1), () async {
     //   var _prefs = context.read(sharedPreferences).prefs;

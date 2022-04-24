@@ -9,6 +9,9 @@ import 'package:trkar/auth/view/register_screen.dart';
 import 'package:trkar/auth/view/reset_password_screen.dart';
 import 'package:trkar/auth/viewModel/login/login_cubit.dart';
 import 'package:trkar/auth/viewModel/register/register_cubit.dart';
+import 'package:trkar/home/view/home_screen.dart';
+import 'package:trkar/profile/view/edit_profile_screen.dart';
+import 'package:trkar/profile/viewModel/updateUserProfile/update_user_profile_cubit.dart';
 import 'package:trkar/splash/view/splash_screen.dart';
 
 class RoutesGenerator {
@@ -66,7 +69,25 @@ class RoutesGenerator {
           settings: settings,
           builder: (_) => const ResetPasswordScreen(),
         );
-
+      case EditProfileScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => UpdateUserProfileCubit(),
+              ),
+              BlocProvider(
+                create: (_) => AddressDataCubit(),
+              ),
+            ],
+            child: const EditProfileScreen(),
+          ),
+        );
+      case HomeScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const HomeScreen(),
+        );
       default:
         return MaterialPageRoute(
           settings: settings,

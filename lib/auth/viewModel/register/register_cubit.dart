@@ -28,7 +28,6 @@ class RegisterCubit extends Cubit<RegisterState> {
     var registerData = await UserRegisterRepo.registerUser(
       context,
       body: {
-        'name': usernameController.text,
         'email': emailController.text,
         'password': passwordController.text,
         'username': usernameController.text,

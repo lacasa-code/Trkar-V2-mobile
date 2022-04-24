@@ -7,6 +7,7 @@ import 'package:trkar/auth/view/login_screen.dart';
 import 'package:trkar/auth/viewModel/validateToken/validate_token_cubit.dart';
 import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
+import 'package:trkar/home/view/home_screen.dart';
 import 'package:trkar/profile/viewModel/userProfile/user_profile_cubit.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -23,10 +24,9 @@ class _SplashScreenState extends State<SplashScreen> {
       if (Helper.isLoggedIn) {
         log('isCurrentTokenValide => ${Helper.isValidToken}');
         context.read<ValidateTokenCubit>().validateToken(context);
-        context.read<UserProfileCubit>().getUserProfile(context);
       }
       NavigationService.pushReplacementAll(
-        page: LoginScreen.routeName,
+        page: Helper.isLoggedIn ? HomeScreen.routeName : LoginScreen.routeName,
       );
     });
     super.initState();

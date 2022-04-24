@@ -6,6 +6,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:trkar/core/components/custom_new_dialog.dart';
 import 'package:trkar/core/helper/helper.dart';
+import 'package:trkar/core/helper/navigator.dart';
+import 'package:trkar/home/view/home_screen.dart';
 import '../../../core/extensions/string.dart';
 import '../../repo/login_repo.dart';
 
@@ -46,6 +48,9 @@ class LoginCubit extends Cubit<LoginState> {
         msg: loginData.message ?? '',
       );
       await Helper.storeNewUserData(loginData);
+      NavigationService.push(
+        page: HomeScreen.routeName,
+      );
       emit(LoginDone());
     } else {
       var errorMessage = '';

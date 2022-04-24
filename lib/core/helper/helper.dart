@@ -7,6 +7,7 @@ import './app_localization.dart';
 import 'package:flutter/material.dart';
 
 class Helper {
+  static String get appBaseUrl => 'http://trkar-v2.lacasacode.com';
   static String get currentLanguage => localization.currentLanguage.toString();
   static Alignment get appAlignment =>
       currentLanguage == 'ar' ? Alignment.centerRight : Alignment.centerLeft;
@@ -37,6 +38,17 @@ class Helper {
     await GetStorage().write(
       'expires_in',
       tokenExpiresDate.toIso8601String(),
+    );
+  }
+
+  static Future<void> clearUserData() async {
+    var getStorage = GetStorage();
+    await getStorage.remove(
+      'user',
+    );
+
+    await getStorage.remove(
+      'expires_in',
     );
   }
 }

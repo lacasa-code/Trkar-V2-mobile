@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:trkar/addressesData/viewModel/countries/countries_cubit.dart';
+import 'package:trkar/auth/viewModel/logout/logout_cubit.dart';
 import 'package:trkar/auth/viewModel/validateToken/validate_token_cubit.dart';
 import 'package:trkar/core/helper/app_localization.dart';
 import 'package:trkar/core/helper/navigator.dart';
@@ -22,10 +24,13 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => UserProfileCubit(),
         ),
+        BlocProvider(
+          create: (_) => LogoutCubit(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
+        title: 'Trkar',
         navigatorKey: NavigationService.navigationKey,
         theme: ThemeData(
           // This is the theme of your application.

@@ -31,8 +31,7 @@ class UserAuthModel {
   UserData? data;
   Map<String, List<String>>? erroressages;
 
-  factory UserAuthModel.fromJson(Map<String, dynamic> json) =>
-      UserAuthModel(
+  factory UserAuthModel.fromJson(Map<String, dynamic> json) => UserAuthModel(
         status: json["status"],
         message: json["message"].runtimeType == String ? json["message"] : null,
         code: json["code"],
@@ -62,7 +61,6 @@ class UserData {
   UserData({
     this.id,
     this.uuid,
-    this.name,
     this.username,
     this.email,
     this.emailVerifiedAt,
@@ -84,7 +82,6 @@ class UserData {
 
   int? id;
   String? uuid;
-  String? name;
   String? username;
   String? email;
   dynamic emailVerifiedAt;
@@ -106,7 +103,6 @@ class UserData {
   factory UserData.fromJson(Map<String, dynamic> json) => UserData(
         id: json["id"],
         uuid: json["uuid"],
-        name: json["name"],
         username: json["username"],
         email: json["email"],
         emailVerifiedAt: json["email_verified_at"],
@@ -129,7 +125,6 @@ class UserData {
   Map<String, dynamic> toJson() => {
         "id": id,
         "uuid": uuid,
-        "name": name,
         "username": username,
         "email": email,
         "email_verified_at": emailVerifiedAt,

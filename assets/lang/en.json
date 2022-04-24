@@ -37,5 +37,11 @@
     "city_required": "City is Required",
     "area": "Area",
     "area_required": "Area is Required",
-    "profile_image_required": "a profile picture is required"
+    "profile_image_required": "a profile picture is required",
+    "logout": "Logout",
+    "edit_profile": "Edit Profile",
+    "update_data": "Update Personal Data",
+    "update_password": "Update Password",
+    "something_wrong": "Something went wrong, please try again later"
+
 }
