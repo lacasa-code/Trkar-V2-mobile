@@ -9,10 +9,15 @@ import 'package:trkar/auth/view/register_screen.dart';
 import 'package:trkar/auth/view/reset_password_screen.dart';
 import 'package:trkar/auth/viewModel/login/login_cubit.dart';
 import 'package:trkar/auth/viewModel/register/register_cubit.dart';
+import 'package:trkar/categories/view/categories_screen.dart';
+import 'package:trkar/categories/view/sub_categories_screen.dart';
+import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
 import 'package:trkar/home/view/home_screen.dart';
 import 'package:trkar/profile/view/edit_profile_screen.dart';
 import 'package:trkar/profile/viewModel/updateUserProfile/update_user_profile_cubit.dart';
 import 'package:trkar/splash/view/splash_screen.dart';
+import 'package:trkar/tab/view/tab_screen.dart';
+import 'package:trkar/tab/viewModel/cubit/tab_cubit.dart';
 
 class RoutesGenerator {
   static Route<dynamic>? onRoutesGenerated(RouteSettings settings) {
@@ -86,7 +91,33 @@ class RoutesGenerator {
         );
       case HomeScreen.routeName:
         return MaterialPageRoute(
+          settings: settings,
           builder: (_) => const HomeScreen(),
+        );
+      case CategoriesScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => BlocProvider(
+            create: (_) => CategoriesCubit(),
+            child: const CategoriesScreen(),
+          ),
+        );
+      case SubCategoriesScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => BlocProvider<CategoriesCubit>.value(
+            value: (settings.arguments
+                as Map<String, dynamic>)['categories_cubit'],
+            child: const SubCategoriesScreen(),
+          ),
+        );
+      case TabScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => BlocProvider<TabCubit>(
+            create: (_) => TabCubit(),
+            child: const TabScreen(),
+          ),
         );
       default:
         return MaterialPageRoute(

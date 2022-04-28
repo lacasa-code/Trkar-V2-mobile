@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:trkar/addressesData/viewModel/countries/countries_cubit.dart';
 import 'package:trkar/auth/viewModel/logout/logout_cubit.dart';
 import 'package:trkar/auth/viewModel/validateToken/validate_token_cubit.dart';
 import 'package:trkar/core/helper/app_localization.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/core/routes/routes_generator.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
 import 'package:trkar/profile/viewModel/userProfile/user_profile_cubit.dart';
 
 class MyApp extends StatelessWidget {
@@ -26,6 +26,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => LogoutCubit(),
+        ),
+        BlocProvider(
+          create: (_) => FilterCarsCubit(),
         ),
       ],
       child: MaterialApp(

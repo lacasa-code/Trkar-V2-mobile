@@ -8,6 +8,7 @@ import 'package:trkar/core/components/custom_new_dialog.dart';
 import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/home/view/home_screen.dart';
+import 'package:trkar/tab/view/tab_screen.dart';
 import '../../../core/extensions/string.dart';
 import '../../repo/login_repo.dart';
 
@@ -49,7 +50,7 @@ class LoginCubit extends Cubit<LoginState> {
       );
       await Helper.storeNewUserData(loginData);
       NavigationService.push(
-        page: HomeScreen.routeName,
+        page: TabScreen.routeName,
       );
       emit(LoginDone());
     } else {

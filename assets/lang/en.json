@@ -42,6 +42,7 @@
     "edit_profile": "Edit Profile",
     "update_data": "Update Personal Data",
     "update_password": "Update Password",
-    "something_wrong": "Something went wrong, please try again later"
-
+    "something_wrong": "Something went wrong, please try again later",
+    "home": "Home",
+    "categories": "Categories"
 }

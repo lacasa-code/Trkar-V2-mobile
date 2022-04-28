@@ -7,8 +7,8 @@ import 'package:trkar/auth/view/login_screen.dart';
 import 'package:trkar/auth/viewModel/validateToken/validate_token_cubit.dart';
 import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
-import 'package:trkar/home/view/home_screen.dart';
-import 'package:trkar/profile/viewModel/userProfile/user_profile_cubit.dart';
+import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
+import 'package:trkar/tab/view/tab_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -24,9 +24,10 @@ class _SplashScreenState extends State<SplashScreen> {
       if (Helper.isLoggedIn) {
         log('isCurrentTokenValide => ${Helper.isValidToken}');
         context.read<ValidateTokenCubit>().validateToken(context);
+        context.read<FilterCarsCubit>().getCarModels(context);
       }
       NavigationService.pushReplacementAll(
-        page: Helper.isLoggedIn ? HomeScreen.routeName : LoginScreen.routeName,
+        page: Helper.isLoggedIn ? TabScreen.routeName : LoginScreen.routeName,
       );
     });
     super.initState();
