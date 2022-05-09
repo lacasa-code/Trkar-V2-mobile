@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'sized_box_helper.dart';
 
-import '../themes/themes.dart';
-import '../extensions/media_query.dart';
-import '../extensions/string.dart';
+import 'package:trkar/core/themes/themes.dart';
+import 'package:trkar/core/extensions/media_query.dart';
+import 'package:trkar/core/extensions/string.dart';
 
 class RegisterButton extends StatelessWidget {
   const RegisterButton({

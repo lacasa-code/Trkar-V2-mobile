@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trkar/categories/view/widgets/category_item.dart';
+import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
+import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import '../../core/extensions/string.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
@@ -17,22 +19,22 @@ class SubCategoriesScreen extends StatefulWidget {
 }
 
 class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
-  late CategoriesCubit categoriesCubit;
+  late SubCategoriesCubit categoriesCubit;
   @override
   void initState() {
-    categoriesCubit = BlocProvider.of<CategoriesCubit>(context);
+    categoriesCubit = BlocProvider.of<SubCategoriesCubit>(context)
+      ..getSubCategories(context);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    log('message ${categoriesCubit.categoryId}');
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
-          categoriesCubit.selectedCategory?.name ?? 'categories'.translate,
+          categoriesCubit.categoryName ?? 'categories'.translate,
           style: const TextStyle(
             color: Colors.black,
           ),
@@ -47,16 +49,22 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
           },
         ),
       ),
-      body: BlocBuilder<CategoriesCubit, CategoriesState>(
+      body: BlocBuilder<SubCategoriesCubit, SubCategoriesState>(
         builder: (context, state) {
+          if (state is SubCategoriesLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
           return SingleChildScrollView(
             child: Column(
               children:
-                  List.generate(categoriesCubit.subCategory.length, (index) {
-                var cat = categoriesCubit.subCategory[index];
+                  List.generate(categoriesCubit.subCategories.length, (index) {
+                var cat = categoriesCubit.subCategories[index];
                 return CategoryItem(
                   onPressed: () {},
-                  categoryName: cat.name,
+                  categoryName:
+                      Helper.currentLanguage == 'ar' ? cat.nameAr : cat.nameEn,
                   categoryImage: cat.image,
                 );
               }),

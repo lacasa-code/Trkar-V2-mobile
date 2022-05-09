@@ -24,10 +24,7 @@ class _TabScreenState extends State<TabScreen> {
       'title': 'home'.translate,
     },
     {
-      'page': BlocProvider<CategoriesCubit>(
-        create: (context) => CategoriesCubit(),
-        child: const CategoriesScreen(),
-      ),
+      'page': const CategoriesScreen(),
       'icon': Icons.category_outlined,
       'title': 'categories'.translate,
     },

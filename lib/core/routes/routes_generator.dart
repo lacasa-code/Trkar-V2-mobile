@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trkar/Addresses/model/my_addresses_model.dart';
+import 'package:trkar/Addresses/view/add_new_address_screen.dart';
+import 'package:trkar/Addresses/view/addresses_screen.dart';
+import 'package:trkar/Addresses/viewModel/addNewAddress/add_new_address_cubit.dart';
 import 'package:trkar/addressesData/viewModel/countries/countries_cubit.dart';
 import 'package:trkar/auth/view/choose_user_type_screen.dart';
 import 'package:trkar/auth/view/email_verfication_screen.dart';
@@ -9,10 +13,13 @@ import 'package:trkar/auth/view/register_screen.dart';
 import 'package:trkar/auth/view/reset_password_screen.dart';
 import 'package:trkar/auth/viewModel/login/login_cubit.dart';
 import 'package:trkar/auth/viewModel/register/register_cubit.dart';
+import 'package:trkar/cars/view/my_cars_screen.dart';
 import 'package:trkar/categories/view/categories_screen.dart';
 import 'package:trkar/categories/view/sub_categories_screen.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
 import 'package:trkar/home/view/home_screen.dart';
+import 'package:trkar/localization/view/change_language_screen.dart';
+import 'package:trkar/localization/viewModel/lang/lang_cubit.dart';
 import 'package:trkar/profile/view/edit_profile_screen.dart';
 import 'package:trkar/profile/viewModel/updateUserProfile/update_user_profile_cubit.dart';
 import 'package:trkar/splash/view/splash_screen.dart';
@@ -109,6 +116,34 @@ class RoutesGenerator {
             value: (settings.arguments
                 as Map<String, dynamic>)['categories_cubit'],
             child: const SubCategoriesScreen(),
+          ),
+        );
+      case ChangeLanguageScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => BlocProvider<LangCubit>(
+            create: (_) => LangCubit(),
+            child: const ChangeLanguageScreen(),
+          ),
+        );
+      case AddressesScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const AddressesScreen(),
+        );
+      case MyCarsScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const MyCarsScreen(),
+        );
+      case AddNewAddressScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => BlocProvider(
+            create: (_) => AddNewAddressCubit(
+              address: settings.arguments as Address?,
+            ),
+            child: const AddNewAddressScreen(),
           ),
         );
       case TabScreen.routeName:

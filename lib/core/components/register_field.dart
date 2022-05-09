@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:trkar/core/themes/screen_utility.dart';
+import 'package:trkar/core/extensions/string.dart';
 
-import '../extensions/string.dart';
-import '../themes/screen_utility.dart';
+
 
 class RegisterField extends StatelessWidget {
   const RegisterField({

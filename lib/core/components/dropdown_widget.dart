@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../helper/helper.dart';
+import 'package:trkar/core/helper/helper.dart';
 import 'sized_box_helper.dart';
-import '../extensions/string.dart';
-import '../themes/screen_utility.dart';
+import 'package:trkar/core/extensions/string.dart';
+import 'package:trkar/core/themes/screen_utility.dart';
 
 class DropDownWidget extends StatelessWidget {
   const DropDownWidget({
