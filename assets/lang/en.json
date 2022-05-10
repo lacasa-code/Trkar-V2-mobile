@@ -71,6 +71,7 @@
     "something_wrong": "Something went wrong, please try again later",
     "home": "Home",
     "categories": "Categories",
+    "subcategories": "Subcategories",
     "add_new_address": "add a new address",
     "edit_address": "edit address",
     "my_cars": "My Cars",
@@ -85,6 +86,6 @@
     "search": "search",
     "search_hint": "Please enter the word you want to search for",
     "all": "All",
-    "manufacturers": "Manufacturers"
-
+    "manufacturers": "Manufacturers",
+    "car_engine": "Car Engine","more":"More"
 }

@@ -6,12 +6,13 @@ import '../../core/extensions/string.dart';
 
 class CategoriesRepo {
   static Future<CategoriesModel?> getCategories(
-    context,
-  ) async {
+    context, {
+    bool allCategories = false,
+  }) async {
     final util = NetworkUtil();
 
     var response = await util.get(
-      'categories',
+      allCategories ? 'categories' : 'main/categories',
       context: context,
     );
     if (response == null) {

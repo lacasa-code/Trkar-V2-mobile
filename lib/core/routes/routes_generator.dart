@@ -17,6 +17,7 @@ import 'package:trkar/cars/view/my_cars_screen.dart';
 import 'package:trkar/categories/view/categories_screen.dart';
 import 'package:trkar/categories/view/sub_categories_screen.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
+import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
 import 'package:trkar/home/view/home_screen.dart';
 import 'package:trkar/localization/view/change_language_screen.dart';
 import 'package:trkar/localization/viewModel/lang/lang_cubit.dart';
@@ -104,17 +105,34 @@ class RoutesGenerator {
       case CategoriesScreen.routeName:
         return MaterialPageRoute(
           settings: settings,
-          builder: (_) => BlocProvider(
-            create: (_) => CategoriesCubit(),
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => CategoriesCubit(),
+              ),
+             
+            ],
             child: const CategoriesScreen(),
           ),
         );
       case SubCategoriesScreen.routeName:
         return MaterialPageRoute(
           settings: settings,
-          builder: (_) => BlocProvider<CategoriesCubit>.value(
-            value: (settings.arguments
-                as Map<String, dynamic>)['categories_cubit'],
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              // BlocProvider<CategoriesCubit>.value(
+              //   value: (settings.arguments
+              //       as Map<String, dynamic>?)?['categories_cubit'],
+              // ),
+              BlocProvider<SubCategoriesCubit>(
+                create: (_) => SubCategoriesCubit(
+                  categoryName: (settings.arguments
+                      as Map<String, dynamic>?)?['category_name'] as String?,
+                  parentId: (settings.arguments
+                      as Map<String, dynamic>?)?['parent_id'],
+                ),
+              ),
+            ],
             child: const SubCategoriesScreen(),
           ),
         );

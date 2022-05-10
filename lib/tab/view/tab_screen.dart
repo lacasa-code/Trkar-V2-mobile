@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trkar/categories/view/categories_screen.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
+import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
 import 'package:trkar/home/view/home_screen.dart';
 import 'package:trkar/tab/viewModel/cubit/tab_cubit.dart';
 import '../../core/extensions/string.dart';
@@ -24,7 +25,10 @@ class _TabScreenState extends State<TabScreen> {
       'title': 'home'.translate,
     },
     {
-      'page': const CategoriesScreen(),
+      'page': BlocProvider(
+        create: (_) => SubCategoriesCubit(),
+        child: const CategoriesScreen(),
+      ),
       'icon': Icons.category_outlined,
       'title': 'categories'.translate,
     },

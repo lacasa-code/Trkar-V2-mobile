@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import '../../model/sub_categories_model.dart';
@@ -7,23 +9,52 @@ part 'sub_categories_state.dart';
 
 class SubCategoriesCubit extends Cubit<SubCategoriesState> {
   SubCategoriesCubit({
-    @required this.parentId,
+    this.parentId,
     this.categoryName,
   }) : super(SubCategoriesInitial());
-  final dynamic parentId;
-  final String? categoryName;
+  dynamic parentId;
+  String? categoryName;
 
   List<SubCategory>? _subCategories = [];
   List<SubCategory> get subCategories => [...?_subCategories];
-
-  Future<void> getSubCategories(
+  Future<bool> hasSubCategories(
+    int categoryId,
     context,
   ) async {
+    var subCategoriesData = await SubCategoriesRepo.getSubCategories(
+      context,
+      parentId: categoryId,
+    );
+    if (subCategoriesData == null) {
+      return false;
+    }
+
+    return subCategoriesData.status ?? false;
+  }
+
+  init() {
+    if (_subCategories!.isNotEmpty) {
+      _subCategories!.clear();
+      emit(SubCategoriesCleared());
+    }
+  }
+
+  Future<void> getSubCategories(
+    context, {
+    int? id,
+    String? name,
+  }) async {
     emit(SubCategoriesLoading());
     var subCategoriesData = await SubCategoriesRepo.getSubCategories(
       context,
-      parentId: parentId,
+      parentId: id ?? parentId,
     );
+    if (name != null) {
+      categoryName = name;
+    }
+    if (id != null) {
+      parentId = id;
+    }
 
     if (subCategoriesData == null) {
       emit(SubCategoriesNetworkError());
@@ -31,7 +62,7 @@ class SubCategoriesCubit extends Cubit<SubCategoriesState> {
       return;
     }
     if (subCategoriesData.status == true) {
-      _subCategories = subCategoriesData.data;
+      _subCategories?.addAll(subCategoriesData.data!);
       emit(SubCategoriesDone());
     } else {
       emit(SubCategoriesError());

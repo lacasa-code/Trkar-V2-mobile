@@ -19,10 +19,10 @@ class SubCategoriesScreen extends StatefulWidget {
 }
 
 class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
-  late SubCategoriesCubit categoriesCubit;
+  late SubCategoriesCubit subcategoriesCubit;
   @override
   void initState() {
-    categoriesCubit = BlocProvider.of<SubCategoriesCubit>(context)
+    subcategoriesCubit = BlocProvider.of<SubCategoriesCubit>(context)
       ..getSubCategories(context);
     super.initState();
   }
@@ -34,7 +34,7 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
-          categoriesCubit.categoryName ?? 'categories'.translate,
+          subcategoriesCubit.categoryName ?? 'categories'.translate,
           style: const TextStyle(
             color: Colors.black,
           ),
@@ -57,12 +57,35 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
             );
           }
           return SingleChildScrollView(
-            child: Column(
-              children:
-                  List.generate(categoriesCubit.subCategories.length, (index) {
-                var cat = categoriesCubit.subCategories[index];
+            child: Wrap(
+              children: List.generate(
+                  subcategoriesCubit.subCategories
+                      .where((element) {
+                        return element.parentId ==
+                            subcategoriesCubit.parentId.toString();
+                      })
+                      .toList()
+                      .length, (index) {
+                var cat = subcategoriesCubit.subCategories
+                    .where((element) =>
+                        element.parentId ==
+                        subcategoriesCubit.parentId.toString())
+                    .toList()[index];
                 return CategoryItem(
-                  onPressed: () {},
+                  onPressed: () async {
+                    var hasSubCat = await subcategoriesCubit.hasSubCategories(
+                        cat.id ?? 0, context);
+                    if (hasSubCat) {
+                      NavigationService.push(
+                          page: SubCategoriesScreen.routeName,
+                          arguments: {
+                            'category_name': Helper.currentLanguage == 'ar'
+                                ? cat.nameAr
+                                : cat.nameEn,
+                            'parent_id': cat.id,
+                          });
+                    }
+                  },
                   categoryName:
                       Helper.currentLanguage == 'ar' ? cat.nameAr : cat.nameEn,
                   categoryImage: cat.image,

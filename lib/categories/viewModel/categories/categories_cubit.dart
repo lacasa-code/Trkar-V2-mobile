@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:trkar/core/helper/laravel_exception.dart';
@@ -30,14 +32,46 @@ class CategoriesCubit extends Cubit<CategoriesState> {
     }
   }
 
+  Future<void> getAllCategories(context) async {
+    log('message');
+    emit(CategoriesLoading());
+    try {
+      var categoriesData = await CategoriesRepo.getCategories(
+        context,
+        allCategories: true,
+      );
+      if (categoriesData == null) {
+        return;
+      }
+      if (categoriesData.status == true) {
+        _allcategory = categoriesData.data;
+        emit(CategoriesDone());
+      } else {
+        emit(CategoriesError(
+          msg: categoriesData.message ?? 'something_wrong'.translate,
+        ));
+      }
+    } on LaravelException catch (error) {
+      emit(CategoriesError(msg: error.exception));
+    }
+  }
+
   int? categoryId;
   List<Category>? _category = [];
+  List<Category>? _allcategory = [];
   Category? get selectedCategory => _category?.firstWhere(
         (element) => element.id == categoryId,
       );
   List<Category> get category => [
-        ...?_category?.where((e) => e.parentId == '0').toList(),
+        ...?_category,
       ];
+  List<Category> get maincategory => [
+        ...?_allcategory?.where((e) => e.parentId == '0').toList(),
+      ];
+  List<Category> subCategories(int parentId) => _allcategory!
+      .where((element) => element.parentId == parentId.toString())
+      .toList();
+
   List<Category> get subCategory => [
         ...?_category
             ?.where((e) => e.parentId == categoryId.toString())

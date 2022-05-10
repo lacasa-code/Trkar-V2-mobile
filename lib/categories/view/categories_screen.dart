@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trkar/categories/view/sub_categories_screen.dart';
 import 'package:trkar/categories/view/widgets/category_item.dart';
+import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import '../../core/extensions/string.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
@@ -83,21 +84,25 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               );
             }
             return SingleChildScrollView(
-              child: Column(
+              child: Wrap(
                 children:
                     List.generate(categoriesCubit.category.length, (index) {
                   var cat = categoriesCubit.category[index];
                   return CategoryItem(
                     onPressed: () {
                       var hasSubCat = categoriesCubit.hasSubCategory(cat.id);
-                      if (hasSubCat) {
-                        NavigationService.push(
-                          page: SubCategoriesScreen.routeName,
-                          arguments: {
-                            'categories_cubit': context.read<CategoriesCubit>(),
-                          },
-                        );
-                      }
+                      // if (hasSubCat) {
+                      var subCat = context.read<SubCategoriesCubit>();
+                      subCat.categoryName = cat.name;
+                      subCat.parentId = cat.id;
+                      NavigationService.push(
+                        page: SubCategoriesScreen.routeName,
+                        arguments: {
+                          'category_name': cat.name,
+                          'parent_id': cat.id,
+                        },
+                      );
+                      // }
                     },
                     categoryName: cat.name,
                     categoryImage: cat.image,

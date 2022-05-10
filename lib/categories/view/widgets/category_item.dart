@@ -25,7 +25,7 @@ class CategoryItem extends StatelessWidget {
         onTap: onPressed,
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: 25,
+            horizontal: 5,
             vertical: 5,
           ),
           child: Card(
@@ -37,7 +37,7 @@ class CategoryItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(25),
               child: Container(
                 height: context.height * 0.23,
-                width: double.infinity,
+                width: context.width * 0.45,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: isImageAvailable
@@ -66,9 +66,10 @@ class CategoryItem extends StatelessWidget {
                     child: Text(
                       '$categoryName',
                       textAlign: TextAlign.start,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: ScreenUtil().setSp(14)),
+                          fontSize: ScreenUtil().setSp(13)),
                     ),
                   ),
                 ),

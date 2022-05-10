@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trkar/auth/viewModel/logout/logout_cubit.dart';
 import 'package:trkar/auth/viewModel/validateToken/validate_token_cubit.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
+import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
 import 'package:trkar/core/helper/app_localization.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/core/routes/routes_generator.dart';
@@ -33,6 +34,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<CategoriesCubit>(
           create: (context) => CategoriesCubit(),
+        ),
+        BlocProvider<SubCategoriesCubit>(
+          create: (context) => SubCategoriesCubit(),
         ),
       ],
       child: MaterialApp(
