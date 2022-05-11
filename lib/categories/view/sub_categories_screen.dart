@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trkar/categories/view/widgets/category_item.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
+import 'package:trkar/core/components/search_icon.dart';
 import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import '../../core/extensions/string.dart';
@@ -31,6 +32,11 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          SearchIcon(
+            categoryId: subcategoriesCubit.parentId,
+          ),
+        ],
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
@@ -57,7 +63,7 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
             );
           }
           return SingleChildScrollView(
-            child: Wrap(
+            child: Column(
               children: List.generate(
                   subcategoriesCubit.subCategories
                       .where((element) {
@@ -72,6 +78,14 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
                         subcategoriesCubit.parentId.toString())
                     .toList()[index];
                 return CategoryItem(
+                  showDivider: cat !=
+                      subcategoriesCubit.subCategories
+                          .where((element) {
+                            return element.parentId ==
+                                subcategoriesCubit.parentId.toString();
+                          })
+                          .toList()
+                          .last,
                   onPressed: () async {
                     var hasSubCat = await subcategoriesCubit.hasSubCategories(
                         cat.id ?? 0, context);

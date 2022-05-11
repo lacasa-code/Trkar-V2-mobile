@@ -7,6 +7,8 @@ class CategoriesInitial extends CategoriesState {}
 
 class CategoriesLoading extends CategoriesState {}
 
+class AllCategoriesLoading extends CategoriesState {}
+
 class CategoriesError extends CategoriesState {
   CategoriesError({
     this.msg,

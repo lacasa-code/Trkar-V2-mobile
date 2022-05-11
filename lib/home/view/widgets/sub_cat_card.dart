@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
 
-
 class SubCatCard extends StatefulWidget {
   const SubCatCard({
     Key? key,
@@ -34,64 +33,68 @@ class _SubCatCardState extends State<SubCatCard> {
   @override
   Widget build(BuildContext context) {
     var list = categoriesCubit.subCategories(widget.catID ?? 0);
-    return list.isEmpty
-        ? Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-                child: Text(
-                  widget.title ?? '',
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(12),
-                    fontWeight: FontWeight.bold,
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: list.isEmpty
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                    child: Text(
+                      widget.title ?? '',
+                      textAlign: TextAlign.start,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(12),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ],
-          )
-        : ExpansionTile(
-            onExpansionChanged: (v) async {
-              if (v) {
-                var index = subCategoriesCubit.subCategories.indexWhere(
-                  (element) => element.parentId == widget.catID.toString(),
-                );
-                //   if (index >= 0) {
-                // log('message joas');
-                //     return;
-                //   }
+                ],
+              )
+            : ExpansionTile(
+                onExpansionChanged: (v) async {
+                  if (v) {
+                    var index = subCategoriesCubit.subCategories.indexWhere(
+                      (element) => element.parentId == widget.catID.toString(),
+                    );
+                    //   if (index >= 0) {
+                    // log('message joas');
+                    //     return;
+                    //   }
 
-                var newIndex =
-                    categoriesCubit.subCategories(widget.catID ?? 0).indexWhere(
+                    var newIndex = categoriesCubit
+                        .subCategories(widget.catID ?? 0)
+                        .indexWhere(
                           (element) =>
                               element.parentId == widget.catID.toString(),
                         );
-                if (newIndex >= 0) {
-                  var list = categoriesCubit
-                      .subCategories(widget.catID ?? 0)
-                      .where((element) =>
-                          element.parentId == widget.catID.toString())
-                      .toList();
-                  list.forEach((r) {
-                    subCategory.add(
-                      SubCatCard(
-                        title: r.name,
-                        catID: r.id,
-                      ),
-                    );
-                  });
-                  setState(() {
-                  });
-                }
-              }
-            },
-            children: subCategory,
-            title: Text(
-              widget.title ?? '',
-              style: const TextStyle(color: Colors.black),
-            ),
-          );
+                    if (newIndex >= 0) {
+                      var list = categoriesCubit
+                          .subCategories(widget.catID ?? 0)
+                          .where((element) =>
+                              element.parentId == widget.catID.toString())
+                          .toList();
+                      list.forEach((r) {
+                        subCategory.add(
+                          SubCatCard(
+                            title: r.name,
+                            catID: r.id,
+                          ),
+                        );
+                      });
+                      setState(() {});
+                    }
+                  }
+                },
+                children: subCategory,
+                title: Text(
+                  widget.title ?? '',
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(color: Colors.black),
+                ),
+              ));
   }
 }

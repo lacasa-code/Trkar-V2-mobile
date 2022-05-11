@@ -16,7 +16,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class SearchModalBottomSheet extends StatefulWidget {
   const SearchModalBottomSheet({
     Key? key,
+    this.categoryId,
   }) : super(key: key);
+  final dynamic categoryId;
 
   @override
   State<SearchModalBottomSheet> createState() => _SearchModalBottomSheetState();
@@ -45,8 +47,16 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
     filterCarsCubit = context.read<FilterCarsCubit>();
     categoriesCubit = context.read<CategoriesCubit>();
     subCategoriesCubit = context.read<SubCategoriesCubit>()..init();
-    if (categoriesCubit.category.isEmpty) {
+    if (categoriesCubit.category.isEmpty && widget.categoryId == null) {
       categoriesCubit.getCategories(context);
+    }
+    if (widget.categoryId != null) {
+      subCategoriesCubit.getSubCategories(context, id: widget.categoryId);
+      filterCarsCubit.getCarMades(context);
+      ids.add(widget.categoryId!);
+      setState(() {
+        searchBy++;
+      });
     }
     super.initState();
   }
@@ -126,41 +136,44 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
             //     // }
             //   },
             // ),
-            BlocBuilder<CategoriesCubit, CategoriesState>(
-              builder: (context, state) {
-                return state is CategoriesLoading
-                    ? const LoaderWidget()
-                    : DropDownWidget(
-                        thinBorder: true,
-                        values: List.generate(
-                            categoriesCubit.category.length,
-                            (index) =>
-                                categoriesCubit.category[index].name ?? ''),
-                        labelText: 'categories',
-                        onChanged: (v) {
-                          if (v == null) {
-                            return;
-                          }
-                          setState(() {
-                            searchBy++;
-                          });
-                          var id = categoriesCubit.category[v].id;
-                          subCategoriesCubit.getSubCategories(
-                            context,
-                            id: categoriesCubit.category[v].id,
-                          );
-                          if (ids.isNotEmpty) {
-                            ids.clear();
-                          }
-                          ids.add(id!);
-                          if (filterCarsCubit.carMades.isNotEmpty) {
-                            log('messageNot');
-                            return;
-                          }
-                          filterCarsCubit.getCarMades(context);
-                        },
-                      );
-              },
+            Visibility(
+              visible: widget.categoryId == null,
+              child: BlocBuilder<CategoriesCubit, CategoriesState>(
+                builder: (context, state) {
+                  return state is CategoriesLoading
+                      ? const LoaderWidget()
+                      : DropDownWidget(
+                          thinBorder: true,
+                          values: List.generate(
+                              categoriesCubit.category.length,
+                              (index) =>
+                                  categoriesCubit.category[index].name ?? ''),
+                          labelText: 'categories',
+                          onChanged: (v) {
+                            if (v == null) {
+                              return;
+                            }
+                            setState(() {
+                              searchBy++;
+                            });
+                            var id = categoriesCubit.category[v].id;
+                            subCategoriesCubit.getSubCategories(
+                              context,
+                              id: categoriesCubit.category[v].id,
+                            );
+                            if (ids.isNotEmpty) {
+                              ids.clear();
+                            }
+                            ids.add(id!);
+                            if (filterCarsCubit.carMades.isNotEmpty) {
+                              log('messageNot');
+                              return;
+                            }
+                            filterCarsCubit.getCarMades(context);
+                          },
+                        );
+                },
+              ),
             ),
             BlocBuilder<SubCategoriesCubit, SubCategoriesState>(
               builder: (context, state) {
@@ -172,37 +185,40 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                           .where((element) =>
                               int.parse(element.parentId ?? '') == ids[index])
                           .toList();
-                      return Visibility(
-                        visible: subCat.isNotEmpty,
-                        child: DropDownWidget(
-                          thinBorder: true,
-                          values: List.generate(
-                              subCat.length,
-                              (index) =>
-                                  (Helper.currentLanguage == 'ar'
-                                      ? subCat[index].nameAr
-                                      : subCat[index].nameEn) ??
-                                  ''),
-                          labelText: 'all',
-                          onChanged: (v) async {
-                            if (v == null) {
-                              return;
-                            }
-                            var id = subCat[v].id;
-                            if (id == null) {
-                              return;
-                            }
-                            setState(() {
-                              handlingIdsList(ids[index]);
-                            });
-                            subCategoriesCubit.getSubCategories(
-                              context,
-                              id: id,
+                      return state is SubCategoriesLoading
+                          ? const LoaderWidget()
+                          : Visibility(
+                              visible: widget.categoryId != null ||
+                                  subCat.isNotEmpty,
+                              child: DropDownWidget(
+                                thinBorder: true,
+                                values: List.generate(
+                                    subCat.length,
+                                    (index) =>
+                                        (Helper.currentLanguage == 'ar'
+                                            ? subCat[index].nameAr
+                                            : subCat[index].nameEn) ??
+                                        ''),
+                                labelText: 'all',
+                                onChanged: (v) async {
+                                  if (v == null) {
+                                    return;
+                                  }
+                                  var id = subCat[v].id;
+                                  if (id == null) {
+                                    return;
+                                  }
+                                  setState(() {
+                                    handlingIdsList(ids[index]);
+                                  });
+                                  subCategoriesCubit.getSubCategories(
+                                    context,
+                                    id: id,
+                                  );
+                                  ids.add(id);
+                                },
+                              ),
                             );
-                            ids.add(id);
-                          },
-                        ),
-                      );
                     },
                   ),
                 );
@@ -219,6 +235,9 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                           ? const LoaderWidget()
                           : DropDownWidget(
                               onChanged: (v) {
+                                if (v == null) {
+                                  return;
+                                }
                                 setState(() {
                                   searchBy++;
                                 });
@@ -242,10 +261,18 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                           ? const LoaderWidget()
                           : DropDownWidget(
                               onChanged: (v) {
+                                if (v == null) {
+                                  return;
+                                }
                                 setState(() {
                                   searchBy++;
                                 });
-                                //TODO : call car engine api ...:...
+                                var carModelId =
+                                    filterCarsCubit.carModels[v].id;
+                                filterCarsCubit.getCarEngines(
+                                  context,
+                                  carModelId: carModelId,
+                                );
                               },
                               labelText: 'model',
                               thinBorder: true,
@@ -258,15 +285,19 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                     ),
                     Visibility(
                       visible: searchBy > 2,
-                      child: state is CarModelsLoading
+                      child: state is CarEngineLoading
                           ? const LoaderWidget()
                           : DropDownWidget(
                               onChanged: (v) {},
                               labelText: 'car_engine',
                               thinBorder: true,
                               values: List.generate(
-                                5,
-                                (index) => 'carEngine ${index + 1}',
+                                filterCarsCubit.carEngines.length,
+                                (index) {
+                                  var carEngine =
+                                      filterCarsCubit.carEngines[index];
+                                  return '${carEngine.name}';
+                                },
                               ),
                             ),
                     ),

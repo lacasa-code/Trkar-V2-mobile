@@ -84,11 +84,12 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               );
             }
             return SingleChildScrollView(
-              child: Wrap(
+              child: Column(
                 children:
                     List.generate(categoriesCubit.category.length, (index) {
                   var cat = categoriesCubit.category[index];
                   return CategoryItem(
+                    showDivider: cat != categoriesCubit.category.last,
                     onPressed: () {
                       var hasSubCat = categoriesCubit.hasSubCategory(cat.id);
                       // if (hasSubCat) {

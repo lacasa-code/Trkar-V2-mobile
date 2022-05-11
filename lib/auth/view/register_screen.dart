@@ -56,14 +56,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const BoxHelper(
                 height: 30,
               ),
-              ProfilePictureWidget(
-                onPicked: (f) {
-                  if (f == null) {
-                    return;
-                  }
-                  registerCubit.pickedImage = f;
-                },
-              ),
+              // ProfilePictureWidget(
+              //   onPicked: (f) {
+              //     if (f == null) {
+              //       return;
+              //     }
+              //     registerCubit.pickedImage = f;
+              //   },
+              // ),
               RegisterField(
                 hintText: 'username',
                 controller: registerCubit.usernameController,
@@ -75,122 +75,122 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 validator: registerCubit.emailValidator,
                 keyboardType: TextInputType.emailAddress,
               ),
-              RegisterField(
-                hintText: 'phone',
-                controller: registerCubit.phoneController,
-                maxLength: 10,
-                formatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                validator: registerCubit.phoneValidator,
-                keyboardType: TextInputType.phone,
-              ),
-              BlocBuilder<AddressDataCubit, AddressDataState>(
-                builder: (context, state) {
-                  if (state is CountryLoading) {
-                    return Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: CircularProgressIndicator(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                    );
-                  }
+              // RegisterField(
+              //   hintText: 'phone',
+              //   controller: registerCubit.phoneController,
+              //   maxLength: 10,
+              //   formatters: [
+              //     FilteringTextInputFormatter.digitsOnly,
+              //   ],
+              //   validator: registerCubit.phoneValidator,
+              //   keyboardType: TextInputType.phone,
+              // ),
+              // BlocBuilder<AddressDataCubit, AddressDataState>(
+              //   builder: (context, state) {
+              //     if (state is CountryLoading) {
+              //       return Center(
+              //         child: Padding(
+              //           padding: const EdgeInsets.all(8.0),
+              //           child: CircularProgressIndicator(
+              //             color: Theme.of(context).primaryColor,
+              //           ),
+              //         ),
+              //       );
+              //     }
 
-                  return Column(
-                    children: [
-                      SearchableDropDownWidget(
-                        values: addressDataCubit.countries
-                            .map((e) => e.name ?? '')
-                            .toList(),
-                        labelText: 'country',
-                        validator: registerCubit.countryValidator,
-                        onChanged: (v) {
-                          if (v == null) {
-                            return;
-                          }
-                          var country = addressDataCubit.countries
-                              .firstWhere((element) => element.name == v);
-                          registerCubit.countryId = country.id;
-                          addressDataCubit.getCities(
-                            context,
-                            countryId: country.id,
-                          );
-                        },
-                      ),
-                      Visibility(
-                        visible: addressDataCubit.cities.isNotEmpty,
-                        child: SearchableDropDownWidget(
-                          values: addressDataCubit.cities
-                              .map((e) => e.name ?? '')
-                              .toList(),
-                          labelText: 'city',
-                          validator: registerCubit.cityValidator,
-                          onChanged: (v) {
-                            if (v == null) {
-                              return;
-                            }
-                            var city = addressDataCubit.cities
-                                .firstWhere((element) => element.name == v);
-                            registerCubit.cityId = city.id;
+              //     return Column(
+              //       children: [
+              //         SearchableDropDownWidget(
+              //           values: addressDataCubit.countries
+              //               .map((e) => e.name ?? '')
+              //               .toList(),
+              //           labelText: 'country',
+              //           validator: registerCubit.countryValidator,
+              //           onChanged: (v) {
+              //             if (v == null) {
+              //               return;
+              //             }
+              //             var country = addressDataCubit.countries
+              //                 .firstWhere((element) => element.name == v);
+              //             registerCubit.countryId = country.id;
+              //             addressDataCubit.getCities(
+              //               context,
+              //               countryId: country.id,
+              //             );
+              //           },
+              //         ),
+              //         Visibility(
+              //           visible: addressDataCubit.cities.isNotEmpty,
+              //           child: SearchableDropDownWidget(
+              //             values: addressDataCubit.cities
+              //                 .map((e) => e.name ?? '')
+              //                 .toList(),
+              //             labelText: 'city',
+              //             validator: registerCubit.cityValidator,
+              //             onChanged: (v) {
+              //               if (v == null) {
+              //                 return;
+              //               }
+              //               var city = addressDataCubit.cities
+              //                   .firstWhere((element) => element.name == v);
+              //               registerCubit.cityId = city.id;
 
-                            addressDataCubit.getArea(
-                              context,
-                              cityId: city.id,
-                            );
-                          },
-                        ),
-                      ),
-                      Visibility(
-                        visible: addressDataCubit.areas.isNotEmpty,
-                        child: SearchableDropDownWidget(
-                          values: addressDataCubit.areas
-                              .map((e) => e.name ?? '')
-                              .toList(),
-                          labelText: 'area',
-                          validator: registerCubit.areaValidator,
-                          onChanged: (v) {
-                            if (v == null) {
-                              return;
-                            }
-                            var area = addressDataCubit.areas
-                                .firstWhere((element) => element.name == v);
-                            registerCubit.areaId = area.id;
-                          },
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-              RegisterField(
-                hintText: 'address',
-                maxLines: null,
-                controller: registerCubit.addressController,
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (_) => BlocProvider<RegisterCubit>.value(
-                        value: context.read<RegisterCubit>(),
-                        child: BlocBuilder<RegisterCubit, RegisterState>(
-                          builder: (context, state) {
-                            return Dialog(
-                              child: MapDialog(
-                                onPickedLocation: registerCubit.pickLocation,
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.add_location_alt_rounded,
-                  ),
-                ),
-              ),
+              //               addressDataCubit.getArea(
+              //                 context,
+              //                 cityId: city.id,
+              //               );
+              //             },
+              //           ),
+              //         ),
+              //         Visibility(
+              //           visible: addressDataCubit.areas.isNotEmpty,
+              //           child: SearchableDropDownWidget(
+              //             values: addressDataCubit.areas
+              //                 .map((e) => e.name ?? '')
+              //                 .toList(),
+              //             labelText: 'area',
+              //             validator: registerCubit.areaValidator,
+              //             onChanged: (v) {
+              //               if (v == null) {
+              //                 return;
+              //               }
+              //               var area = addressDataCubit.areas
+              //                   .firstWhere((element) => element.name == v);
+              //               registerCubit.areaId = area.id;
+              //             },
+              //           ),
+              //         ),
+              //       ],
+              //     );
+              //   },
+              // ),
+              // RegisterField(
+              //   hintText: 'address',
+              //   maxLines: null,
+              //   controller: registerCubit.addressController,
+              //   suffixIcon: IconButton(
+              //     onPressed: () {
+              //       showDialog(
+              //         context: context,
+              //         builder: (_) => BlocProvider<RegisterCubit>.value(
+              //           value: context.read<RegisterCubit>(),
+              //           child: BlocBuilder<RegisterCubit, RegisterState>(
+              //             builder: (context, state) {
+              //               return Dialog(
+              //                 child: MapDialog(
+              //                   onPickedLocation: registerCubit.pickLocation,
+              //                 ),
+              //               );
+              //             },
+              //           ),
+              //         ),
+              //       );
+              //     },
+              //     icon: const Icon(
+              //       Icons.add_location_alt_rounded,
+              //     ),
+              //   ),
+              // ),
               RegisterField(
                 hintText: 'password',
                 controller: registerCubit.passwordController,

@@ -8,15 +8,23 @@ import 'package:trkar/auth/viewModel/logout/logout_cubit.dart';
 import 'package:trkar/categories/view/sub_categories_screen.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
+import 'package:trkar/core/components/register_button.dart';
+import 'package:trkar/core/components/register_field.dart';
+import 'package:trkar/core/components/search_icon.dart';
 import 'package:trkar/core/components/search_modal_bottom_sheet.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/extensions/string.dart';
+import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
+import 'package:trkar/home/view/widgets/home_categories_item.dart';
 import 'package:trkar/home/view/widgets/my_drawer.dart';
+import 'package:trkar/home/view/widgets/recently_viewed_product_view.dart';
 import 'package:trkar/home/view/widgets/select_car_card.dart';
+import 'package:trkar/home/view/widgets/send_offers_email_view.dart';
 import 'package:trkar/localization/view/change_language_screen.dart';
 import '../../core/extensions/media_query.dart';
 import 'package:trkar/profile/view/edit_profile_screen.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -60,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen>
     return Scaffold(
       body: BlocBuilder<CategoriesCubit, CategoriesState>(
         builder: (context, state) {
-          if (state is CategoriesLoading) {
+          if (state is AllCategoriesLoading) {
             return const LoaderWidget();
           }
 
@@ -68,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen>
             key: key,
             drawer: const MyDrawer(),
             appBar: AppBar(
+              /*
               bottom: TabBar(
                 labelColor: Colors.white,
                 unselectedLabelColor: Colors.black,
@@ -90,32 +99,13 @@ class _HomeScreenState extends State<HomeScreen>
                     )
                     .toList(),
               ),
+              */
               // automaticallyImplyLeading: false,
               titleTextStyle: const TextStyle(color: Colors.black),
               title: Row(
-                children: [
-                  const SelectCarWidget(),
-                  IconButton(
-                    onPressed: () {
-                      showModalBottomSheet(
-                        isScrollControlled: true,
-                        context: context,
-                        builder: (_) => BlocProvider(
-                          create: (_) => SubCategoriesCubit(),
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom,
-                            ),
-                            child: const SearchModalBottomSheet(),
-                          ),
-                        ),
-                      );
-                    },
-                    color: Colors.black,
-                    icon: const Icon(
-                      Icons.search,
-                    ),
-                  ),
+                children: const [
+                  SelectCarWidget(),
+                  SearchIcon(),
                 ],
               ),
               elevation: 0,
@@ -194,82 +184,132 @@ class _HomeScreenState extends State<HomeScreen>
                 // ),
               ],
             ),
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(
-                  child: TabBarView(
-                    controller: _controller,
-                    children: categoriesCubit.maincategory
-                        .map(
-                          (e) => Column(
-                            children: [
-                              SingleChildScrollView(
-                                child: Wrap(
-                                  spacing: ScreenUtil().setWidth(10),
-                                  children: List.generate(
-                                    categoriesCubit
-                                                .subCategories(e.id ?? 0)
-                                                .length >
-                                            6
-                                        ? 6
-                                        : categoriesCubit
-                                            .subCategories(e.id ?? 0)
-                                            .length,
-                                    (index) {
-                                      var subCat = categoriesCubit
-                                          .subCategories(e.id ?? 0)[index];
-                                      return HomeCategoryItem(
-                                        title: subCat.name,
-                                        imagePath: subCat.image,
-                                      );
-                                    },
+            body: SingleChildScrollView(
+              child: Column(
+                // crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const HomeCarouselCard(),
+                  Column(
+                    children: [
+                      Align(
+                        alignment: Helper.appAlignment,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 10),
+                          child: Text(
+                            'all_categories'.translate,
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: ScreenUtil().setSp(15),
+                            ),
+                          ),
+                        ),
+                      ),
+                      ...List.generate(categoriesCubit.allcategory.length,
+                          (index) {
+                        var cat = categoriesCubit.allcategory[index];
+
+                        return HomeCategoryItem(
+                          onTap: () {
+                            // var hasSubCat = categoriesCubit.hasSubCategory(cat.id);
+                            // if (hasSubCat) {
+                            var subCat = context.read<SubCategoriesCubit>();
+                            subCat.categoryName = cat.name;
+                            subCat.parentId = cat.id;
+                            NavigationService.push(
+                              page: SubCategoriesScreen.routeName,
+                              arguments: {
+                                'category_name': cat.name,
+                                'parent_id': cat.id,
+                              },
+                            );
+                          },
+                          title: cat.name,
+                          imagePath: cat.image,
+                        );
+                      }),
+                    ],
+                  ),
+                  const RecentlyViewedProductsView(),
+                  const SendOffersEmailView(),
+                  /*
+                  Expanded(
+                    child: TabBarView(
+                      controller: _controller,
+                      children: categoriesCubit.maincategory
+                          .map(
+                            (e) => Column(
+                              children: [
+                                SingleChildScrollView(
+                                  child: Wrap(
+                                    spacing: ScreenUtil().setWidth(10),
+                                    children: List.generate(
+                                      categoriesCubit
+                                                  .subCategories(e.id ?? 0)
+                                                  .length >
+                                              6
+                                          ? 6
+                                          : categoriesCubit
+                                              .subCategories(e.id ?? 0)
+                                              .length,
+                                      (index) {
+                                        var subCat = categoriesCubit
+                                            .subCategories(e.id ?? 0)[index];
+                                        return HomeCategoryItem(
+                                          title: subCat.name,
+                                          imagePath: subCat.image,
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ),
-                              ),
-                              const BoxHelper(height: 20),
-                              TextButton(
-                                  onPressed: () {
-                                    var cat = categoriesCubit
-                                        .maincategory[_controller.index];
-                                    var hasSubCat =
-                                        categoriesCubit.hasSubCategory(cat.id);
-                                    // if (hasSubCat) {
-                                    var subCat =
-                                        context.read<SubCategoriesCubit>();
-                                    subCat.categoryName = cat.name;
-                                    subCat.parentId = cat.id;
-                                    NavigationService.push(
-                                      page: SubCategoriesScreen.routeName,
-                                      arguments: {
-                                        'category_name': cat.name,
-                                        'parent_id': cat.id,
-                                      },
-                                    );
-                                  },
-                                  child: Text(
-                                    'more'.translate,
-                                    style: const TextStyle(
-                                        decoration: TextDecoration.underline,
-                                        fontWeight: FontWeight.bold),
-                                  ))
-                            ],
-                          ),
-                        )
-                        .toList(),
+                                const BoxHelper(height: 20),
+                                TextButton(
+                                    onPressed: () {
+                                      var cat = categoriesCubit
+                                          .maincategory[_controller.index];
+                                      var hasSubCat =
+                                          categoriesCubit.hasSubCategory(cat.id);
+                                      // if (hasSubCat) {
+                                      var subCat =
+                                          context.read<SubCategoriesCubit>();
+                                      subCat.categoryName = cat.name;
+                                      subCat.parentId = cat.id;
+                                      NavigationService.push(
+                                        page: SubCategoriesScreen.routeName,
+                                        arguments: {
+                                          'category_name': cat.name,
+                                          'parent_id': cat.id,
+                                        },
+                                      );
+                                    },
+                                    child: Text(
+                                      'more'.translate,
+                                      style: const TextStyle(
+                                          decoration: TextDecoration.underline,
+                                          fontWeight: FontWeight.bold),
+                                    ))
+                              ],
+                            ),
+                          )
+                          .toList(),
+                    ),
                   ),
-                ),
-                // const BoxHelper(
-                //   height: 80,
-                // ),
-                // Image.asset(
-                //   'assets/icons/trkarLogoWhite.png',
-                //   // alignment: Al,
-                // ),
-                // const BoxHelper(
-                //   height: 30,
-                // ),
-              ],
+                  */
+                  // const BoxHelper(
+                  //   height: 80,
+                  // ),
+                  // Image.asset(
+                  //   'assets/icons/trkarLogoWhite.png',
+                  //   // alignment: Al,
+                  // ),
+                  // const BoxHelper(
+                  //   height: 30,
+                  // ),
+                ],
+              ),
             ),
           );
         },
@@ -278,60 +318,30 @@ class _HomeScreenState extends State<HomeScreen>
   }
 }
 
-class HomeCategoryItem extends StatelessWidget {
-  const HomeCategoryItem({
+class HomeCarouselCard extends StatelessWidget {
+  const HomeCarouselCard({
     Key? key,
-    this.imagePath,
-    this.title,
   }) : super(key: key);
-  final String? title;
-  final String? imagePath;
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: context.width * 0.3,
-      // padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const BoxHelper(
-            height: 10,
-          ),
-          // Image.network(
-          //   imagePath ?? 'assets/icons/trkarLogoWhite.png',
-          //   width: context.width * 0.25,
-
-          //   // height: context.height * 0.1,
-          //   // alignment: Al,
-          // ),
-          FadeInImage(
-            placeholder: const AssetImage(
-              'assets/icons/trkarLogoWhite.png',
-            ),
-            image: NetworkImage(imagePath ?? ''),
-            width: context.width * 0.25,
-            imageErrorBuilder: (_, __, ___) => Image.asset(
-              'assets/icons/trkarLogoWhite.png',
-              width: context.width * 0.25,
-
-              // height: context.height * 0.1,
-              // alignment: Al,
-            ),
-          ),
-          const BoxHelper(
-            height: 15,
-          ),
-          Text(
-            title ?? 'cat name',
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              // fontSize: ScreenUtil().setSp(10),
-            ),
-          ),
-        ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: CarouselSlider(
+        items: List.generate(
+            3,
+            (index) => Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Image.asset(
+                    'assets/images/car-offers${index + 1}.jpg',
+                    fit: BoxFit.cover,
+                  ),
+                )),
+        options: CarouselOptions(
+          height: ScreenUtil().setHeight(180),
+          enableInfiniteScroll: false,
+          initialPage: 1,
+        ),
       ),
     );
   }

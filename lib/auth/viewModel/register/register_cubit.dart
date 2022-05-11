@@ -31,18 +31,18 @@ class RegisterCubit extends Cubit<RegisterState> {
         'email': emailController.text,
         'password': passwordController.text,
         'username': usernameController.text,
-        'country_id': countryId,
-        'city_id': cityId,
-        'area_id': areaId,
-        'latitude': latitude,
-        'longitude': longitude,
-        'address': addressController.text,
-        'phone': phoneController.text,
-        'image': pickedImage == null
-            ? null
-            : await MultipartFile.fromFile(
-                pickedImage!.path,
-              ),
+        // 'country_id': countryId,
+        // 'city_id': cityId,
+        // 'area_id': areaId,
+        // 'latitude': latitude,
+        // 'longitude': longitude,
+        // 'address': addressController.text,
+        // 'phone': phoneController.text,
+        // 'image': pickedImage == null
+        //     ? null
+        //     : await MultipartFile.fromFile(
+        //         pickedImage!.path,
+        //       ),
       },
     );
     if (registerData == null) {
@@ -133,15 +133,16 @@ class RegisterCubit extends Cubit<RegisterState> {
   Future<void> register(context) async {
     FocusManager.instance.primaryFocus?.unfocus();
     var validate = formKey.currentState!.validate();
-    if (!validate || pickedImage == null) {
-      if (pickedImage == null) {
-        Fluttertoast.showToast(
-          msg: 'profile_image_required'.translate,
-          backgroundColor: Colors.red,
-        );
-      }
+    if (!validate) {
       return;
     }
+    // if (pickedImage == null) {
+    //   Fluttertoast.showToast(
+    //     msg: 'profile_image_required'.translate,
+    //     backgroundColor: Colors.red,
+    //   );
+    // return;
+    // }
     // if (userType == 1) {
     //   _registerVendor(context);
     // } else {

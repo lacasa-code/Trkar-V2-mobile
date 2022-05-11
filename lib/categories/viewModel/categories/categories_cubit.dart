@@ -34,7 +34,7 @@ class CategoriesCubit extends Cubit<CategoriesState> {
 
   Future<void> getAllCategories(context) async {
     log('message');
-    emit(CategoriesLoading());
+    emit(AllCategoriesLoading());
     try {
       var categoriesData = await CategoriesRepo.getCategories(
         context,
@@ -45,6 +45,7 @@ class CategoriesCubit extends Cubit<CategoriesState> {
       }
       if (categoriesData.status == true) {
         _allcategory = categoriesData.data;
+        _allcategory?.sort((a, b) => a.parentId?.compareTo(b.parentId!) ?? 0);
         emit(CategoriesDone());
       } else {
         emit(CategoriesError(
@@ -68,6 +69,8 @@ class CategoriesCubit extends Cubit<CategoriesState> {
   List<Category> get maincategory => [
         ...?_allcategory?.where((e) => e.parentId == '0').toList(),
       ];
+  List<Category> get allcategory => [...?_allcategory];
+
   List<Category> subCategories(int parentId) => _allcategory!
       .where((element) => element.parentId == parentId.toString())
       .toList();

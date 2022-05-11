@@ -87,5 +87,13 @@
     "search_hint": "Please enter the word you want to search for",
     "all": "All",
     "manufacturers": "Manufacturers",
-    "car_engine": "Car Engine","more":"More"
+    "car_engine": "Car Engine",
+    "more": "More",
+    "recieve_offersmail": "Yes, I would like to recieve email newsletters with special promotions, I can unsubscribe at any time",
+    "recieve_offersmail_header": "Email-exclusive Offers and coupon codes for subscribers!",
+    "please_note": "Please note our ",
+    "privacy_policy": "Privacy Policy",
+    "subscribe": "Subscribe",
+    "recently_viewed": "Recently Viewed",
+    "all_categories": "All Categories"
 }

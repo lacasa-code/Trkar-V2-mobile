@@ -7,6 +7,8 @@ class FilterCarsInitial extends FilterCarsState {}
 
 class CarMadesLoading extends FilterCarsState {}
 
+class CarEngineLoading extends FilterCarsState {}
+
 class CarModelsLoading extends FilterCarsState {}
 
 class CarYearsLoading extends FilterCarsState {}

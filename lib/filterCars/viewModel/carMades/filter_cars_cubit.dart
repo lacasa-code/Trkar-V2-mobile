@@ -14,6 +14,8 @@ import '../../model/car_years_model.dart';
 import '../../repo/car_years_repo.dart';
 import '../../model/cars_model.dart';
 import '../../repo/car_model_repo.dart';
+import '../../model/car_engine_model.dart';
+import '../../repo/car_engine_repo.dart';
 
 part 'filter_cars_state.dart';
 
@@ -32,6 +34,35 @@ class FilterCarsCubit extends Cubit<FilterCarsState> {
       }
       if (carMadesData.status == true) {
         _carMades = carMadesData.data;
+        emit(FilterCarsDone());
+      } else {
+        emit(FilterCarsError(message: 'something_wrong'));
+      }
+    } on LaravelException catch (error) {
+      emit(FilterCarsError(
+        message: error.exception,
+      ));
+    }
+  }
+
+  Future<void> getCarEngines(
+    context, {
+    carModelId,
+  }) async {
+    emit(CarEngineLoading());
+    try {
+      var carMadesData = await CarEnginesRepo.getCarEngine(
+        context,
+        carModelId: carModelId,
+      );
+      if (carMadesData == null) {
+        emit(FilterCarsError(
+          message: 'network'.translate,
+        ));
+        return;
+      }
+      if (carMadesData.status == true) {
+        _carEngines = carMadesData.data;
         emit(FilterCarsDone());
       } else {
         emit(FilterCarsError(message: 'something_wrong'));
@@ -143,6 +174,7 @@ class FilterCarsCubit extends Cubit<FilterCarsState> {
   List<OriginalCountry>? _originalCountry = [];
   List<Year>? _carYears = [];
   List<Car>? _carModels = [];
+  List<CarEngine>? _carEngines = [];
 
   /// getters ...
 
@@ -151,4 +183,5 @@ class FilterCarsCubit extends Cubit<FilterCarsState> {
   List<OriginalCountry> get originalCountry => [...?_originalCountry];
   List<Year> get carYears => [...?_carYears];
   List<Car> get carModels => [...?_carModels];
+  List<CarEngine> get carEngines => [...?_carEngines];
 }
