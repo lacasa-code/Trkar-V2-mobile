@@ -20,15 +20,12 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 3), () {
-      if (Helper.isLoggedIn) {
-        log('isCurrentTokenValide => ${Helper.isValidToken}');
-        context.read<ValidateTokenCubit>().validateToken(context);
-        context.read<FilterCarsCubit>().getCarModels(context);
-      }
-      NavigationService.pushReplacementAll(
-        page: Helper.isLoggedIn ? TabScreen.routeName : LoginScreen.routeName,
-      );
+    Future.delayed(const Duration(seconds: 3), () async{
+   
+       await context.read<ValidateTokenCubit>().validateToken(context);
+       
+      
+    
     });
     super.initState();
   }

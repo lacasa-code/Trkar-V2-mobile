@@ -40,6 +40,13 @@ class UpdateUserProfileCubit extends Cubit<UpdateUserProfileState> {
     if (!valid) {
       return;
     }
+    // if (pickedImage == null) {
+    //   Fluttertoast.showToast(
+    //     msg: 'profile_image_required'.translate,
+    //     backgroundColor: Colors.red,
+    //   );
+    //   return;
+    // }
     emit(UpdateUserProfileLoading());
     try {
       var updateData = await UpdateUserProfileRepo.updateData(
@@ -54,11 +61,13 @@ class UpdateUserProfileCubit extends Cubit<UpdateUserProfileState> {
           'longitude': longitude,
           'address': addressController.text,
           'phone': phoneController.text,
-          'image': pickedImage == null
-              ? pickedImage
-              : await MultipartFile.fromFile(
-                  pickedImage!.path,
-                ),
+          if (pickedImage != null) ...{
+            'image': pickedImage == null
+                ? pickedImage
+                : await MultipartFile.fromFile(
+                    pickedImage!.path,
+                  ),
+          }
         },
       );
       if (updateData == null) {
@@ -75,6 +84,14 @@ class UpdateUserProfileCubit extends Cubit<UpdateUserProfileState> {
         Fluttertoast.showToast(
           msg: updateData.message ?? '',
         );
+        try {
+          await context.read<UserProfileCubit>().getUserProfile(
+                context,
+                initial: false,
+              );
+        } catch (e) {
+          log('message');
+        }
         emit(UpdateUserProfileDone());
       } else {
         _dialog.showWarningDialog(

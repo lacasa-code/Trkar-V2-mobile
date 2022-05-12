@@ -14,14 +14,17 @@ import 'package:trkar/auth/view/reset_password_screen.dart';
 import 'package:trkar/auth/viewModel/login/login_cubit.dart';
 import 'package:trkar/auth/viewModel/register/register_cubit.dart';
 import 'package:trkar/cars/view/my_cars_screen.dart';
+import 'package:trkar/cart/view/cart_screen.dart';
 import 'package:trkar/categories/view/categories_screen.dart';
 import 'package:trkar/categories/view/sub_categories_screen.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
+import 'package:trkar/favorites/view/favorites_screen.dart';
 import 'package:trkar/home/view/home_screen.dart';
 import 'package:trkar/localization/view/change_language_screen.dart';
 import 'package:trkar/localization/viewModel/lang/lang_cubit.dart';
 import 'package:trkar/profile/view/edit_profile_screen.dart';
+import 'package:trkar/profile/view/profile_screen.dart';
 import 'package:trkar/profile/viewModel/updateUserProfile/update_user_profile_cubit.dart';
 import 'package:trkar/splash/view/splash_screen.dart';
 import 'package:trkar/tab/view/tab_screen.dart';
@@ -101,6 +104,21 @@ class RoutesGenerator {
         return MaterialPageRoute(
           settings: settings,
           builder: (_) => const HomeScreen(),
+        );
+      case CartScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const CartScreen(),
+        );
+      case FavoritesScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const FavoritesScreen(),
+        );
+      case ProfileScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const ProfileScreen(),
         );
       case CategoriesScreen.routeName:
         return MaterialPageRoute(

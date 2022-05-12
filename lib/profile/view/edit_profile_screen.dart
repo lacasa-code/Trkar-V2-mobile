@@ -106,102 +106,157 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                       BlocBuilder<AddressDataCubit, AddressDataState>(
                         builder: (context, state) {
-                          if (state is CountryLoading ||
-                              state is CityLoading ||
-                              state is AreaLoading) {
-                            return Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: CircularProgressIndicator(
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                            );
-                          }
+                          // if (state is CountryLoading ||
+                          //     state is CityLoading ||
+                          //     state is AreaLoading) {
+                          //   return Center(
+                          //     child: Padding(
+                          //       padding: const EdgeInsets.all(8.0),
+                          //       child: CircularProgressIndicator(
+                          //         color: Theme.of(context).primaryColor,
+                          //       ),
+                          //     ),
+                          //   );
+                          // }
 
                           return Column(
                             children: [
-                              SearchableDropDownWidget(
-                                initialValue: addressDataCubit
-                                    .getCountryById(int.parse(
-                                        updateUserProfileCubit.countryId ??
-                                            '0'))
-                                    ?.name,
-                                values: addressDataCubit.countries
-                                    .map((e) => e.name ?? '')
-                                    .toList(),
-                                labelText: 'country',
-                                validator:
-                                    updateUserProfileCubit.countryValidator,
-                                onChanged: (v) {
-                                  if (v == null) {
-                                    return;
-                                  }
-                                  var country = addressDataCubit.countries
-                                      .firstWhere(
-                                          (element) => element.name == v);
-                                  updateUserProfileCubit.countryId =
-                                      country.id.toString();
-                                  addressDataCubit.getCities(
-                                    context,
-                                    countryId: country.id,
-                                  );
-                                },
-                              ),
+                              state is CountryLoading
+                                  ? Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: CircularProgressIndicator(
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                      ),
+                                    )
+                                  : addressDataCubit.countries.isEmpty
+                                      ? const SizedBox()
+                                      : SearchableDropDownWidget(
+                                          initialValue: updateUserProfileCubit
+                                                      .countryId ==
+                                                  null
+                                              ? null
+                                              : addressDataCubit
+                                                  .getCountryById(int.parse(
+                                                      updateUserProfileCubit
+                                                              .countryId ??
+                                                          '0'))
+                                                  ?.name,
+                                          values: addressDataCubit.countries
+                                              .map((e) => e.name ?? '')
+                                              .toList(),
+                                          labelText: 'country',
+                                          validator: updateUserProfileCubit
+                                              .countryValidator,
+                                          onChanged: (v) {
+                                            if (v == null) {
+                                              return;
+                                            }
+                                            var country = addressDataCubit
+                                                .countries
+                                                .firstWhere((element) =>
+                                                    element.name == v);
+                                            updateUserProfileCubit.countryId =
+                                                country.id.toString();
+                                            addressDataCubit.getCities(
+                                              context,
+                                              countryId: country.id,
+                                            );
+                                          },
+                                        ),
                               Visibility(
-                                visible: addressDataCubit.cities.isNotEmpty,
-                                child: SearchableDropDownWidget(
-                                  values: addressDataCubit.cities
-                                      .map((e) => e.name ?? '')
-                                      .toList(),
-                                  labelText: 'city',
-                                  initialValue: addressDataCubit
-                                      .getCityById(int.parse(
-                                          updateUserProfileCubit.cityId ?? ''))
-                                      ?.name,
-                                  validator:
-                                      updateUserProfileCubit.cityValidator,
-                                  onChanged: (v) {
-                                    if (v == null) {
-                                      return;
-                                    }
-                                    var city = addressDataCubit.cities
-                                        .firstWhere(
-                                            (element) => element.name == v);
-                                    updateUserProfileCubit.cityId =
-                                        city.id.toString();
+                                visible: addressDataCubit.cities.isNotEmpty ||
+                                    state is CityLoading,
+                                child: state is CityLoading
+                                    ? Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: CircularProgressIndicator(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                          ),
+                                        ),
+                                      )
+                                    : addressDataCubit.cities.isEmpty
+                                        ? const SizedBox()
+                                        : SearchableDropDownWidget(
+                                            values: addressDataCubit.cities
+                                                .map((e) => e.name ?? '')
+                                                .toList(),
+                                            labelText: 'city',
+                                            initialValue: updateUserProfileCubit
+                                                        .cityId ==
+                                                    null
+                                                ? null
+                                                : addressDataCubit
+                                                    .getCityById(int.parse(
+                                                        updateUserProfileCubit
+                                                                .cityId ??
+                                                            ''))
+                                                    ?.name,
+                                            validator: updateUserProfileCubit
+                                                .cityValidator,
+                                            onChanged: (v) {
+                                              if (v == null) {
+                                                return;
+                                              }
+                                              var city = addressDataCubit.cities
+                                                  .firstWhere((element) =>
+                                                      element.name == v);
+                                              updateUserProfileCubit.cityId =
+                                                  city.id.toString();
 
-                                    addressDataCubit.getArea(
-                                      context,
-                                      cityId: city.id,
-                                    );
-                                  },
-                                ),
+                                              addressDataCubit.getArea(
+                                                context,
+                                                cityId: city.id,
+                                              );
+                                            },
+                                          ),
                               ),
                               Visibility(
-                                visible: addressDataCubit.areas.isNotEmpty,
-                                child: SearchableDropDownWidget(
-                                  values: addressDataCubit.areas
-                                      .map((e) => e.name ?? '')
-                                      .toList(),
-                                  labelText: 'area',
-                                  initialValue: addressDataCubit
-                                      .getAreaById(int.parse(
-                                          updateUserProfileCubit.areaId ?? '0'))
-                                      ?.name,
-                                  validator:
-                                      updateUserProfileCubit.areaValidator,
-                                  onChanged: (v) {
-                                    if (v == null) {
-                                      return;
-                                    }
-                                    var area = addressDataCubit.areas
-                                        .firstWhere(
-                                            (element) => element.name == v);
-                                    updateUserProfileCubit.areaId =
-                                        area.id.toString();
-                                  },
-                                ),
+                                visible: addressDataCubit.areas.isNotEmpty ||
+                                    state is AreaLoading,
+                                child: state is AreaLoading
+                                    ? Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: CircularProgressIndicator(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                          ),
+                                        ),
+                                      )
+                                    : addressDataCubit.areas.isEmpty
+                                        ? const SizedBox()
+                                        : SearchableDropDownWidget(
+                                            values: addressDataCubit.areas
+                                                .map((e) => e.name ?? '')
+                                                .toList(),
+                                            labelText: 'area',
+                                            initialValue: updateUserProfileCubit
+                                                        .areaId ==
+                                                    null
+                                                ? null
+                                                : addressDataCubit
+                                                    .getAreaById(int.parse(
+                                                        updateUserProfileCubit
+                                                                .areaId ??
+                                                            '0'))
+                                                    ?.name,
+                                            validator: updateUserProfileCubit
+                                                .areaValidator,
+                                            onChanged: (v) {
+                                              if (v == null) {
+                                                return;
+                                              }
+                                              var area = addressDataCubit.areas
+                                                  .firstWhere((element) =>
+                                                      element.name == v);
+                                              updateUserProfileCubit.areaId =
+                                                  area.id.toString();
+                                            },
+                                          ),
                               ),
                             ],
                           );

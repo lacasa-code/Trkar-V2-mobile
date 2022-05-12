@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/services.dart';
@@ -52,7 +53,7 @@ class GlobalTranslations {
     // }
 
     if (language == "") {
-      language = "ar";
+      language = Platform.localeName.split('_').first;
     }
 
     _locale = Locale(language!, "");
@@ -77,7 +78,7 @@ class GlobalTranslations {
   }
 
   Future<String> _getApplicationSavedInformation(String name) async {
-    return GetStorage().read<String>(_storageKey + name) ?? 'ar';
+    return GetStorage().read<String>(_storageKey + name) ?? Platform.localeName.split('_').first;
   }
 
   Future<void> _setApplicationSavedInformation(

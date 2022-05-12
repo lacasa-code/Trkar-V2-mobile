@@ -60,6 +60,55 @@ class CategoriesCubit extends Cubit<CategoriesState> {
   int? categoryId;
   List<Category>? _category = [];
   List<Category>? _allcategory = [];
+  final List<int> _categoriesScreenSubCatIds = [
+
+    // motorcycle parts ..
+    519,
+    33,
+    536,
+    36,
+    32,
+    // e-mobility .. .. ..
+  ];
+  final List<int> _homeCategoriesIds = [
+    34,
+    35,
+    53,
+    36,
+    37,
+    13,
+    39,
+    40,
+    41,
+    43,
+    30,
+    45,
+    31,
+    46,
+    47,
+    518,
+    542,
+    42,
+    49,
+    50,
+    504,
+    505,
+    507,
+    509,
+    563,
+    28,
+    29,
+    510,
+    506,
+    508,
+    511,
+    512,
+    515,
+    514,
+    8,
+    517,
+    516,
+  ];
   Category? get selectedCategory => _category?.firstWhere(
         (element) => element.id == categoryId,
       );
@@ -69,6 +118,46 @@ class CategoriesCubit extends Cubit<CategoriesState> {
   List<Category> get maincategory => [
         ...?_allcategory?.where((e) => e.parentId == '0').toList(),
       ];
+  List<Category> get homeCategories {
+    List<Category> _myCat = [];
+    for (var i = 0; i < _homeCategoriesIds.length; i++) {
+      var index = _allcategory!
+          .indexWhere((element) => element.id == _homeCategoriesIds[i]);
+      if (index < 0) {
+        continue;
+      }
+      _myCat.add(_allcategory!
+          .firstWhere((element) => element.id == _homeCategoriesIds[i]));
+    }
+    return _myCat;
+    // return [
+    //   ...?_allcategory
+    //       ?.where((e) =>
+    //           _homeCategoriesIds.indexWhere((element) => element == e.id) >= 0)
+    //       .toList(),
+    // ];
+  }
+
+  List<Category> get categoriesScreenSubCat {
+    List<Category> _myCat = [];
+    for (var i = 0; i < _categoriesScreenSubCatIds.length; i++) {
+      var index = _allcategory!
+          .indexWhere((element) => element.id == _categoriesScreenSubCatIds[i]);
+      if (index < 0) {
+        continue;
+      }
+      _myCat.add(_allcategory!.firstWhere(
+          (element) => element.id == _categoriesScreenSubCatIds[i]));
+    }
+    return _myCat;
+    // return [
+    //   ...?_allcategory
+    //       ?.where((e) =>
+    //           _homeCategoriesIds.indexWhere((element) => element == e.id) >= 0)
+    //       .toList(),
+    // ];
+  }
+
   List<Category> get allcategory => [...?_allcategory];
 
   List<Category> subCategories(int parentId) => _allcategory!

@@ -39,6 +39,15 @@ class _MyDrawerState extends State<MyDrawer> {
                             onExpansionChanged: (v) {
                               if (v) {}
                             },
+                            leading: Transform.scale(
+                              scale: 0.7,
+                              child: Image.network(
+                                e.image ?? '',
+                                errorBuilder: (_, __, ___) => Image.asset(
+                                  'assets/icons/edit_note.png',
+                                ),
+                              ),
+                            ),
                             title: Text(
                               e.name ?? '',
                               style: const TextStyle(color: Colors.black),
@@ -52,6 +61,7 @@ class _MyDrawerState extends State<MyDrawer> {
                                 return SubCatCard(
                                   catID: subCat.id,
                                   title: subCat.name,
+                                  image: subCat.image,
                                 );
                               },
                             ).toList(),

@@ -104,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen>
               titleTextStyle: const TextStyle(color: Colors.black),
               title: Row(
                 children: const [
-                  SelectCarWidget(),
+                  // SelectCarWidget(),
                   SearchIcon(),
                 ],
               ),
@@ -119,58 +119,58 @@ class _HomeScreenState extends State<HomeScreen>
               ),
               backgroundColor: Colors.transparent,
               actions: [
-                PopupMenuButton(
-                  icon: Icon(
-                    Icons.settings_outlined,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  onSelected: (v) {
-                    if (v == 'edit') {
-                      NavigationService.push(
-                        page: EditProfileScreen.routeName,
-                      );
-                    }
-                    if (v == 'addresses') {
-                      NavigationService.push(
-                        page: AddressesScreen.routeName,
-                      );
-                    }
-                    if (v == 'lang') {
-                      NavigationService.push(
-                        page: ChangeLanguageScreen.routeName,
-                      );
-                    }
-                    if (v == 'logout') {
-                      BlocProvider.of<LogoutCubit>(context).logOut(context);
-                    }
-                  },
-                  itemBuilder: (_) => [
-                    PopupMenuItem(
-                      value: 'edit',
-                      child: Text(
-                        'edit_profile'.translate,
-                      ),
-                    ),
-                    PopupMenuItem(
-                      value: 'lang',
-                      child: Text(
-                        'lang'.translate,
-                      ),
-                    ),
-                    PopupMenuItem(
-                      value: 'addresses',
-                      child: Text(
-                        'addresses'.translate,
-                      ),
-                    ),
-                    PopupMenuItem(
-                      value: 'logout',
-                      child: Text(
-                        'logout'.translate,
-                      ),
-                    ),
-                  ],
-                ),
+                // PopupMenuButton(
+                //   icon: Icon(
+                //     Icons.settings_outlined,
+                //     color: Theme.of(context).primaryColor,
+                //   ),
+                //   onSelected: (v) {
+                //     if (v == 'edit') {
+                //       NavigationService.push(
+                //         page: EditProfileScreen.routeName,
+                //       );
+                //     }
+                //     if (v == 'addresses') {
+                //       NavigationService.push(
+                //         page: AddressesScreen.routeName,
+                //       );
+                //     }
+                //     if (v == 'lang') {
+                //       NavigationService.push(
+                //         page: ChangeLanguageScreen.routeName,
+                //       );
+                //     }
+                //     if (v == 'logout') {
+                //       BlocProvider.of<LogoutCubit>(context).logOut(context);
+                //     }
+                //   },
+                //   itemBuilder: (_) => [
+                //     PopupMenuItem(
+                //       value: 'edit',
+                //       child: Text(
+                //         'edit_profile'.translate,
+                //       ),
+                //     ),
+                //     PopupMenuItem(
+                //       value: 'lang',
+                //       child: Text(
+                //         'lang'.translate,
+                //       ),
+                //     ),
+                //     PopupMenuItem(
+                //       value: 'addresses',
+                //       child: Text(
+                //         'addresses'.translate,
+                //       ),
+                //     ),
+                //     PopupMenuItem(
+                //       value: 'logout',
+                //       child: Text(
+                //         'logout'.translate,
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 // IconButton(
                 //   onPressed: () {
                 //     NavigationService.push(
@@ -207,25 +207,28 @@ class _HomeScreenState extends State<HomeScreen>
                           ),
                         ),
                       ),
-                      ...List.generate(categoriesCubit.allcategory.length,
+                      ...List.generate(categoriesCubit.homeCategories.length,
                           (index) {
-                        var cat = categoriesCubit.allcategory[index];
-
+                        var cat = categoriesCubit.homeCategories[index];
+                        var hasSubCat = categoriesCubit.hasSubCategory(cat.id);
                         return HomeCategoryItem(
-                          onTap: () {
-                            // var hasSubCat = categoriesCubit.hasSubCategory(cat.id);
-                            // if (hasSubCat) {
-                            var subCat = context.read<SubCategoriesCubit>();
-                            subCat.categoryName = cat.name;
-                            subCat.parentId = cat.id;
-                            NavigationService.push(
-                              page: SubCategoriesScreen.routeName,
-                              arguments: {
-                                'category_name': cat.name,
-                                'parent_id': cat.id,
-                              },
-                            );
-                          },
+                          onTap: !hasSubCat
+                              ? null
+                              : () {
+                                  if (hasSubCat) {
+                                    var subCat =
+                                        context.read<SubCategoriesCubit>();
+                                    subCat.categoryName = cat.name;
+                                    subCat.parentId = cat.id;
+                                    NavigationService.push(
+                                      page: SubCategoriesScreen.routeName,
+                                      arguments: {
+                                        'category_name': cat.name,
+                                        'parent_id': cat.id,
+                                      },
+                                    );
+                                  }
+                                },
                           title: cat.name,
                           imagePath: cat.image,
                         );

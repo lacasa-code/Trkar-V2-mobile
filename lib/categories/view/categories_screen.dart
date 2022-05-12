@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trkar/categories/view/sub_categories_screen.dart';
 import 'package:trkar/categories/view/widgets/category_item.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
+import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import '../../core/extensions/string.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
@@ -85,30 +86,56 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
             }
             return SingleChildScrollView(
               child: Column(
-                children:
-                    List.generate(categoriesCubit.category.length, (index) {
-                  var cat = categoriesCubit.category[index];
-                  return CategoryItem(
-                    showDivider: cat != categoriesCubit.category.last,
-                    onPressed: () {
-                      var hasSubCat = categoriesCubit.hasSubCategory(cat.id);
-                      // if (hasSubCat) {
-                      var subCat = context.read<SubCategoriesCubit>();
-                      subCat.categoryName = cat.name;
-                      subCat.parentId = cat.id;
-                      NavigationService.push(
-                        page: SubCategoriesScreen.routeName,
-                        arguments: {
-                          'category_name': cat.name,
-                          'parent_id': cat.id,
-                        },
-                      );
-                      // }
-                    },
-                    categoryName: cat.name,
-                    categoryImage: cat.image,
-                  );
-                }),
+                children: [
+                  ...List.generate(categoriesCubit.category.length, (index) {
+                    var cat = categoriesCubit.category[index];
+                    return CategoryItem(
+                      showDivider: true, //cat != categoriesCubit.category.last,
+                      onPressed: () {
+                        var hasSubCat = categoriesCubit.hasSubCategory(cat.id);
+                        // if (hasSubCat) {
+                        var subCat = context.read<SubCategoriesCubit>();
+                        subCat.categoryName = cat.name;
+                        subCat.parentId = cat.id;
+                        NavigationService.push(
+                          page: SubCategoriesScreen.routeName,
+                          arguments: {
+                            'category_name': cat.name,
+                            'parent_id': cat.id,
+                          },
+                        );
+                        // }
+                      },
+                      categoryName: cat.name,
+                      categoryImage: cat.image,
+                    );
+                  }),
+                  ...List.generate(
+                      categoriesCubit.categoriesScreenSubCat.length, (index) {
+                    var cat = categoriesCubit.categoriesScreenSubCat[index];
+                    return CategoryItem(
+                      showDivider:
+                          cat != categoriesCubit.categoriesScreenSubCat.last,
+                      onPressed: () {
+                        var hasSubCat = categoriesCubit.hasSubCategory(cat.id);
+                        if (hasSubCat) {
+                          var subCat = context.read<SubCategoriesCubit>();
+                          subCat.categoryName = cat.name;
+                          subCat.parentId = cat.id;
+                          NavigationService.push(
+                            page: SubCategoriesScreen.routeName,
+                            arguments: {
+                              'category_name': cat.name,
+                              'parent_id': cat.id,
+                            },
+                          );
+                        }
+                      },
+                      categoryName: cat.name,
+                      categoryImage: cat.image,
+                    );
+                  }),
+                ],
               ),
             );
           },

@@ -185,40 +185,38 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                           .where((element) =>
                               int.parse(element.parentId ?? '') == ids[index])
                           .toList();
-                      return state is SubCategoriesLoading
-                          ? const LoaderWidget()
-                          : Visibility(
-                              visible: widget.categoryId != null ||
-                                  subCat.isNotEmpty,
-                              child: DropDownWidget(
-                                thinBorder: true,
-                                values: List.generate(
-                                    subCat.length,
-                                    (index) =>
-                                        (Helper.currentLanguage == 'ar'
-                                            ? subCat[index].nameAr
-                                            : subCat[index].nameEn) ??
-                                        ''),
-                                labelText: 'all',
-                                onChanged: (v) async {
-                                  if (v == null) {
-                                    return;
-                                  }
-                                  var id = subCat[v].id;
-                                  if (id == null) {
-                                    return;
-                                  }
-                                  setState(() {
-                                    handlingIdsList(ids[index]);
-                                  });
-                                  subCategoriesCubit.getSubCategories(
-                                    context,
-                                    id: id,
-                                  );
-                                  ids.add(id);
-                                },
-                              ),
+                      return Visibility(
+                        visible: widget.categoryId != null || subCat.isNotEmpty,
+                        child: DropDownWidget(
+                          key: ValueKey(ids[index]),
+                          thinBorder: true,
+                          values: List.generate(
+                              subCat.length,
+                              (index) =>
+                                  (Helper.currentLanguage == 'ar'
+                                      ? subCat[index].nameAr
+                                      : subCat[index].nameEn) ??
+                                  ''),
+                          labelText: 'all',
+                          onChanged: (v) async {
+                            if (v == null) {
+                              return;
+                            }
+                            var id = subCat[v].id;
+                            if (id == null) {
+                              return;
+                            }
+                            setState(() {
+                              handlingIdsList(ids[index]);
+                            });
+                            subCategoriesCubit.getSubCategories(
+                              context,
+                              id: id,
                             );
+                            ids.add(id);
+                          },
+                        ),
+                      );
                     },
                   ),
                 );

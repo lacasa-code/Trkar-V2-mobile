@@ -95,5 +95,11 @@
     "privacy_policy": "سياسة الخصوصية",
     "subscribe": "الإشتراك",
     "recently_viewed": "تمت مشاهدته مؤخرًا",
-    "all_categories": "كل الفئات"
+    "all_categories": "كل الفئات",
+    "wishlist": "المفضلة",
+    "my_account": "حسابي",
+    "cart": "عربة التسوق",
+    "my_orders_history": "سجل طلباتي",
+    "bank_details": "تفاصيل الحساب البنكي",
+    "my_coupons": "كوبونات الخصم الخاصة بي"
 }

@@ -3,8 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:trkar/core/themes/screen_utility.dart';
 import 'package:trkar/core/extensions/string.dart';
 
-
-
 class RegisterField extends StatelessWidget {
   const RegisterField({
     Key? key,
@@ -21,6 +19,8 @@ class RegisterField extends StatelessWidget {
     this.maxLength,
     this.onChanged,
     this.formatters,
+    this.hideBorder = false,
+    this.removePadding = false,
   }) : super(key: key);
   final String? labelText;
   final String? hintText;
@@ -35,11 +35,15 @@ class RegisterField extends StatelessWidget {
   final void Function(String?)? onChanged;
   final List<TextInputFormatter>? formatters;
   final String? Function(String?)? validator;
+  final bool removePadding;
+  final bool hideBorder;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      padding: removePadding
+          ? EdgeInsets.zero
+          : const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: TextFormField(
         maxLength: maxLength,
         maxLines: maxLines,
@@ -66,31 +70,37 @@ class RegisterField extends StatelessWidget {
             color:
                 thinBorder ? MainStyle.lightGreyColor : MainStyle.darkGreyColor,
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(thinBorder ? 12 : 25),
-            borderSide: BorderSide(
-              width: thinBorder ? 1 : 2,
-              color: thinBorder
-                  ? MainStyle.lightGreyColor
-                  : MainStyle.darkGreyColor,
-            ),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(thinBorder ? 12 : 25),
-            borderSide: BorderSide(
-              width: thinBorder ? 1 : 2,
-              color: thinBorder
-                  ? MainStyle.lightGreyColor
-                  : MainStyle.darkGreyColor,
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(thinBorder ? 12 : 25),
-            borderSide: BorderSide(
-              width: thinBorder ? 1 : 2,
-              color: Theme.of(context).primaryColor,
-            ),
-          ),
+          border: hideBorder
+              ? null
+              : OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(thinBorder ? 12 : 25),
+                  borderSide: BorderSide(
+                    width: thinBorder ? 1 : 2,
+                    color: thinBorder
+                        ? MainStyle.lightGreyColor
+                        : MainStyle.darkGreyColor,
+                  ),
+                ),
+          enabledBorder: hideBorder
+              ? null
+              : OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(thinBorder ? 12 : 25),
+                  borderSide: BorderSide(
+                    width: thinBorder ? 1 : 2,
+                    color: thinBorder
+                        ? MainStyle.lightGreyColor
+                        : MainStyle.darkGreyColor,
+                  ),
+                ),
+          focusedBorder: hideBorder
+              ? null
+              : OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(thinBorder ? 12 : 25),
+                  borderSide: BorderSide(
+                    width: thinBorder ? 1 : 2,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
           suffixIcon: suffixIcon,
         ),
       ),

@@ -9,9 +9,11 @@ class SubCatCard extends StatefulWidget {
     Key? key,
     this.catID,
     this.title,
+    this.image,
   }) : super(key: key);
   final int? catID;
   final String? title;
+  final String? image;
 
   @override
   State<SubCatCard> createState() => _SubCatCardState();
@@ -34,27 +36,39 @@ class _SubCatCardState extends State<SubCatCard> {
   Widget build(BuildContext context) {
     var list = categoriesCubit.subCategories(widget.catID ?? 0);
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 5),
         child: list.isEmpty
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-                    child: Text(
+                  ListTile(
+                    leading: Transform.scale(
+                      scale: 0.6,
+                      child: Image.network(
+                        widget.image ?? '',
+                        errorBuilder: (_, __, ___) => Image.asset(
+                          'assets/icons/edit_note.png',
+                        ),
+                      ),
+                    ),
+                    title: Text(
                       widget.title ?? '',
                       textAlign: TextAlign.start,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(12),
-                        fontWeight: FontWeight.bold,
-                      ),
                     ),
                   ),
                 ],
               )
             : ExpansionTile(
+                leading: Transform.scale(
+                  scale: 0.6,
+                  child: Image.network(
+                    widget.image ?? '',
+                    errorBuilder: (_, __, ___) => Image.asset(
+                      'assets/icons/edit_note.png',
+                    ),
+                  ),
+                ),
                 onExpansionChanged: (v) async {
                   if (v) {
                     var index = subCategoriesCubit.subCategories.indexWhere(
@@ -82,6 +96,7 @@ class _SubCatCardState extends State<SubCatCard> {
                           SubCatCard(
                             title: r.name,
                             catID: r.id,
+                            image: r.image,
                           ),
                         );
                       });

@@ -95,5 +95,11 @@
     "privacy_policy": "Privacy Policy",
     "subscribe": "Subscribe",
     "recently_viewed": "Recently Viewed",
-    "all_categories": "All Categories"
+    "all_categories": "All Categories",
+    "wishlist": "Wishlist",
+    "my_account": "My Account",
+    "cart": "Shopping Cart",
+    "my_orders_history": "My Orders History",
+    "bank_details": "Bank Details",
+    "my_coupons": "My Coupons"
 }

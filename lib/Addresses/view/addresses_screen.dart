@@ -66,7 +66,9 @@ class _AddressesScreenState extends State<AddressesScreen> {
               ),
               ...List.generate(
                 6,
-                (index) => AddressWidget(),
+                (index) => AddressWidget(
+                  isDefault: index == 0,
+                ),
               ),
             ],
           ),

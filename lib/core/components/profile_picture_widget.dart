@@ -44,8 +44,7 @@ class _ProfilePictureWidgetState extends State<ProfilePictureWidget> {
                             'assets/images/profile2.png',
                           )
                         : NetworkImage(
-                            Helper.appBaseUrl +
-                                (Helper.currentUser?.data?.image ?? ''),
+                            (Helper.currentUser?.data?.image ?? ''),
                           ) as ImageProvider)
                     : FileImage(
                         pickedImage!,
