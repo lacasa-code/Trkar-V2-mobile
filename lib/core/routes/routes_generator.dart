@@ -19,16 +19,21 @@ import 'package:trkar/categories/view/categories_screen.dart';
 import 'package:trkar/categories/view/sub_categories_screen.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
+import 'package:trkar/delivery/view/delivery_screen.dart';
 import 'package:trkar/favorites/view/favorites_screen.dart';
 import 'package:trkar/home/view/home_screen.dart';
 import 'package:trkar/localization/view/change_language_screen.dart';
 import 'package:trkar/localization/viewModel/lang/lang_cubit.dart';
+import 'package:trkar/privacy/view/privacy_screen.dart';
 import 'package:trkar/profile/view/edit_profile_screen.dart';
 import 'package:trkar/profile/view/profile_screen.dart';
 import 'package:trkar/profile/viewModel/updateUserProfile/update_user_profile_cubit.dart';
+import 'package:trkar/returns/view/returns_refunds_screen.dart';
 import 'package:trkar/splash/view/splash_screen.dart';
+import 'package:trkar/support/view/support_screen.dart';
 import 'package:trkar/tab/view/tab_screen.dart';
 import 'package:trkar/tab/viewModel/cubit/tab_cubit.dart';
+import 'package:trkar/terms/view/terms_screen.dart';
 
 class RoutesGenerator {
   static Route<dynamic>? onRoutesGenerated(RouteSettings settings) {
@@ -110,6 +115,34 @@ class RoutesGenerator {
           settings: settings,
           builder: (_) => const CartScreen(),
         );
+      case ReturnsAndRefundsScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const ReturnsAndRefundsScreen(),
+        );
+      case TermsAndConitionsScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const TermsAndConitionsScreen(),
+        );
+      case SupportScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => BlocProvider(
+            create: (_) => AddressDataCubit(),
+            child: const SupportScreen(),
+          ),
+        );
+      case PrivacyScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const PrivacyScreen(),
+        );
+      case DeliveryScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const DeliveryScreen(),
+        );
       case FavoritesScreen.routeName:
         return MaterialPageRoute(
           settings: settings,
@@ -128,7 +161,6 @@ class RoutesGenerator {
               BlocProvider(
                 create: (_) => CategoriesCubit(),
               ),
-             
             ],
             child: const CategoriesScreen(),
           ),

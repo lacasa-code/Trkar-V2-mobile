@@ -237,6 +237,7 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                   const RecentlyViewedProductsView(),
                   const SendOffersEmailView(),
+                  const BestDealsView(),
                   /*
                   Expanded(
                     child: TabBarView(
@@ -255,6 +256,7 @@ class _HomeScreenState extends State<HomeScreen>
                                               6
                                           ? 6
                                           : categoriesCubit
+                                             
                                               .subCategories(e.id ?? 0)
                                               .length,
                                       (index) {
@@ -317,6 +319,46 @@ class _HomeScreenState extends State<HomeScreen>
           );
         },
       ),
+    );
+  }
+}
+
+class BestDealsView extends StatelessWidget {
+  const BestDealsView({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ListTile(
+          leading: const Icon(
+            Icons.discount_outlined,
+          ),
+          title: Text(
+            'best_deals'.translate,
+            style: TextStyle(
+              fontSize: ScreenUtil().setSp(12),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+          child: Wrap(
+            runSpacing: ScreenUtil().setHeight(20),
+            spacing: ScreenUtil().setWidth(30),
+            children: List.generate(
+              8,
+              (index) => Image.asset(
+                'assets/images/manufactorsLogo/manufactor${index + 1}.png',
+                // width: ScreenUtil().setWidth(60),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

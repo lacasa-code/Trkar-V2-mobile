@@ -175,6 +175,7 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                 },
               ),
             ),
+            const RegisterField(labelText: 'vin_number', thinBorder: true),
             BlocBuilder<SubCategoriesCubit, SubCategoriesState>(
               builder: (context, state) {
                 return Column(

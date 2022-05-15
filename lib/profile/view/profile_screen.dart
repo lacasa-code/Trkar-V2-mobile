@@ -3,16 +3,23 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:fluttericon/iconic_icons.dart';
 import 'package:fluttericon/octicons_icons.dart';
 import 'package:trkar/Addresses/view/addresses_screen.dart';
 import 'package:trkar/auth/viewModel/logout/logout_cubit.dart';
 import 'package:trkar/core/components/search_modal_bottom_sheet.dart';
 import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
+import 'package:trkar/delivery/view/delivery_screen.dart';
+import 'package:trkar/localization/view/change_language_screen.dart';
+import 'package:trkar/privacy/view/privacy_screen.dart';
 import 'package:trkar/profile/view/edit_profile_screen.dart';
 import 'package:trkar/profile/view/widgets/profile_header_item.dart';
 import 'package:trkar/profile/view/widgets/profile_item.dart';
 import 'package:trkar/profile/viewModel/userProfile/user_profile_cubit.dart';
+import 'package:trkar/returns/view/returns_refunds_screen.dart';
+import 'package:trkar/support/view/support_screen.dart';
+import 'package:trkar/terms/view/terms_screen.dart';
 import '../../core/extensions/string.dart';
 import 'package:trkar/tab/viewModel/cubit/tab_cubit.dart';
 
@@ -78,6 +85,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 icons: Icons.history,
               ),
               ProfileItem(
+                onPressed: () {
+                  NavigationService.push(
+                    page: ChangeLanguageScreen.routeName,
+                  );
+                },
+                title: 'lang',
+                icons: Icons.language,
+              ),
+              ProfileItem(
                 onPressed: () {},
                 title: 'bank_details',
                 icons: FontAwesome5.wallet,
@@ -106,9 +122,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 icons: FontAwesome5.user_edit,
               ),
               ProfileItem(
-                onPressed: () {},
+                onPressed: () {
+                  NavigationService.push(
+                    page: PrivacyScreen.routeName,
+                  );
+                },
                 title: 'privacy_policy',
                 icons: Octicons.shield_lock,
+              ),
+              ProfileItem(
+                onPressed: () {
+                  NavigationService.push(
+                    page: TermsAndConitionsScreen.routeName,
+                  );
+                },
+                title: 'terms',
+                icons: Octicons.shield_lock,
+              ),
+              ProfileItem(
+                onPressed: () {
+                  NavigationService.push(
+                    page: DeliveryScreen.routeName,
+                  );
+                },
+                title: 'delivery',
+                icons: Icons.drive_eta,
+              ),
+              ProfileItem(
+                onPressed: () {
+                  NavigationService.push(
+                    page: ReturnsAndRefundsScreen.routeName,
+                  );
+                },
+                title: 'returns_refunds',
+                icons: Iconic.undo,
+              ),
+              ProfileItem(
+                onPressed: () {
+                  NavigationService.push(
+                    page: SupportScreen.routeName,
+                  );
+                },
+                title: 'support',
+                icons: Icons.headphones,
               ),
               ProfileItem(
                 onPressed: () {

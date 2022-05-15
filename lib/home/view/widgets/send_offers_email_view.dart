@@ -9,7 +9,9 @@ import '../../../core/extensions/string.dart';
 class SendOffersEmailView extends StatefulWidget {
   const SendOffersEmailView({
     Key? key,
+    this.title,
   }) : super(key: key);
+  final String? title;
 
   @override
   State<SendOffersEmailView> createState() => _SendOffersEmailViewState();
@@ -31,7 +33,7 @@ class _SendOffersEmailViewState extends State<SendOffersEmailView> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Text(
-                  'recieve_offersmail_header'.translate,
+                  widget.title ?? 'recieve_offersmail_header'.translate,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: ScreenUtil().setSp(15),
