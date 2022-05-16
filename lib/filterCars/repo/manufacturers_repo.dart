@@ -6,12 +6,15 @@ import '../../../core/helper/network_utils.dart';
 
 class ManufacturersRepo {
   static Future<ManufacturersModel?> getManufacturer(
-    context,
-  ) async {
+    context, {
+    dynamic categoryId,
+  }) async {
     final util = NetworkUtil();
 
     var response = await util.get(
-      'manufacturers',
+      categoryId == null
+          ? 'manufacturers'
+          : 'category/manufacturers/$categoryId',
       context: context,
     );
 
@@ -19,7 +22,8 @@ class ManufacturersRepo {
       return null;
     }
     if (response.statusCode! >= 500) {
-      throw LaravelException('${'something_wrong'.translate} \n STATUS_CODE : ${response.statusCode}');
+      throw LaravelException(
+          '${'something_wrong'.translate} \n STATUS_CODE : ${response.statusCode}');
     }
     var model = ManufacturersModel.fromJson(response.data);
 

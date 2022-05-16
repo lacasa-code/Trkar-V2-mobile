@@ -74,10 +74,16 @@ class FilterCarsCubit extends Cubit<FilterCarsState> {
     }
   }
 
-  Future<void> getManufacturer(context) async {
+  Future<void> getManufacturer(
+    context, {
+    categoryId,
+  }) async {
     emit(ManufacturersLoading());
     try {
-      var manufacturersData = await ManufacturersRepo.getManufacturer(context);
+      var manufacturersData = await ManufacturersRepo.getManufacturer(
+        context,
+        categoryId: categoryId,
+      );
       if (manufacturersData == null) {
         emit(FilterCarsError(
           message: 'network'.translate,
@@ -85,9 +91,15 @@ class FilterCarsCubit extends Cubit<FilterCarsState> {
         return;
       }
       if (manufacturersData.status == true) {
-        _manufacturers = manufacturersData.data;
+        if (categoryId != null) {
+          _categoriesManufacturers = manufacturersData.data;
+        } else {
+          _manufacturers = manufacturersData.data;
+        }
         emit(FilterCarsDone());
       } else {
+        _manufacturers?.clear();
+        _categoriesManufacturers?.clear();
         emit(FilterCarsError(message: 'something_wrong'));
       }
     } on LaravelException catch (error) {
@@ -171,6 +183,7 @@ class FilterCarsCubit extends Cubit<FilterCarsState> {
 
   List<CarMades>? _carMades = [];
   List<Manufacturer>? _manufacturers = [];
+  List<Manufacturer>? _categoriesManufacturers = [];
   List<OriginalCountry>? _originalCountry = [];
   List<Year>? _carYears = [];
   List<Car>? _carModels = [];
@@ -180,6 +193,8 @@ class FilterCarsCubit extends Cubit<FilterCarsState> {
 
   List<CarMades> get carMades => [...?_carMades];
   List<Manufacturer> get manufacturers => [...?_manufacturers];
+  List<Manufacturer> get categoriesManufacturers =>
+      [...?_categoriesManufacturers];
   List<OriginalCountry> get originalCountry => [...?_originalCountry];
   List<Year> get carYears => [...?_carYears];
   List<Car> get carModels => [...?_carModels];

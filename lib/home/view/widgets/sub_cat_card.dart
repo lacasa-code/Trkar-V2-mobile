@@ -91,7 +91,7 @@ class _SubCatCardState extends State<SubCatCard> {
                           .where((element) =>
                               element.parentId == widget.catID.toString())
                           .toList();
-                      list.forEach((r) {
+                      for (var r in list) {
                         subCategory.add(
                           SubCatCard(
                             title: r.name,
@@ -99,7 +99,7 @@ class _SubCatCardState extends State<SubCatCard> {
                             image: r.image,
                           ),
                         );
-                      });
+                      }
                       setState(() {});
                     }
                   }

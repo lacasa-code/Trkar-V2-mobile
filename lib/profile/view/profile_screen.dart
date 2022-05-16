@@ -6,6 +6,7 @@ import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/iconic_icons.dart';
 import 'package:fluttericon/octicons_icons.dart';
 import 'package:trkar/Addresses/view/addresses_screen.dart';
+import 'package:trkar/about/view/about_screen.dart';
 import 'package:trkar/auth/viewModel/logout/logout_cubit.dart';
 import 'package:trkar/core/components/search_modal_bottom_sheet.dart';
 import 'package:trkar/core/helper/helper.dart';
@@ -49,6 +50,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       onWillPop: () async => tabCubit.onBackButtonPressed(context),
       child: Scaffold(
         appBar: AppBar(
+          // actions: [
+          //   IconButton(
+          //     onPressed: () {},
+          //     icon: const Icon(
+          //       Icons.settings_outlined,
+          //     ),
+          //     color: Theme.of(context).primaryColor,
+          //   ),
+          // ],
           elevation: 0,
           backgroundColor: Colors.transparent,
           title: Text(
@@ -139,23 +149,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 title: 'terms',
                 icons: Octicons.shield_lock,
               ),
+              // ProfileItem(
+              //   onPressed: () {
+              //     NavigationService.push(
+              //       page: DeliveryScreen.routeName,
+              //     );
+              //   },
+              //   title: 'delivery',
+              //   icons: Icons.drive_eta,
+              // ),
+              // ProfileItem(
+              //   onPressed: () {
+              //     NavigationService.push(
+              //       page: ReturnsAndRefundsScreen.routeName,
+              //     );
+              //   },
+              //   title: 'returns_refunds',
+              //   icons: Iconic.undo,
+              // ),
               ProfileItem(
                 onPressed: () {
                   NavigationService.push(
-                    page: DeliveryScreen.routeName,
+                    page: AboutScreen.routeName,
                   );
                 },
-                title: 'delivery',
-                icons: Icons.drive_eta,
-              ),
-              ProfileItem(
-                onPressed: () {
-                  NavigationService.push(
-                    page: ReturnsAndRefundsScreen.routeName,
-                  );
-                },
-                title: 'returns_refunds',
-                icons: Iconic.undo,
+                title: 'about_trkar',
+                icons: Iconic.info,
               ),
               ProfileItem(
                 onPressed: () {

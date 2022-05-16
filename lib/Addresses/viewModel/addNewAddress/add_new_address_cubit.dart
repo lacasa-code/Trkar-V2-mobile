@@ -201,7 +201,7 @@ class AddNewAddressCubit extends Cubit<AddNewAddressState> {
   String _isDefault = '0';
   String get isDefault => _isDefault;
   double? lat, lon;
-  bool _canChangeDefaultState = true;
+  final bool _canChangeDefaultState = true;
   bool get canChangeDefaultState => _canChangeDefaultState;
 
   changeDefault(bool value) {

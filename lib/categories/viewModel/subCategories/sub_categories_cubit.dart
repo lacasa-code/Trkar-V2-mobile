@@ -15,7 +15,7 @@ class SubCategoriesCubit extends Cubit<SubCategoriesState> {
   dynamic parentId;
   String? categoryName;
 
-  List<SubCategory>? _subCategories = [];
+  final List<SubCategory>? _subCategories = [];
   List<SubCategory> get subCategories => [...?_subCategories];
   Future<bool> hasSubCategories(
     int categoryId,

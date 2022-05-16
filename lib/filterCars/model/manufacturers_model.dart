@@ -49,21 +49,45 @@ class Manufacturer {
     this.id,
     this.name,
     this.status,
+    this.website,
+    this.categoryId,
+    this.categoryName,
+    this.image,
+    this.address,
+    this.companyName,
   });
 
   int? id;
   String? name;
   String? status;
+  String? image;
+  String? companyName;
+  String? address;
+  String? website;
+  String? categoryId;
+  String? categoryName;
 
   factory Manufacturer.fromJson(Map<String, dynamic> json) => Manufacturer(
         id: json["id"],
         name: json["name"],
         status: json["status"],
+        website: json["website"],
+        image: json["image"],
+        categoryId: json["category_id"],
+        categoryName: json["category_name"],
+        address: json["address"],
+        companyName: json["company_name"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
         "status": status,
+        "image": image,
+        "category_id": categoryId,
+        "category_name": categoryName,
+        "address": address,
+        "company_name": companyName,
+        "website": website,
       };
 }

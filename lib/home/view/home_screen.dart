@@ -118,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen>
                 color: Colors.black,
               ),
               backgroundColor: Colors.transparent,
-              actions: [
+              actions: const [
                 // PopupMenuButton(
                 //   icon: Icon(
                 //     Icons.settings_outlined,
@@ -332,32 +332,7 @@ class BestDealsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ListTile(
-          leading: const Icon(
-            Icons.discount_outlined,
-          ),
-          title: Text(
-            'best_deals'.translate,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(12),
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-          child: Wrap(
-            runSpacing: ScreenUtil().setHeight(20),
-            spacing: ScreenUtil().setWidth(30),
-            children: List.generate(
-              8,
-              (index) => Image.asset(
-                'assets/images/manufactorsLogo/manufactor${index + 1}.png',
-                // width: ScreenUtil().setWidth(60),
-              ),
-            ),
-          ),
-        ),
+      
       ],
     );
   }

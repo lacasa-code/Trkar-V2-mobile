@@ -123,5 +123,14 @@
     "in_stock": "IN STOCK",
     "in_stock_body": "The item is available. Items with this availability status are sent within 1-2 working days after the receipt of payment",
     "not_in_stock": "CURRENTLY NOT IN STOCK",
-    "not_in_stock_body": "This item cannot be ordered. It is no longer available or has been discontinued. You can order a similar item from a different manufacturer."
+    "not_in_stock_body": "This item cannot be ordered. It is no longer available or has been discontinued. You can order a similar item from a different manufacturer.",
+    "vat_desc": "ALL PRICES INCLUDE 20% VAT. \nFREE DELIVERY DOES NOT APPLY TO: \nbulky items; \norders that are shipped outside of Great Britain; \ndelivery to islands;  \nall prices indicated are subject to VAT at the current rate",
+    "about_trkar": "About Trkar",
+    "replacement": "Replacement",
+    "payment": "Payment",
+    "legal_notice": "Legal Notice",
+    "right_of_withdrawal": "Right of withdrawal",
+    "credit_card_details": "Credit card: \n\nAfter you have chosen credit card as payment method, please click on “confirm order”. After this you will be redirected to a secure page where you can select your credit card type. Finally, you have to enter the correct card information and to confirm the payment. Your card will be charged after your order has been completed.",
+    "paypal_details": "Pay Pal: \n\nAfter you place the order, you will be redirected to the PayPal sign-in page. Please sign in and make the payment. To pay by means of PayPal you need to have a PayPal account. There are no additional charges in connection with this.",
+    "show_address": "Show address"
 }

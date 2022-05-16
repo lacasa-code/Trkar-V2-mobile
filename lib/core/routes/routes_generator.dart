@@ -4,6 +4,7 @@ import 'package:trkar/Addresses/model/my_addresses_model.dart';
 import 'package:trkar/Addresses/view/add_new_address_screen.dart';
 import 'package:trkar/Addresses/view/addresses_screen.dart';
 import 'package:trkar/Addresses/viewModel/addNewAddress/add_new_address_cubit.dart';
+import 'package:trkar/about/view/about_screen.dart';
 import 'package:trkar/addressesData/viewModel/countries/countries_cubit.dart';
 import 'package:trkar/auth/view/choose_user_type_screen.dart';
 import 'package:trkar/auth/view/email_verfication_screen.dart';
@@ -22,13 +23,16 @@ import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.da
 import 'package:trkar/delivery/view/delivery_screen.dart';
 import 'package:trkar/favorites/view/favorites_screen.dart';
 import 'package:trkar/home/view/home_screen.dart';
+import 'package:trkar/legalNotice/view/legal_notice_screen.dart';
 import 'package:trkar/localization/view/change_language_screen.dart';
 import 'package:trkar/localization/viewModel/lang/lang_cubit.dart';
+import 'package:trkar/payment/view/payment_screen.dart';
 import 'package:trkar/privacy/view/privacy_screen.dart';
 import 'package:trkar/profile/view/edit_profile_screen.dart';
 import 'package:trkar/profile/view/profile_screen.dart';
 import 'package:trkar/profile/viewModel/updateUserProfile/update_user_profile_cubit.dart';
 import 'package:trkar/returns/view/returns_refunds_screen.dart';
+import 'package:trkar/rightOfWithDrawal/view/rights_of_withdrawal.dart';
 import 'package:trkar/splash/view/splash_screen.dart';
 import 'package:trkar/support/view/support_screen.dart';
 import 'package:trkar/tab/view/tab_screen.dart';
@@ -138,6 +142,11 @@ class RoutesGenerator {
           settings: settings,
           builder: (_) => const PrivacyScreen(),
         );
+      case AboutScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const AboutScreen(),
+        );
       case DeliveryScreen.routeName:
         return MaterialPageRoute(
           settings: settings,
@@ -152,6 +161,21 @@ class RoutesGenerator {
         return MaterialPageRoute(
           settings: settings,
           builder: (_) => const ProfileScreen(),
+        );
+      case PaymentScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const PaymentScreen(),
+        );
+      case RightsOfWithdrawalScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const RightsOfWithdrawalScreen(),
+        );
+      case LegalNoticeScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const LegalNoticeScreen(),
         );
       case CategoriesScreen.routeName:
         return MaterialPageRoute(

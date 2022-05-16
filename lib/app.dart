@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:trkar/addressesData/viewModel/countries/countries_cubit.dart';
 import 'package:trkar/auth/viewModel/logout/logout_cubit.dart';
 import 'package:trkar/auth/viewModel/validateToken/validate_token_cubit.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
@@ -28,6 +29,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => LogoutCubit(),
+        ),
+        BlocProvider(
+          create: (_) => AddressDataCubit(),
         ),
         BlocProvider(
           create: (_) => FilterCarsCubit(),

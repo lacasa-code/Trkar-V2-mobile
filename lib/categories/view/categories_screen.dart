@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trkar/categories/view/sub_categories_screen.dart';
@@ -5,6 +7,7 @@ import 'package:trkar/categories/view/widgets/category_item.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
+import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
 import '../../core/extensions/string.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
 import 'package:trkar/tab/viewModel/cubit/tab_cubit.dart';
@@ -92,6 +95,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     return CategoryItem(
                       showDivider: true, //cat != categoriesCubit.category.last,
                       onPressed: () {
+                        context.read<FilterCarsCubit>().getManufacturer(
+                              context,
+                              categoryId: cat.id,
+                            );
                         var hasSubCat = categoriesCubit.hasSubCategory(cat.id);
                         // if (hasSubCat) {
                         var subCat = context.read<SubCategoriesCubit>();
@@ -118,6 +125,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           cat != categoriesCubit.categoriesScreenSubCat.last,
                       onPressed: () {
                         var hasSubCat = categoriesCubit.hasSubCategory(cat.id);
+                        log('message $hasSubCat ${cat.id}');
                         if (hasSubCat) {
                           var subCat = context.read<SubCategoriesCubit>();
                           subCat.categoryName = cat.name;

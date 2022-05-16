@@ -104,7 +104,7 @@ class _MyCarsScreenState extends State<MyCarsScreen>
                 ),
                 SearchableDropDownWidget(
                   thinBorder: true,
-                  values: [
+                  values: const [
                     'manual',
                     'automatic',
                   ],
