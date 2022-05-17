@@ -1,12 +1,17 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:trkar/categories/carMades/view/all_car_mades_screen.dart';
+import 'package:trkar/categories/manufacturers/view/all_manufacturers_screen.dart';
 import 'package:trkar/categories/view/widgets/category_item.dart';
+import 'package:trkar/categories/view/widgets/manufacturers_details_item.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
 import 'package:trkar/core/components/search_icon.dart';
+import 'package:trkar/core/components/search_modal_bottom_sheet.dart';
 import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
@@ -72,156 +77,19 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 15),
-                      child: Text(
-                        '${'manufacturers'.translate} :',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 15),
-                    child: Wrap(
-                      runSpacing: ScreenUtil().setHeight(20),
-                      spacing: ScreenUtil().setWidth(30),
-                      children: List.generate(
-                        filterCarsCubit.categoriesManufacturers.length,
-                        (index) {
-                          var manufacurer =
-                              filterCarsCubit.categoriesManufacturers[0];
-                          return Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Visibility(
-                                visible: manufacurer.image != null,
-                                child: Image.network(
-                                  manufacurer.image ?? '',
-                                  height: ScreenUtil().setHeight(40),
-                                  width: ScreenUtil().setHeight(40),
-                                ),
-                              ),
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    manufacurer.name ?? '',
-                                    style: TextStyle(
-                                      fontSize: ScreenUtil().setSp(12),
-                                      // fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Visibility(
-                                    visible: manufacurer.address != null,
-                                    child: InkWell(
-                                      onTap: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (_) => Dialog(
-                                            child: SizedBox(
-                                              // margin: EdgeInsets.symmetric(
-                                              //   horizontal: 15,
-                                              // ),
-                                              width: context.width,
-                                              child: Stack(
-                                                clipBehavior: Clip.none,
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        vertical: 10),
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .stretch,
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        ManufacturerDetailsItem(
-                                                          title:
-                                                              'Company Name :',
-                                                          details: manufacurer
-                                                              .categoryName,
-                                                        ),
-                                                        ManufacturerDetailsItem(
-                                                          title: 'Address :',
-                                                          details: manufacurer
-                                                              .address,
-                                                        ),
-                                                        ManufacturerDetailsItem(
-                                                          title: 'website :',
-                                                          details: manufacurer
-                                                              .website,
-                                                          isLink: true,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Positioned(
-                                                    top: -ScreenUtil()
-                                                        .setHeight(40),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment.end,
-                                                      children: [
-                                                        IconButton(
-                                                          onPressed: () {
-                                                            NavigationService
-                                                                .goBack();
-                                                          },
-                                                          icon: const Icon(
-                                                            Icons.close,
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(
-                                            'show_address'.translate,
-                                            style: TextStyle(
-                                              color: Colors.blue,
-                                              fontSize: ScreenUtil().setSp(10),
-                                              // fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Transform.scale(
-                                            scale: 0.7,
-                                            child: const Icon(
-                                              Icons.arrow_forward_ios,
-                                              color: Colors.blue,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  Divider(
-                    thickness: 1,
-                  ),
-                ],
+              BlocBuilder<FilterCarsCubit, FilterCarsState>(
+                builder: (context, state) {
+                  return Column(
+                    children: [
+                      state is CarMadesLoading
+                          ? const LoaderWidget()
+                          : BrandsView(filterCarsCubit: filterCarsCubit),
+                      state is ManufacturersLoading
+                          ? const LoaderWidget()
+                          : ManufacturersView(filterCarsCubit: filterCarsCubit),
+                    ],
+                  );
+                },
               ),
               Expanded(
                 child: SingleChildScrollView(
@@ -280,50 +148,259 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
   }
 }
 
-class ManufacturerDetailsItem extends StatelessWidget {
-  const ManufacturerDetailsItem({
+class ManufacturersView extends StatelessWidget {
+  const ManufacturersView({
     Key? key,
-    required this.title,
-    this.details,
-    this.isLink = false,
+    required this.filterCarsCubit,
   }) : super(key: key);
-  final String title;
-  final String? details;
-  final bool isLink;
+
+  final FilterCarsCubit filterCarsCubit;
+
   @override
   Widget build(BuildContext context) {
-    return Visibility(
-      visible: details != null,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-        child: RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: title,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+            child: Text(
+              '${'manufacturers'.translate} :',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
               ),
-              TextSpan(
-                text: details ?? '',
-                recognizer: isLink
-                    ? (TapGestureRecognizer()
-                      ..onTap = () {
-                        launchUrl(Uri.parse(details ?? ''));
-                      })
-                    : null,
-                style: TextStyle(
-                  color: isLink ? Colors.blue : Colors.black,
-                  decoration:
-                      isLink ? TextDecoration.underline : TextDecoration.none,
-                ),
+            )),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Wrap(
+              direction: Axis.horizontal,
+              runSpacing: ScreenUtil().setHeight(20),
+              spacing: ScreenUtil().setWidth(15),
+              children: List.generate(
+                filterCarsCubit.categoriesManufacturers.length > 6
+                    ? 6
+                    : filterCarsCubit.categoriesManufacturers.length,
+                (index) {
+                  var manufacurer =
+                      filterCarsCubit.categoriesManufacturers[index];
+                  return Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Visibility(
+                        visible: manufacurer.image != null,
+                        child: Image.network(
+                          manufacurer.image ?? '',
+                          height: ScreenUtil().setHeight(40),
+                          width: ScreenUtil().setHeight(40),
+                        ),
+                      ),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            manufacurer.name ?? '',
+                            style: TextStyle(
+                              fontSize: ScreenUtil().setSp(12),
+                              // fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Visibility(
+                            visible: false,
+                            child: InkWell(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => Dialog(
+                                    child: SizedBox(
+                                      // margin: EdgeInsets.symmetric(
+                                      //   horizontal: 15,
+                                      // ),
+                                      width: context.width,
+                                      child: Stack(
+                                        clipBehavior: Clip.none,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 10),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                ManufacturerDetailsItem(
+                                                  title: 'Company Name :',
+                                                  details:
+                                                      manufacurer.categoryName,
+                                                ),
+                                                ManufacturerDetailsItem(
+                                                  title: 'Address :',
+                                                  details: manufacurer.address,
+                                                ),
+                                                ManufacturerDetailsItem(
+                                                  title: 'website :',
+                                                  details: manufacurer.website,
+                                                  isLink: true,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Positioned(
+                                            top: -ScreenUtil().setHeight(40),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () {
+                                                    NavigationService.goBack();
+                                                  },
+                                                  icon: const Icon(
+                                                    Icons.close,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    'show_address'.translate,
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontSize: ScreenUtil().setSp(10),
+                                      // fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Transform.scale(
+                                    scale: 0.7,
+                                    child: const Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                },
               ),
-            ],
+            ),
           ),
         ),
-      ),
+        Visibility(
+          visible: kDebugMode || filterCarsCubit.manufacturers.length > 6,
+          child: Align(
+            alignment: Alignment.center,
+            child: InkWell(
+              onTap: () {
+                NavigationService.push(
+                  page: AllManufacturersScreen.routeName,
+                );
+              },
+              child: Text(
+                'more'.translate,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(13),
+                  color: Colors.blue,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+          ),
+        ),
+        const Divider(
+          thickness: 1,
+        ),
+      ],
+    );
+  }
+}
+
+class BrandsView extends StatelessWidget {
+  const BrandsView({
+    Key? key,
+    required this.filterCarsCubit,
+  }) : super(key: key);
+
+  final FilterCarsCubit filterCarsCubit;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+            child: Text(
+              '${'brand'.translate} :',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            )),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Wrap(
+              direction: Axis.horizontal,
+              runSpacing: ScreenUtil().setHeight(20),
+              spacing: ScreenUtil().setWidth(15),
+              children: List.generate(
+                filterCarsCubit.carMades.length > 6
+                    ? 6
+                    : filterCarsCubit.carMades.length,
+                (index) {
+                  var carMade = filterCarsCubit.carMades[index];
+                  return Image.network(
+                    carMade.image ?? '',
+                    fit: BoxFit.cover,
+                    height: ScreenUtil().setHeight(60),
+                    width: ScreenUtil().setHeight(60),
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+        Visibility(
+          visible: filterCarsCubit.carMades.length > 6,
+          child: Align(
+            alignment: Alignment.center,
+            child: InkWell(
+              onTap: () {
+                NavigationService.push(
+                  page: AllCarMadesScreen.routeName,
+                );
+              },
+              child: Text(
+                'more'.translate,
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(13),
+                  color: Colors.blue,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+          ),
+        ),
+        const Divider(
+          thickness: 1,
+        ),
+      ],
     );
   }
 }

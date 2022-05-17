@@ -16,6 +16,7 @@ import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/extensions/string.dart';
 import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
+import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
 import 'package:trkar/home/view/widgets/home_categories_item.dart';
 import 'package:trkar/home/view/widgets/my_drawer.dart';
 import 'package:trkar/home/view/widgets/recently_viewed_product_view.dart';
@@ -216,6 +217,21 @@ class _HomeScreenState extends State<HomeScreen>
                               ? null
                               : () {
                                   if (hasSubCat) {
+                                    context.read<FilterCarsCubit>()
+                                      ..getManufacturer(
+                                        context,
+                                        categoryId:
+                                            int.parse(cat.parentId ?? '0') == 0
+                                                ? cat.id
+                                                : cat.parentId,
+                                      )
+                                      ..getCarMades(
+                                        context,
+                                        categoryId:
+                                            int.parse(cat.parentId ?? '0') == 0
+                                                ? cat.id
+                                                : cat.parentId,
+                                      );
                                     var subCat =
                                         context.read<SubCategoriesCubit>();
                                     subCat.categoryName = cat.name;
@@ -331,9 +347,7 @@ class BestDealsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
-      
-      ],
+      children: [],
     );
   }
 }

@@ -14,6 +14,7 @@ class DropDownWidget extends StatelessWidget {
     this.selectedValueIndex,
     this.leadingIcons,
     this.validator,
+    this.textAlignment,
     this.thinBorder = false,
   }) : super(key: key);
   final int? selectedValueIndex;
@@ -23,6 +24,7 @@ class DropDownWidget extends StatelessWidget {
   final void Function(int?)? onChanged;
   final String labelText;
   final bool thinBorder;
+  final Alignment? textAlignment;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,7 @@ class DropDownWidget extends StatelessWidget {
           (index) => DropdownMenuItem(
             child: leadingIcons == null
                 ? Align(
-                    alignment: Helper.appAlignment,
+                    alignment: textAlignment ?? Helper.appAlignment,
                     child: Text(
                       values[index]!,
                       textAlign: TextAlign.start,

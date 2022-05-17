@@ -132,5 +132,7 @@
     "right_of_withdrawal": "Right of withdrawal",
     "credit_card_details": "Credit card: \n\nAfter you have chosen credit card as payment method, please click on “confirm order”. After this you will be redirected to a secure page where you can select your credit card type. Finally, you have to enter the correct card information and to confirm the payment. Your card will be charged after your order has been completed.",
     "paypal_details": "Pay Pal: \n\nAfter you place the order, you will be redirected to the PayPal sign-in page. Please sign in and make the payment. To pay by means of PayPal you need to have a PayPal account. There are no additional charges in connection with this.",
-    "show_address": "Show address"
+    "show_address": "Show address",
+    "all_brands": "All Brands",
+    "all_manufacturers": "All Manufacturers"
 }

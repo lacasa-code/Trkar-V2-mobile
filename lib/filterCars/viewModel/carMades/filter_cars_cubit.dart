@@ -22,10 +22,18 @@ part 'filter_cars_state.dart';
 class FilterCarsCubit extends Cubit<FilterCarsState> {
   FilterCarsCubit() : super(FilterCarsInitial());
 
-  Future<void> getCarMades(context) async {
-    emit(CarMadesLoading());
+  Future<void> getCarMades(
+    context, {
+    categoryId,
+    bool isSearch = false,
+  }) async {
+    emit(isSearch ? CarMadesEnglishLoading() : CarMadesLoading());
     try {
-      var carMadesData = await CarMadesRepo.getCarMades(context);
+      var carMadesData = await CarMadesRepo.getCarMades(
+        context,
+        categoryId: categoryId,
+        isEnglish: isSearch,
+      );
       if (carMadesData == null) {
         emit(FilterCarsError(
           message: 'network'.translate,
@@ -33,7 +41,11 @@ class FilterCarsCubit extends Cubit<FilterCarsState> {
         return;
       }
       if (carMadesData.status == true) {
-        _carMades = carMadesData.data;
+        if (isSearch) {
+          _carMadesEnglish = carMadesData.data;
+        } else {
+          _carMades = carMadesData.data;
+        }
         emit(FilterCarsDone());
       } else {
         emit(FilterCarsError(message: 'something_wrong'));
@@ -156,10 +168,16 @@ class FilterCarsCubit extends Cubit<FilterCarsState> {
     }
   }
 
-  Future<void> getCarModels(context) async {
+  Future<void> getCarModels(
+    context, {
+    carMadeId,
+  }) async {
     emit(CarModelsLoading());
     try {
-      var carYearsData = await CarModelsRepo.getCarModels(context);
+      var carYearsData = await CarModelsRepo.getCarModels(
+        context,
+        carMadeId: carMadeId,
+      );
       if (carYearsData == null) {
         emit(FilterCarsError(
           message: 'network'.translate,
@@ -182,6 +200,7 @@ class FilterCarsCubit extends Cubit<FilterCarsState> {
   /// setters ...
 
   List<CarMades>? _carMades = [];
+  List<CarMades>? _carMadesEnglish = [];
   List<Manufacturer>? _manufacturers = [];
   List<Manufacturer>? _categoriesManufacturers = [];
   List<OriginalCountry>? _originalCountry = [];
@@ -192,6 +211,7 @@ class FilterCarsCubit extends Cubit<FilterCarsState> {
   /// getters ...
 
   List<CarMades> get carMades => [...?_carMades];
+  List<CarMades> get carMadesEnglish => [...?_carMadesEnglish];
   List<Manufacturer> get manufacturers => [...?_manufacturers];
   List<Manufacturer> get categoriesManufacturers =>
       [...?_categoriesManufacturers];

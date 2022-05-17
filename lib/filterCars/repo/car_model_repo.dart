@@ -6,12 +6,13 @@ import '../../../core/helper/network_utils.dart';
 
 class CarModelsRepo {
   static Future<CarsModel?> getCarModels(
-    context,
-  ) async {
+    context, {
+    carMadeId,
+  }) async {
     final util = NetworkUtil();
 
     var response = await util.get(
-      'car/model',
+      carMadeId != null ? 'mades/car/model/$carMadeId' : 'car/model',
       context: context,
     );
 
@@ -19,7 +20,8 @@ class CarModelsRepo {
       return null;
     }
     if (response.statusCode! >= 500) {
-      throw LaravelException('${'something_wrong'.translate} \n STATUS_CODE : ${response.statusCode}');
+      throw LaravelException(
+          '${'something_wrong'.translate} \n STATUS_CODE : ${response.statusCode}');
     }
     var model = CarsModel.fromJson(response.data);
 

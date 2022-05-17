@@ -95,10 +95,16 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     return CategoryItem(
                       showDivider: true, //cat != categoriesCubit.category.last,
                       onPressed: () {
-                        context.read<FilterCarsCubit>().getManufacturer(
-                              context,
-                              categoryId: cat.id,
-                            );
+                        context.read<FilterCarsCubit>()
+                          ..getManufacturer(
+                            context,
+                            categoryId: cat.id,
+                          )
+                          ..getCarMades(
+                            context,
+                            categoryId: cat.id,
+                          );
+
                         var hasSubCat = categoriesCubit.hasSubCategory(cat.id);
                         // if (hasSubCat) {
                         var subCat = context.read<SubCategoriesCubit>();

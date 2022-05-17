@@ -25,11 +25,12 @@ class NetworkUtil {
   Future<Response?> get(
     String url, {
     @required BuildContext? context,
+    String? specificLangCode,
     Map? headers,
     bool withHeader = true,
   }) async {
     Response? response;
-
+    log('lang ${specificLangCode ?? Helper.currentLanguage}');
     try {
       dio.options.baseUrl = "http://trkar-v2.lacasacode.com/api/";
       (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
@@ -48,7 +49,7 @@ class NetworkUtil {
                       },
                       // HttpHeaders.contentTypeHeader: 'application/json',
                       // HttpHeaders.acceptHeader: 'application/json',
-                      'lang': Helper.currentLanguage,
+                      'lang': specificLangCode ?? Helper.currentLanguage,
                     }
                   : headers == null
                       ? null

@@ -52,7 +52,9 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
     }
     if (widget.categoryId != null) {
       subCategoriesCubit.getSubCategories(context, id: widget.categoryId);
-      filterCarsCubit.getCarMades(context);
+      filterCarsCubit.getCarMades(context,
+          isSearch: true, categoryId: widget.categoryId);
+
       ids.add(widget.categoryId!);
       setState(() {
         searchBy++;
@@ -156,20 +158,25 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                             setState(() {
                               searchBy++;
                             });
-                            var id = categoriesCubit.category[v].id;
+
+                            var categoryId = categoriesCubit.category[v].id;
                             subCategoriesCubit.getSubCategories(
                               context,
-                              id: categoriesCubit.category[v].id,
+                              id: categoryId,
                             );
                             if (ids.isNotEmpty) {
                               ids.clear();
                             }
-                            ids.add(id!);
+                            ids.add(categoryId!);
                             if (filterCarsCubit.carMades.isNotEmpty) {
                               log('messageNot');
                               return;
                             }
-                            filterCarsCubit.getCarMades(context);
+                            filterCarsCubit.getCarMades(
+                              context,
+                              categoryId: categoryId,
+                              isSearch: true,
+                            );
                           },
                         );
                 },
@@ -230,9 +237,10 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                   children: [
                     Visibility(
                       visible: searchBy > 0,
-                      child: state is CarMadesLoading
+                      child: state is CarMadesEnglishLoading
                           ? const LoaderWidget()
                           : DropDownWidget(
+                              textAlignment: Alignment.centerLeft,
                               onChanged: (v) {
                                 if (v == null) {
                                   return;
@@ -240,17 +248,21 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                                 setState(() {
                                   searchBy++;
                                 });
-                                if (filterCarsCubit.carModels.isNotEmpty) {
-                                  return;
-                                }
-                                filterCarsCubit.getCarModels(context);
+
+                                filterCarsCubit.getCarModels(
+                                  context,
+                                  carMadeId:
+                                      filterCarsCubit.carMadesEnglish[v].id,
+                                );
                               },
                               labelText: 'brand',
                               thinBorder: true,
                               values: List.generate(
-                                filterCarsCubit.carMades.length,
+                                filterCarsCubit.carMadesEnglish.length,
                                 (index) =>
-                                    filterCarsCubit.carMades[index].name ?? '',
+                                    filterCarsCubit
+                                        .carMadesEnglish[index].name ??
+                                    '',
                               ),
                             ),
                     ),

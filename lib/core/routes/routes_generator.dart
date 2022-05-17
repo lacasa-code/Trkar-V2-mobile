@@ -16,6 +16,8 @@ import 'package:trkar/auth/viewModel/login/login_cubit.dart';
 import 'package:trkar/auth/viewModel/register/register_cubit.dart';
 import 'package:trkar/cars/view/my_cars_screen.dart';
 import 'package:trkar/cart/view/cart_screen.dart';
+import 'package:trkar/categories/carMades/view/all_car_mades_screen.dart';
+import 'package:trkar/categories/manufacturers/view/all_manufacturers_screen.dart';
 import 'package:trkar/categories/view/categories_screen.dart';
 import 'package:trkar/categories/view/sub_categories_screen.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
@@ -166,6 +168,16 @@ class RoutesGenerator {
         return MaterialPageRoute(
           settings: settings,
           builder: (_) => const PaymentScreen(),
+        );
+      case AllCarMadesScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const AllCarMadesScreen(),
+        );
+      case AllManufacturersScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const AllManufacturersScreen(),
         );
       case RightsOfWithdrawalScreen.routeName:
         return MaterialPageRoute(
