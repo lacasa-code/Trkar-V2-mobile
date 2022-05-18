@@ -27,7 +27,7 @@ class FilterCarsCubit extends Cubit<FilterCarsState> {
     categoryId,
     bool isSearch = false,
   }) async {
-    emit(isSearch ? CarMadesEnglishLoading() : CarMadesLoading());
+    emit(CarMadesLoading());
     try {
       var carMadesData = await CarMadesRepo.getCarMades(
         context,
@@ -41,11 +41,7 @@ class FilterCarsCubit extends Cubit<FilterCarsState> {
         return;
       }
       if (carMadesData.status == true) {
-        if (isSearch) {
-          _carMadesEnglish = carMadesData.data;
-        } else {
-          _carMades = carMadesData.data;
-        }
+        _carMades = carMadesData.data;
         emit(FilterCarsDone());
       } else {
         emit(FilterCarsError(message: 'something_wrong'));
@@ -200,7 +196,6 @@ class FilterCarsCubit extends Cubit<FilterCarsState> {
   /// setters ...
 
   List<CarMades>? _carMades = [];
-  List<CarMades>? _carMadesEnglish = [];
   List<Manufacturer>? _manufacturers = [];
   List<Manufacturer>? _categoriesManufacturers = [];
   List<OriginalCountry>? _originalCountry = [];
@@ -211,7 +206,6 @@ class FilterCarsCubit extends Cubit<FilterCarsState> {
   /// getters ...
 
   List<CarMades> get carMades => [...?_carMades];
-  List<CarMades> get carMadesEnglish => [...?_carMadesEnglish];
   List<Manufacturer> get manufacturers => [...?_manufacturers];
   List<Manufacturer> get categoriesManufacturers =>
       [...?_categoriesManufacturers];

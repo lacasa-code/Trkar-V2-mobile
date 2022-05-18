@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
 import 'package:trkar/core/helper/helper.dart';
+import 'package:trkar/search/viewModel/search/search_cubit.dart';
 import './dropdown_widget.dart';
 import './multiselect_dropdown_widget.dart';
 import './register_button.dart';
 import './register_field.dart';
 import '../helper/enums.dart';
-import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
 import '../extensions/string.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -35,16 +35,16 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
     'country_of_origin'.translate,
     'manufacturers'.translate
   ];
-  late FilterCarsCubit filterCarsCubit;
   late CategoriesCubit categoriesCubit;
   late SubCategoriesCubit subCategoriesCubit;
+  late SearchCubit searchCubit;
   int searchBy = 0;
   List<int> ids = [];
   List<Widget> subCats = [];
 
   @override
   void initState() {
-    filterCarsCubit = context.read<FilterCarsCubit>();
+    searchCubit = context.read<SearchCubit>();
     categoriesCubit = context.read<CategoriesCubit>();
     subCategoriesCubit = context.read<SubCategoriesCubit>()..init();
     if (categoriesCubit.category.isEmpty && widget.categoryId == null) {
@@ -52,8 +52,7 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
     }
     if (widget.categoryId != null) {
       subCategoriesCubit.getSubCategories(context, id: widget.categoryId);
-      filterCarsCubit.getCarMades(context,
-          isSearch: true, categoryId: widget.categoryId);
+      searchCubit.getCarMades(context, categoryId: widget.categoryId);
 
       ids.add(widget.categoryId!);
       setState(() {
@@ -65,179 +64,190 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      margin: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            const RegisterField(
-              suffixIcon: Icon(
-                Icons.search,
-              ),
-              hintText: 'search_hint',
-              labelText: 'search',
-              thinBorder: true,
-            ),
-            // DropDownWidget(
-            //   thinBorder: true,
-            //   values: values,
-            //   labelText: 'search_by',
-            //   onChanged: (v) {
-            //     if (v == null) {
-            //       return;
-            //     }
-            //     // if (values[v] == 'brand'.translate) {
-            //     //   setState(() {
-            //     //     searchBy = SearchBy.brand;
-            //     //   });
-            //     //   if (filterCarsCubit.carMades.isEmpty) {
-            //     //     filterCarsCubit.getCarMades(context);
-            //     //   }
-            //     // } else if (values[v] == 'model'.translate) {
-            //     //   setState(() {
-            //     //     searchBy = SearchBy.model;
-            //     //   });
-            //     //   if (filterCarsCubit.carModels.isEmpty) {
-            //     //     filterCarsCubit.getCarModels(context);
-            //     //   }
-            //     // } else if (values[v] == 'categories'.translate) {
-            //     //   setState(() {
-            //     //     searchBy = SearchBy.categories;
-            //     //   });
-            //     //   if (categoriesCubit.category.isEmpty) {
-            //     //     categoriesCubit.getCategories(context);
-            //     //   }
-            //     // } else if (values[v] == 'country_of_origin'.translate) {
-            //     //   setState(() {
-            //     //     searchBy = SearchBy.countryOfOrigin;
-            //     //   });
-            //     //   if (filterCarsCubit.originalCountry.isEmpty) {
-            //     //     filterCarsCubit.getOriginCountries(context);
-            //     //   }
-            //     // } else if (values[v] == 'manufacturing_year'.translate) {
-            //     //   setState(() {
-            //     //     searchBy = SearchBy.manufacturingYear;
-            //     //   });
-            //     //   if (filterCarsCubit.carYears.isEmpty) {
-            //     //     filterCarsCubit.getCarYears(context);
-            //     //   }
-            //     // } else if (values[v] == 'manufacturers'.translate) {
-            //     //   setState(() {
-            //     //     searchBy = SearchBy.manufactureres;
-            //     //   });
-            //     //   if (filterCarsCubit.manufacturers.isEmpty) {
-            //     //     filterCarsCubit.getManufacturer(context);
-            //     //   }
-            //     // } else {
-            //     //   setState(() {
-            //     //     searchBy = null;
-            //     //   });
-            //     // }
-            //   },
-            // ),
-            Visibility(
-              visible: widget.categoryId == null,
-              child: BlocBuilder<CategoriesCubit, CategoriesState>(
-                builder: (context, state) {
-                  return state is CategoriesLoading
-                      ? const LoaderWidget()
-                      : DropDownWidget(
-                          thinBorder: true,
-                          values: List.generate(
-                              categoriesCubit.category.length,
-                              (index) =>
-                                  categoriesCubit.category[index].name ?? ''),
-                          labelText: 'categories',
-                          onChanged: (v) {
-                            if (v == null) {
-                              return;
-                            }
-                            setState(() {
-                              searchBy++;
-                            });
+    log('padding => ${MediaQuery.of(context).viewInsets.bottom}');
+    return BlocBuilder<SearchCubit, SearchState>(
+      builder: (context, state) {
+        return Card(
+          margin: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewPadding.bottom),
+          elevation: 5,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const RegisterField(
+                  suffixIcon: Icon(
+                    Icons.search,
+                  ),
+                  hintText: 'search_hint',
+                  labelText: 'search',
+                  thinBorder: true,
+                ),
+                // DropDownWidget(
+                //   thinBorder: true,
+                //   values: values,
+                //   labelText: 'search_by',
+                //   onChanged: (v) {
+                //     if (v == null) {
+                //       return;
+                //     }
+                //     // if (values[v] == 'brand'.translate) {
+                //     //   setState(() {
+                //     //     searchBy = SearchBy.brand;
+                //     //   });
+                //     //   if (searchCubit.carMades.isEmpty) {
+                //     //     searchCubit.getCarMades(context);
+                //     //   }
+                //     // } else if (values[v] == 'model'.translate) {
+                //     //   setState(() {
+                //     //     searchBy = SearchBy.model;
+                //     //   });
+                //     //   if (searchCubit.carModels.isEmpty) {
+                //     //     searchCubit.getCarModels(context);
+                //     //   }
+                //     // } else if (values[v] == 'categories'.translate) {
+                //     //   setState(() {
+                //     //     searchBy = SearchBy.categories;
+                //     //   });
+                //     //   if (categoriesCubit.category.isEmpty) {
+                //     //     categoriesCubit.getCategories(context);
+                //     //   }
+                //     // } else if (values[v] == 'country_of_origin'.translate) {
+                //     //   setState(() {
+                //     //     searchBy = SearchBy.countryOfOrigin;
+                //     //   });
+                //     //   if (searchCubit.originalCountry.isEmpty) {
+                //     //     searchCubit.getOriginCountries(context);
+                //     //   }
+                //     // } else if (values[v] == 'manufacturing_year'.translate) {
+                //     //   setState(() {
+                //     //     searchBy = SearchBy.manufacturingYear;
+                //     //   });
+                //     //   if (searchCubit.carYears.isEmpty) {
+                //     //     searchCubit.getCarYears(context);
+                //     //   }
+                //     // } else if (values[v] == 'manufacturers'.translate) {
+                //     //   setState(() {
+                //     //     searchBy = SearchBy.manufactureres;
+                //     //   });
+                //     //   if (searchCubit.manufacturers.isEmpty) {
+                //     //     searchCubit.getManufacturer(context);
+                //     //   }
+                //     // } else {
+                //     //   setState(() {
+                //     //     searchBy = null;
+                //     //   });
+                //     // }
+                //   },
+                // ),
+                Visibility(
+                  visible: widget.categoryId == null,
+                  child: BlocBuilder<CategoriesCubit, CategoriesState>(
+                    builder: (context, state) {
+                      return state is CategoriesLoading
+                          ? const LoaderWidget()
+                          : DropDownWidget(
+                              thinBorder: true,
+                              values: List.generate(
+                                  categoriesCubit.category.length,
+                                  (index) =>
+                                      categoriesCubit.category[index].name ??
+                                      ''),
+                              labelText: 'categories',
+                              onChanged: (v) {
+                                if (v == null) {
+                                  return;
+                                }
+                                setState(() {
+                                  searchBy++;
+                                });
 
-                            var categoryId = categoriesCubit.category[v].id;
-                            subCategoriesCubit.getSubCategories(
-                              context,
-                              id: categoryId,
+                                var categoryId = categoriesCubit.category[v].id;
+                                subCategoriesCubit.getSubCategories(
+                                  context,
+                                  id: categoryId,
+                                );
+                                if (ids.isNotEmpty) {
+                                  ids.clear();
+                                }
+                                ids.add(categoryId!);
+
+                                searchCubit.getCarMades(
+                                  context,
+                                  categoryId: categoryId,
+                                );
+                              },
                             );
-                            if (ids.isNotEmpty) {
-                              ids.clear();
-                            }
-                            ids.add(categoryId!);
-                            if (filterCarsCubit.carMades.isNotEmpty) {
-                              log('messageNot');
-                              return;
-                            }
-                            filterCarsCubit.getCarMades(
-                              context,
-                              categoryId: categoryId,
-                              isSearch: true,
-                            );
-                          },
-                        );
-                },
-              ),
-            ),
-            const RegisterField(labelText: 'vin_number', thinBorder: true),
-            BlocBuilder<SubCategoriesCubit, SubCategoriesState>(
-              builder: (context, state) {
-                return Column(
-                  children: List.generate(
-                    ids.length,
-                    (index) {
-                      var subCat = subCategoriesCubit.subCategories
-                          .where((element) =>
-                              int.parse(element.parentId ?? '') == ids[index])
-                          .toList();
-                      return Visibility(
-                        visible: widget.categoryId != null || subCat.isNotEmpty,
-                        child: DropDownWidget(
-                          key: ValueKey(ids[index]),
-                          thinBorder: true,
-                          values: List.generate(
-                              subCat.length,
-                              (index) =>
-                                  (Helper.currentLanguage == 'ar'
-                                      ? subCat[index].nameAr
-                                      : subCat[index].nameEn) ??
-                                  ''),
-                          labelText: 'all',
-                          onChanged: (v) async {
-                            if (v == null) {
-                              return;
-                            }
-                            var id = subCat[v].id;
-                            if (id == null) {
-                              return;
-                            }
-                            setState(() {
-                              handlingIdsList(ids[index]);
-                            });
-                            subCategoriesCubit.getSubCategories(
-                              context,
-                              id: id,
-                            );
-                            ids.add(id);
-                          },
-                        ),
-                      );
                     },
                   ),
-                );
-              },
-            ),
+                ),
+                Form(
+                  key: searchCubit.formKey,
+                  child: RegisterField(
+                    labelText: 'vin_number',
+                    thinBorder: true,
+                    validator: searchCubit.vinNumberValidate,
+                    controller: searchCubit.vinNumberController,
+                    onChanged: (value) =>
+                        searchCubit.onVinNumberChanged(value, context),
+                    maxLength: 17,
+                  ),
+                ),
+                BlocBuilder<SubCategoriesCubit, SubCategoriesState>(
+                  builder: (context, state) {
+                    return Column(
+                      children: List.generate(
+                        ids.length,
+                        (index) {
+                          var subCat = subCategoriesCubit.subCategories
+                              .where((element) =>
+                                  int.parse(element.parentId ?? '') ==
+                                  ids[index])
+                              .toList();
+                          return Visibility(
+                            visible:
+                                widget.categoryId != null || subCat.isNotEmpty,
+                            child: DropDownWidget(
+                              key: ValueKey(ids[index]),
+                              thinBorder: true,
+                              values: List.generate(
+                                  subCat.length,
+                                  (index) =>
+                                      (Helper.currentLanguage == 'ar'
+                                          ? subCat[index].nameAr
+                                          : subCat[index].nameEn) ??
+                                      ''),
+                              labelText: 'all',
+                              onChanged: (v) async {
+                                if (v == null) {
+                                  return;
+                                }
+                                var id = subCat[v].id;
+                                if (id == null) {
+                                  return;
+                                }
+                                setState(() {
+                                  handlingIdsList(ids[index]);
+                                });
+                                subCategoriesCubit.getSubCategories(
+                                  context,
+                                  id: id,
+                                );
+                                ids.add(id);
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
 
-            BlocBuilder<FilterCarsCubit, FilterCarsState>(
-              builder: (context, state) {
-                return Column(
+                Column(
                   children: [
                     Visibility(
                       visible: searchBy > 0,
-                      child: state is CarMadesEnglishLoading
+                      child: state is CarMadesLoading
                           ? const LoaderWidget()
                           : DropDownWidget(
                               textAlignment: Alignment.centerLeft,
@@ -249,19 +259,17 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                                   searchBy++;
                                 });
 
-                                filterCarsCubit.getCarModels(
+                                searchCubit.getCarModels(
                                   context,
-                                  carMadeId:
-                                      filterCarsCubit.carMadesEnglish[v].id,
+                                  carMadeId: searchCubit.carMadesEnglish[v].id,
                                 );
                               },
                               labelText: 'brand',
                               thinBorder: true,
                               values: List.generate(
-                                filterCarsCubit.carMadesEnglish.length,
+                                searchCubit.carMadesEnglish.length,
                                 (index) =>
-                                    filterCarsCubit
-                                        .carMadesEnglish[index].name ??
+                                    searchCubit.carMadesEnglish[index].name ??
                                     '',
                               ),
                             ),
@@ -278,9 +286,8 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                                 setState(() {
                                   searchBy++;
                                 });
-                                var carModelId =
-                                    filterCarsCubit.carModels[v].id;
-                                filterCarsCubit.getCarEngines(
+                                var carModelId = searchCubit.carModels[v].id;
+                                searchCubit.getCarEngines(
                                   context,
                                   carModelId: carModelId,
                                 );
@@ -288,9 +295,9 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                               labelText: 'model',
                               thinBorder: true,
                               values: List.generate(
-                                filterCarsCubit.carModels.length,
+                                searchCubit.carModels.length,
                                 (index) =>
-                                    filterCarsCubit.carModels[index].name ?? '',
+                                    searchCubit.carModels[index].name ?? '',
                               ),
                             ),
                     ),
@@ -303,10 +310,9 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                               labelText: 'car_engine',
                               thinBorder: true,
                               values: List.generate(
-                                filterCarsCubit.carEngines.length,
+                                searchCubit.carEngines.length,
                                 (index) {
-                                  var carEngine =
-                                      filterCarsCubit.carEngines[index];
+                                  var carEngine = searchCubit.carEngines[index];
                                   return '${carEngine.name}';
                                 },
                               ),
@@ -320,9 +326,9 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                     //           labelText: 'manufacturers',
                     //           thinBorder: true,
                     //           values: List.generate(
-                    //             filterCarsCubit.manufacturers.length,
+                    //             searchCubit.manufacturers.length,
                     //             (index) =>
-                    //                 filterCarsCubit.manufacturers[index].name ??
+                    //                 searchCubit.manufacturers[index].name ??
                     //                 '',
                     //           ),
                     //         ),
@@ -335,7 +341,7 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                     //           labelText: 'country_of_origin'.translate,
                     //           thinBorder: true,
                     //           values: List.generate(
-                    //             filterCarsCubit.originalCountry.length,
+                    //             searchCubit.originalCountry.length,
                     //             (index) =>
                     //                 filterCarsCubit
                     //                     .originalCountry[index].name ??
@@ -351,24 +357,27 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                     //           labelText: 'manufacturing_year'.translate,
                     //           thinBorder: true,
                     //           values: List.generate(
-                    //             filterCarsCubit.carYears.length,
+                    //             searchCubit.carYears.length,
                     //             (index) =>
-                    //                 filterCarsCubit.carYears[index].year ?? '',
+                    //                 searchCubit.carYears[index].year ?? '',
                     //           ),
                     //         ),
                     // ),
                   ],
-                );
-              },
+                ),
+                RegisterButton(
+                  radius: 13,
+                  title: 'search',
+                  onPressed: () {},
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).viewInsets.bottom,
+                )
+              ],
             ),
-            RegisterButton(
-              radius: 13,
-              title: 'search',
-              onPressed: () {},
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 

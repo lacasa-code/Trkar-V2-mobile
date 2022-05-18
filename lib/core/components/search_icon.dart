@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
 import 'package:trkar/core/components/search_modal_bottom_sheet.dart';
+import 'package:trkar/search/viewModel/search/search_cubit.dart';
 
 class SearchIcon extends StatelessWidget {
   const SearchIcon({
@@ -13,17 +15,26 @@ class SearchIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () {
-        showModalBottomSheet(
-          isScrollControlled: true,
+        showDialog(
+          // isScrollControlled: true,
           context: context,
-          builder: (_) => BlocProvider(
-            create: (_) => SubCategoriesCubit(),
+          builder: (_) => Dialog(
             child: Padding(
               padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
-              child: SearchModalBottomSheet(
-                categoryId: categoryId,
+              child: MultiBlocProvider(
+                providers: [
+                  BlocProvider<SearchCubit>(
+                    create: (_) => SearchCubit(),
+                  ),
+                  BlocProvider<SubCategoriesCubit>(
+                    create: (_) => SubCategoriesCubit(),
+                  ),
+                ],
+                child: SearchModalBottomSheet(
+                  categoryId: categoryId,
+                ),
               ),
             ),
           ),

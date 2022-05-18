@@ -15,6 +15,7 @@ class DropDownWidget extends StatelessWidget {
     this.leadingIcons,
     this.validator,
     this.textAlignment,
+    this.removePadding = false,
     this.thinBorder = false,
   }) : super(key: key);
   final int? selectedValueIndex;
@@ -24,12 +25,15 @@ class DropDownWidget extends StatelessWidget {
   final void Function(int?)? onChanged;
   final String labelText;
   final bool thinBorder;
+  final bool removePadding;
   final Alignment? textAlignment;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      padding: removePadding
+          ? EdgeInsets.zero
+          : const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: DropdownButtonFormField(
         validator: validator,
         isExpanded: true,

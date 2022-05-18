@@ -3,16 +3,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:trkar/Addresses/view/addresses_screen.dart';
-import 'package:trkar/auth/viewModel/logout/logout_cubit.dart';
 import 'package:trkar/categories/view/sub_categories_screen.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
-import 'package:trkar/core/components/register_button.dart';
-import 'package:trkar/core/components/register_field.dart';
 import 'package:trkar/core/components/search_icon.dart';
 import 'package:trkar/core/components/search_modal_bottom_sheet.dart';
-import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/extensions/string.dart';
 import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
@@ -20,11 +15,8 @@ import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
 import 'package:trkar/home/view/widgets/home_categories_item.dart';
 import 'package:trkar/home/view/widgets/my_drawer.dart';
 import 'package:trkar/home/view/widgets/recently_viewed_product_view.dart';
-import 'package:trkar/home/view/widgets/select_car_card.dart';
+
 import 'package:trkar/home/view/widgets/send_offers_email_view.dart';
-import 'package:trkar/localization/view/change_language_screen.dart';
-import '../../core/extensions/media_query.dart';
-import 'package:trkar/profile/view/edit_profile_screen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class HomeScreen extends StatefulWidget {

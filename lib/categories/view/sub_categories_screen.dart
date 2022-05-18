@@ -117,6 +117,7 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
                                 .toList()
                                 .last,
                         onPressed: () async {
+                          log('catId =>${cat.id}');
                           var hasSubCat = await subcategoriesCubit
                               .hasSubCategories(cat.id ?? 0, context);
                           if (hasSubCat) {

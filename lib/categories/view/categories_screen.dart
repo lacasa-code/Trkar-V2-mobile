@@ -8,6 +8,7 @@ import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.da
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
+import 'package:trkar/tyres/view/tyres_screen.dart';
 import '../../core/extensions/string.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
 import 'package:trkar/tab/viewModel/cubit/tab_cubit.dart';
@@ -130,6 +131,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       showDivider:
                           cat != categoriesCubit.categoriesScreenSubCat.last,
                       onPressed: () {
+                        if (cat.slug == 'tyres') {
+                          NavigationService.push(page: TyresScreen.routeName);
+                        }
                         var hasSubCat = categoriesCubit.hasSubCategory(cat.id);
                         log('message $hasSubCat ${cat.id}');
                         if (hasSubCat) {
