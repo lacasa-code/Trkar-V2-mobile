@@ -5,6 +5,8 @@ abstract class SearchState {}
 
 class SearchInitial extends SearchState {}
 
+class SearchTypeChanged extends SearchState {}
+
 class VinNumberLoading extends SearchState {}
 
 class VinNumberDone extends SearchState {}

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
+import 'package:trkar/core/components/searchable_dropdown_widget.dart';
 import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/search/viewModel/search/search_cubit.dart';
 import './dropdown_widget.dart';
@@ -38,7 +39,6 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
   late CategoriesCubit categoriesCubit;
   late SubCategoriesCubit subCategoriesCubit;
   late SearchCubit searchCubit;
-  int searchBy = 0;
   List<int> ids = [];
   List<Widget> subCats = [];
 
@@ -53,11 +53,8 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
     if (widget.categoryId != null) {
       subCategoriesCubit.getSubCategories(context, id: widget.categoryId);
       searchCubit.getCarMades(context, categoryId: widget.categoryId);
-
+      searchCubit.changeSearchType(1);
       ids.add(widget.categoryId!);
-      setState(() {
-        searchBy++;
-      });
     }
     super.initState();
   }
@@ -67,6 +64,7 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
     log('padding => ${MediaQuery.of(context).viewInsets.bottom}');
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
+        log('selectedNull =>${searchCubit.selectedCarMadesItem == null}');
         return Card(
           margin: EdgeInsets.only(
               bottom: MediaQuery.of(context).viewPadding.bottom),
@@ -158,9 +156,7 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                                 if (v == null) {
                                   return;
                                 }
-                                setState(() {
-                                  searchBy++;
-                                });
+                                searchCubit.changeSearchType(2);
 
                                 var categoryId = categoriesCubit.category[v].id;
                                 subCategoriesCubit.getSubCategories(
@@ -246,22 +242,30 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                 Column(
                   children: [
                     Visibility(
-                      visible: searchBy > 0,
+                      visible: searchCubit.searchBy > 0,
                       child: state is CarMadesLoading
                           ? const LoaderWidget()
-                          : DropDownWidget(
-                              textAlignment: Alignment.centerLeft,
+                          : SearchableDropDownWidget(
+                              initialValue: searchCubit.selectedCarMadesItem ==
+                                      null
+                                  ? null
+                                  : searchCubit
+                                      .carMadesEnglish[
+                                          searchCubit.selectedCarMadesItem ?? 0]
+                                      .name,
                               onChanged: (v) {
                                 if (v == null) {
                                   return;
                                 }
-                                setState(() {
-                                  searchBy++;
-                                });
+                                searchCubit.changeSearchType(2);
 
                                 searchCubit.getCarModels(
                                   context,
-                                  carMadeId: searchCubit.carMadesEnglish[v].id,
+                                  carMadeId: searchCubit.carMadesEnglish
+                                      .firstWhere(
+                                        (element) => element.name == v,
+                                      )
+                                      .id,
                                 );
                               },
                               labelText: 'brand',
@@ -275,18 +279,21 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                             ),
                     ),
                     Visibility(
-                      visible: searchBy > 1,
+                      visible: searchCubit.searchBy > 1,
                       child: state is CarModelsLoading
                           ? const LoaderWidget()
-                          : DropDownWidget(
+                          : SearchableDropDownWidget(
                               onChanged: (v) {
                                 if (v == null) {
                                   return;
                                 }
-                                setState(() {
-                                  searchBy++;
-                                });
-                                var carModelId = searchCubit.carModels[v].id;
+                                searchCubit.changeSearchType(3);
+
+                                var carModelId = searchCubit.carModels
+                                    .firstWhere(
+                                      (element) => element.name == v,
+                                    )
+                                    .id;
                                 searchCubit.getCarEngines(
                                   context,
                                   carModelId: carModelId,
@@ -302,10 +309,10 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                             ),
                     ),
                     Visibility(
-                      visible: searchBy > 2,
+                      visible: searchCubit.searchBy > 2,
                       child: state is CarEngineLoading
                           ? const LoaderWidget()
-                          : DropDownWidget(
+                          : SearchableDropDownWidget(
                               onChanged: (v) {},
                               labelText: 'car_engine',
                               thinBorder: true,

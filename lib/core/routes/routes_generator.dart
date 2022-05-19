@@ -41,6 +41,7 @@ import 'package:trkar/tab/view/tab_screen.dart';
 import 'package:trkar/tab/viewModel/cubit/tab_cubit.dart';
 import 'package:trkar/terms/view/terms_screen.dart';
 import 'package:trkar/tyres/view/tyres_screen.dart';
+import 'package:trkar/tyres/viewModel/tyresFilter/tyres_filter_cubit.dart';
 
 class RoutesGenerator {
   static Route<dynamic>? onRoutesGenerated(RouteSettings settings) {
@@ -173,7 +174,10 @@ class RoutesGenerator {
       case TyresScreen.routeName:
         return MaterialPageRoute(
           settings: settings,
-          builder: (_) => const TyresScreen(),
+          builder: (_) => BlocProvider(
+            create: (_) => TyresFilterCubit(),
+            child: const TyresScreen(),
+          ),
         );
       case AllCarMadesScreen.routeName:
         return MaterialPageRoute(

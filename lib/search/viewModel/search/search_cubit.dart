@@ -17,7 +17,12 @@ class SearchCubit extends Cubit<SearchState> {
   SearchCubit() : super(SearchInitial());
   final formKey = GlobalKey<FormState>();
   var vinNumberController = TextEditingController();
+  int _searchBy = 0;
+  int? _selectedCarMadesItem;
+  int? get selectedCarMadesItem => _selectedCarMadesItem;
 
+  /// 1=> show CarMades, 2=>show carModels, 3=> show carEngine
+  int get searchBy => _searchBy;
   void onVinNumberChanged(String? value, context) {
     if (value!.length == 17) {
       getCarMadesFromVinNumber(context);
@@ -69,12 +74,22 @@ class SearchCubit extends Cubit<SearchState> {
       }
       if (carMadesData.status == true) {
         if (carMadeName != null) {
-          _carMadesEnglish = carMadesData.data
-              ?.where((element) => element.name == carMadeName)
-              .toList();
+          var index = carMadesData.data?.indexWhere(
+                (element) => element.name == carMadeName,
+              ) ??
+              0;
+          if (index >= 0) {
+            _selectedCarMadesItem = index;
+            getCarModels(
+              context,
+              carMadeId: carMadesData.data?[index].id,
+            );
+          }
         } else {
-          _carMadesEnglish = carMadesData.data;
+          _selectedCarMadesItem = null;
         }
+        _carMadesEnglish = carMadesData.data;
+        changeSearchType(2);
 
         emit(CarMadesDone());
       } else {
@@ -105,6 +120,8 @@ class SearchCubit extends Cubit<SearchState> {
       }
       if (carYearsData.status == true) {
         _carModels = carYearsData.data;
+        changeSearchType(2);
+
         emit(CarEngineDone());
       } else {
         emit(CarEngineError(message: 'something_wrong'));
@@ -134,6 +151,8 @@ class SearchCubit extends Cubit<SearchState> {
       }
       if (carMadesData.status == true) {
         _carEngines = carMadesData.data;
+        changeSearchType(3);
+
         emit(CarEngineDone());
       } else {
         emit(CarEngineError(message: 'something_wrong'));
@@ -151,9 +170,14 @@ class SearchCubit extends Cubit<SearchState> {
     }
     var vin = VIN(number: value, extended: true).valid();
     if (value.length < 17 || !vin) {
-      return 'invalid_vin_number'.translate;
+      return 'vin_number_invalid'.translate;
     }
     return null;
+  }
+
+  void changeSearchType(int type) {
+    _searchBy = type;
+    emit(SearchTypeChanged());
   }
 
   List<CarMades>? _carMadesEnglish = [];
