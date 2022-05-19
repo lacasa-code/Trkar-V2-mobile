@@ -350,6 +350,48 @@ class _TyresScreenState extends State<TyresScreen>
                 Icons.search,
               ),
             ),
+            const BoxHelper(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Text(
+                      'tyres_brands'.translate,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: ScreenUtil().setSp(15),
+                      ),
+                    ),
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Wrap(
+                      direction: Axis.horizontal,
+                      runSpacing: ScreenUtil().setHeight(20),
+                      spacing: ScreenUtil().setWidth(15),
+                      children: List.generate(
+                        4,
+                        (index) {
+                          return Image.asset(
+                            'assets/images/brand${index + 1}.png',
+                            fit: BoxFit.cover,
+                            height: ScreenUtil().setHeight(60),
+                            width: ScreenUtil().setHeight(60),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
