@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trkar/cart/view/cart_screen.dart';
 import 'package:trkar/categories/view/categories_screen.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
@@ -75,6 +76,8 @@ class _TabScreenState extends State<TabScreen> {
             onTap: tabCubit.changeTabIndex,
             selectedItemColor: Theme.of(context).primaryColor,
             unselectedItemColor: Colors.grey,
+            selectedFontSize: ScreenUtil().setSp(10),
+            unselectedFontSize: ScreenUtil().setSp(10),
             items: pages
                 .map(
                   (e) => BottomNavigationBarItem(

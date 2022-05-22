@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trkar/carAccessories/view/car_accessories_screen.dart';
 import 'package:trkar/categories/view/sub_categories_screen.dart';
 import 'package:trkar/categories/view/widgets/category_item.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
@@ -133,6 +134,12 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       onPressed: () {
                         if (cat.slug == 'tyres') {
                           NavigationService.push(page: TyresScreen.routeName);
+                        }
+                        if (cat.slug == 'car-accessories') {
+                          NavigationService.push(
+                            page: CarAccessoriesScreen.routeName,
+                          );
+                          return;
                         }
                         var hasSubCat = categoriesCubit.hasSubCategory(cat.id);
                         log('message $hasSubCat ${cat.id}');

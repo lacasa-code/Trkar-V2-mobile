@@ -63,7 +63,7 @@ class SearchCubit extends Cubit<SearchState> {
     try {
       var carMadesData = await CarMadesRepo.getCarMades(
         context,
-        categoryId: categoryId,
+        categoryId: categoryId ?? 1,
         isEnglish: true,
       );
       if (carMadesData == null) {

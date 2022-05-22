@@ -14,6 +14,7 @@ import 'package:trkar/auth/view/register_screen.dart';
 import 'package:trkar/auth/view/reset_password_screen.dart';
 import 'package:trkar/auth/viewModel/login/login_cubit.dart';
 import 'package:trkar/auth/viewModel/register/register_cubit.dart';
+import 'package:trkar/carAccessories/view/car_accessories_screen.dart';
 import 'package:trkar/cars/view/my_cars_screen.dart';
 import 'package:trkar/cart/view/cart_screen.dart';
 import 'package:trkar/categories/carMades/view/all_car_mades_screen.dart';
@@ -63,6 +64,11 @@ class RoutesGenerator {
         return MaterialPageRoute(
           settings: settings,
           builder: (_) => const ChooseUserTypeScreen(),
+        );
+      case CarAccessoriesScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const CarAccessoriesScreen(),
         );
       case RegisterScreen.routeName:
         return MaterialPageRoute(

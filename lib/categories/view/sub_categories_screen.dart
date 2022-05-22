@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:trkar/carAccessories/view/car_accessories_screen.dart';
 import 'package:trkar/categories/carMades/view/all_car_mades_screen.dart';
 import 'package:trkar/categories/manufacturers/view/all_manufacturers_screen.dart';
 import 'package:trkar/categories/view/widgets/category_item.dart';
@@ -74,74 +75,78 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
               child: CircularProgressIndicator(),
             );
           }
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              BlocBuilder<FilterCarsCubit, FilterCarsState>(
-                builder: (context, state) {
-                  return Column(
-                    children: [
-                      state is CarMadesLoading
-                          ? const LoaderWidget()
-                          : BrandsView(filterCarsCubit: filterCarsCubit),
-                      state is ManufacturersLoading
-                          ? const LoaderWidget()
-                          : ManufacturersView(filterCarsCubit: filterCarsCubit),
-                    ],
-                  );
-                },
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: List.generate(
-                        subcategoriesCubit.subCategories
-                            .where((element) {
-                              return element.parentId ==
-                                  subcategoriesCubit.parentId.toString();
-                            })
-                            .toList()
-                            .length, (index) {
-                      var cat = subcategoriesCubit.subCategories
-                          .where((element) =>
-                              element.parentId ==
-                              subcategoriesCubit.parentId.toString())
-                          .toList()[index];
-                      return CategoryItem(
-                        showDivider: cat !=
-                            subcategoriesCubit.subCategories
-                                .where((element) {
-                                  return element.parentId ==
-                                      subcategoriesCubit.parentId.toString();
-                                })
-                                .toList()
-                                .last,
-                        onPressed: () async {
-                          log('catId =>${cat.id}');
-                          var hasSubCat = await subcategoriesCubit
-                              .hasSubCategories(cat.id ?? 0, context);
-                          if (hasSubCat) {
-                            NavigationService.push(
-                                page: SubCategoriesScreen.routeName,
-                                arguments: {
-                                  'category_name':
-                                      Helper.currentLanguage == 'ar'
-                                          ? cat.nameAr
-                                          : cat.nameEn,
-                                  'parent_id': cat.id,
-                                });
-                          }
-                        },
-                        categoryName: Helper.currentLanguage == 'ar'
-                            ? cat.nameAr
-                            : cat.nameEn,
-                        categoryImage: cat.image,
-                      );
-                    }),
-                  ),
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                BlocBuilder<FilterCarsCubit, FilterCarsState>(
+                  builder: (context, state) {
+                    return Column(
+                      children: [
+                        state is CarMadesLoading
+                            ? const LoaderWidget()
+                            : BrandsView(filterCarsCubit: filterCarsCubit),
+                        state is ManufacturersLoading
+                            ? const LoaderWidget()
+                            : ManufacturersView(
+                                filterCarsCubit: filterCarsCubit),
+                      ],
+                    );
+                  },
                 ),
-              ),
-            ],
+                Column(
+                  children: List.generate(
+                      subcategoriesCubit.subCategories
+                          .where((element) {
+                            return element.parentId ==
+                                subcategoriesCubit.parentId.toString();
+                          })
+                          .toList()
+                          .length, (index) {
+                    var cat = subcategoriesCubit.subCategories
+                        .where((element) =>
+                            element.parentId ==
+                            subcategoriesCubit.parentId.toString())
+                        .toList()[index];
+                    return CategoryItem(
+                      showDivider: cat !=
+                          subcategoriesCubit.subCategories
+                              .where((element) {
+                                return element.parentId ==
+                                    subcategoriesCubit.parentId.toString();
+                              })
+                              .toList()
+                              .last,
+                      onPressed: () async {
+                        log('catId =>${cat.id}');
+                        if (cat.slug == 'car-accessories') {
+                          NavigationService.push(
+                            page: CarAccessoriesScreen.routeName,
+                          );
+                          return;
+                        }
+                        var hasSubCat = await subcategoriesCubit
+                            .hasSubCategories(cat.id ?? 0, context);
+                        if (hasSubCat) {
+                          NavigationService.push(
+                              page: SubCategoriesScreen.routeName,
+                              arguments: {
+                                'category_name': Helper.currentLanguage == 'ar'
+                                    ? cat.nameAr
+                                    : cat.nameEn,
+                                'parent_id': cat.id,
+                              });
+                        }
+                      },
+                      categoryName: Helper.currentLanguage == 'ar'
+                          ? cat.nameAr
+                          : cat.nameEn,
+                      categoryImage: cat.image,
+                    );
+                  }),
+                ),
+              ],
+            ),
           );
         },
       ),

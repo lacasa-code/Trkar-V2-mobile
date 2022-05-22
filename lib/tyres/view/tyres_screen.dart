@@ -83,301 +83,353 @@ class _TyresScreenState extends State<TyresScreen>
           if (state is TypesLoaing) {
             return const LoaderWidget();
           }
+
           return SingleChildScrollView(
             child: Column(
               children: [
-                Stack(
-                  children: [
-                    SingleChildScrollView(
-                      controller: tyresFilterCubit.controller,
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: List.generate(
-                          tyresFilterCubit.types.length,
-                          (index) => TyresTabItem(
-                            title: tyresFilterCubit.types[index].name ?? '',
-                            imagePath:
-                                tyresFilterCubit.types[index].image ?? '',
-                            onTap: () =>
-                                tyresFilterCubit.changeTypesTabIndex(index),
-                            isSelected: tyresFilterCubit.tabIndex == index,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      left: ScreenUtil().setWidth(3),
-                      right: ScreenUtil().setWidth(3),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                TypesTabsView(tyresFilterCubit: tyresFilterCubit),
+                state is SeasonsLoading
+                    ? const LoaderWidget()
+                    : Column(
                         children: [
                           Visibility(
-                            visible: tyresFilterCubit.isMax,
-                            child: IconButton(
-                              onPressed: () => tyresFilterCubit.animateTo(
-                                  scrollToEnd: false),
-                              icon: CircleAvatar(
-                                backgroundColor: Theme.of(context).primaryColor,
-                                child: const Icon(
-                                  Icons.arrow_back,
-                                  color: Colors.white,
+                            visible: tyresFilterCubit.tabIndex < 3,
+                            child: state is SeasonsLoading
+                                ? const LoaderWidget()
+                                : Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 10),
+                                    child: TyresDropDownView(
+                                      onChanged: tyresFilterCubit
+                                          .onSeasonDropdownChanged,
+                                      title: 'season',
+                                      values: tyresFilterCubit.seasons
+                                          .map(
+                                            (e) => e.name ?? '',
+                                          )
+                                          .toList(),
+                                      selectedValue: 0,
+                                    ),
+                                  ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 10),
+                            child: Row(
+                              textDirection: TextDirection.ltr,
+                              children: [
+                                Expanded(
+                                  child: state is WidthLoading
+                                      ? const LoaderWidget()
+                                      : TyresDropDownView(
+                                        key:ValueKey(tyresFilterCubit.selectedSeasonId),
+                                          onChanged: tyresFilterCubit
+                                              .onWidthDropdownChanged,
+                                          title: 'width',
+                                          values: tyresFilterCubit.width
+                                              .map((e) => e.value ?? '')
+                                              .toList(),
+                                        ),
                                 ),
+                                const BoxHelper(
+                                  width: 5,
+                                ),
+                                Expanded(
+                                  child: state is HeightLoading
+                                      ? const LoaderWidget()
+                                      : TyresDropDownView(
+                                        key:ValueKey(tyresFilterCubit.selectedSeasonId),
+                                          onChanged: tyresFilterCubit
+                                              .onHeightDropdownChanged,
+                                          title: 'height',
+                                          values: List.generate(
+                                            tyresFilterCubit.height.length,
+                                            (index) {
+                                              var height = tyresFilterCubit
+                                                  .height[index];
+                                              return height.value ?? '';
+                                            },
+                                          ),
+                                        ),
+                                ),
+                                const BoxHelper(
+                                  width: 5,
+                                ),
+                                Expanded(
+                                  child: state is DiameterLoading
+                                      ? const LoaderWidget()
+                                      : TyresDropDownView(
+                                        key:ValueKey(tyresFilterCubit.selectedSeasonId),
+                                          onChanged: (value) {},
+                                          title: 'diameter',
+                                          values: List.generate(
+                                              tyresFilterCubit.diameter.length,
+                                              (index) {
+                                            var diameter = tyresFilterCubit
+                                                .diameter[index];
+                                            return diameter.value ?? '';
+                                          }),
+                                        ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 10),
+                            child: Image.asset(
+                              'assets/icons/select_tire.png',
+                              width: double.infinity,
+                            ),
+                          ),
+                          Visibility(
+                            visible: tyresFilterCubit.tabIndex == 3,
+                            child: CheckboxListTile(
+                              value: isWinter,
+                              onChanged: (v) {
+                                setState(() {
+                                  isWinter = v!;
+                                });
+                              },
+                              title: Text('winter_tyres'.translate),
+                            ),
+                          ),
+                          const BoxHelper(
+                            height: 20,
+                          ),
+                          Visibility(
+                            visible: tyresFilterCubit.tabIndex <= 2,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 0),
+                              child: Column(
+                                children: [
+                                  state is TyresManufacturersLoading
+                                      ? const LoaderWidget()
+                                      : TyresMultiselectDropDownView(
+                                          title: 'manufacturer',
+                                          values: List.generate(
+                                            tyresFilterCubit
+                                                .manufacturer.length,
+                                            (index) {
+                                              var manufacturer =
+                                                  tyresFilterCubit
+                                                      .manufacturer[index];
+                                              return manufacturer.name ?? '';
+                                            },
+                                          ),
+                                        ),
+                                  const BoxHelper(
+                                    height: 5,
+                                  ),
+                                  Visibility(
+                                    visible: tyresFilterCubit.tabIndex <= 1,
+                                    child: TyresMultiselectDropDownView(
+                                      title: 'speed_rating',
+                                      values: const [
+                                        '31',
+                                        '34',
+                                        '12',
+                                      ],
+                                    ),
+                                  ),
+                                  Visibility(
+                                    visible: tyresFilterCubit.tabIndex == 2,
+                                    child: TyresMultiselectDropDownView(
+                                      title: 'load_index',
+                                      values: const [
+                                        '31',
+                                        '34',
+                                        '12',
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                           Visibility(
-                            visible: !tyresFilterCubit.isMax,
-                            child: IconButton(
-                              onPressed: () =>
-                                  tyresFilterCubit.animateTo(scrollToEnd: true),
-                              icon: CircleAvatar(
-                                backgroundColor: Theme.of(context).primaryColor,
-                                child: const Icon(
-                                  Icons.arrow_forward,
-                                  color: Colors.white,
-                                ),
+                            visible: tyresFilterCubit.tabIndex == 3,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 10),
+                              child: Column(
+                                children: [
+                                  TyresMultiselectDropDownView(
+                                    title: 'speed_rating',
+                                    values: const [
+                                      '31',
+                                      '34',
+                                      '12',
+                                    ],
+                                  ),
+                                  const BoxHelper(
+                                    height: 5,
+                                  ),
+                                  TyresMultiselectDropDownView(
+                                    title: 'axle',
+                                    values: const [
+                                      '31',
+                                      '34',
+                                      '12',
+                                    ],
+                                  ),
+                                  const BoxHelper(
+                                    height: 5,
+                                  ),
+                                  state is TyresManufacturersLoading
+                                      ? const LoaderWidget()
+                                      : TyresMultiselectDropDownView(
+                                          title: 'manufacturer',
+                                          values: List.generate(
+                                            tyresFilterCubit
+                                                .manufacturer.length,
+                                            (index) {
+                                              var manufacturer =
+                                                  tyresFilterCubit
+                                                      .manufacturer[index];
+                                              return manufacturer.name ?? '';
+                                            },
+                                          ),
+                                        ),
+                                ],
                               ),
+                            ),
+                          ),
+                          const BoxHelper(
+                            height: 15,
+                          ),
+                          RegisterButton(
+                            radius: 10,
+                            title: 'search',
+                            onPressed: () {},
+                            icon: const Icon(
+                              Icons.search,
+                            ),
+                          ),
+                          const BoxHelper(
+                            height: 20,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 15),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  child: Text(
+                                    'tyres_brands'.translate,
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: ScreenUtil().setSp(15),
+                                    ),
+                                  ),
+                                ),
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Wrap(
+                                    direction: Axis.horizontal,
+                                    runSpacing: ScreenUtil().setHeight(20),
+                                    spacing: ScreenUtil().setWidth(15),
+                                    children: List.generate(
+                                      4,
+                                      (index) {
+                                        return Image.asset(
+                                          'assets/images/brand${index + 1}.png',
+                                          fit: BoxFit.cover,
+                                          height: ScreenUtil().setHeight(60),
+                                          width: ScreenUtil().setHeight(60),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-                Visibility(
-                  visible: tyresFilterCubit.tabIndex < 3,
-                  child: state is SeasonsLoading
-                      ? const LoaderWidget()
-                      : Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 10),
-                          child: TyresDropDownView(
-                            onChanged: tyresFilterCubit.onSeasonDropdownChanged,
-                            title: 'season',
-                            values: tyresFilterCubit.seasons
-                                .map(
-                                  (e) => e.name ?? '',
-                                )
-                                .toList(),
-                            selectedValue: 0,
-                          ),
-                        ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  child: Row(
-                    textDirection: TextDirection.ltr,
-                    children: [
-                      Expanded(
-                        child: state is WidthLoading
-                            ? const LoaderWidget()
-                            : TyresDropDownView(
-                                onChanged: (value) {},
-                                title: 'width',
-                                values: tyresFilterCubit.width
-                                    .map((e) => e.value ?? '')
-                                    .toList(),
-                              ),
-                      ),
-                      const BoxHelper(
-                        width: 5,
-                      ),
-                      Expanded(
-                        child: TyresDropDownView(
-                          onChanged: (value) {},
-                          title: 'height',
-                          values: const [
-                            '31',
-                            '34',
-                            '12',
-                          ],
-                        ),
-                      ),
-                      const BoxHelper(
-                        width: 5,
-                      ),
-                      Expanded(
-                        child: TyresDropDownView(
-                          onChanged: (value) {},
-                          title: 'diameter',
-                          values: const [
-                            '31',
-                            '34',
-                            '12',
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  child: Image.asset(
-                    'assets/icons/select_tire.png',
-                    width: double.infinity,
-                  ),
-                ),
-                Visibility(
-                  visible: tyresFilterCubit.tabIndex == 3,
-                  child: CheckboxListTile(
-                    value: isWinter,
-                    onChanged: (v) {
-                      setState(() {
-                        isWinter = v!;
-                      });
-                    },
-                    title: Text('winter_tyres'.translate),
-                  ),
-                ),
-                const BoxHelper(
-                  height: 20,
-                ),
-                Visibility(
-                  visible: tyresFilterCubit.tabIndex <= 2,
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-                    child: Column(
-                      children: [
-                        TyresMultiselectDropDownView(
-                          title: 'manufacturer',
-                          values: const [
-                            'test1',
-                            'test2',
-                            'test3',
-                          ],
-                        ),
-                        const BoxHelper(
-                          height: 5,
-                        ),
-                        Visibility(
-                          visible: tyresFilterCubit.tabIndex <= 1,
-                          child: TyresMultiselectDropDownView(
-                            title: 'speed_rating',
-                            values: const [
-                              '31',
-                              '34',
-                              '12',
-                            ],
-                          ),
-                        ),
-                        Visibility(
-                          visible: tyresFilterCubit.tabIndex == 2,
-                          child: TyresMultiselectDropDownView(
-                            title: 'load_index',
-                            values: const [
-                              '31',
-                              '34',
-                              '12',
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: tyresFilterCubit.tabIndex == 3,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 10),
-                    child: Column(
-                      children: [
-                        TyresMultiselectDropDownView(
-                          title: 'speed_rating',
-                          values: const [
-                            '31',
-                            '34',
-                            '12',
-                          ],
-                        ),
-                        const BoxHelper(
-                          height: 5,
-                        ),
-                        TyresMultiselectDropDownView(
-                          title: 'axle',
-                          values: const [
-                            '31',
-                            '34',
-                            '12',
-                          ],
-                        ),
-                        const BoxHelper(
-                          height: 5,
-                        ),
-                        TyresMultiselectDropDownView(
-                          title: 'manufacturer',
-                          values: const [
-                            'test1',
-                            'test2',
-                            'test3',
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const BoxHelper(
-                  height: 15,
-                ),
-                RegisterButton(
-                  radius: 10,
-                  title: 'search',
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.search,
-                  ),
-                ),
-                const BoxHelper(
-                  height: 20,
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Text(
-                          'tyres_brands'.translate,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: ScreenUtil().setSp(15),
-                          ),
-                        ),
-                      ),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Wrap(
-                          direction: Axis.horizontal,
-                          runSpacing: ScreenUtil().setHeight(20),
-                          spacing: ScreenUtil().setWidth(15),
-                          children: List.generate(
-                            4,
-                            (index) {
-                              return Image.asset(
-                                'assets/images/brand${index + 1}.png',
-                                fit: BoxFit.cover,
-                                height: ScreenUtil().setHeight(60),
-                                width: ScreenUtil().setHeight(60),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
               ],
             ),
           );
         },
       ),
+    );
+  }
+}
+
+class TypesTabsView extends StatelessWidget {
+  const TypesTabsView({
+    Key? key,
+    required this.tyresFilterCubit,
+  }) : super(key: key);
+
+  final TyresFilterCubit tyresFilterCubit;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        SingleChildScrollView(
+          controller: tyresFilterCubit.controller,
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: List.generate(
+              tyresFilterCubit.types.length,
+              (index) => TyresTabItem(
+                title: tyresFilterCubit.types[index].name ?? '',
+                imagePath: tyresFilterCubit.types[index].image ?? '',
+                onTap: () => tyresFilterCubit.changeTypesTabIndex(
+                  index,
+                  context,
+                ),
+                isSelected: tyresFilterCubit.tabIndex == index,
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          left: ScreenUtil().setWidth(3),
+          right: ScreenUtil().setWidth(3),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Visibility(
+                visible: tyresFilterCubit.isMax,
+                child: IconButton(
+                  onPressed: () =>
+                      tyresFilterCubit.animateTo(scrollToEnd: false),
+                  icon: CircleAvatar(
+                    backgroundColor: Theme.of(context).primaryColor,
+                    child: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: !tyresFilterCubit.isMax,
+                child: IconButton(
+                  onPressed: () =>
+                      tyresFilterCubit.animateTo(scrollToEnd: true),
+                  icon: CircleAvatar(
+                    backgroundColor: Theme.of(context).primaryColor,
+                    child: const Icon(
+                      Icons.arrow_forward,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

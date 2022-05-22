@@ -257,6 +257,7 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                                 if (v == null) {
                                   return;
                                 }
+                                searchCubit.vinNumberController.clear();
                                 searchCubit.changeSearchType(2);
 
                                 searchCubit.getCarModels(
