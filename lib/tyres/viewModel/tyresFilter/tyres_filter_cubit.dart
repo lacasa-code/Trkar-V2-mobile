@@ -205,6 +205,7 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
     if (value == null) {
       return;
     }
+    _diameter?.clear();
     getDiameterBySeasonId(
       NavigationService.context,
       heightId: _height?[value].id,

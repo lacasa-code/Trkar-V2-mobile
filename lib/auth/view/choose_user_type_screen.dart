@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:trkar/auth/view/register_screen.dart';
 import 'package:trkar/core/components/or_widget.dart';
 import 'package:trkar/core/components/register_button.dart';
@@ -48,6 +49,11 @@ class _ChooseUserTypeScreenState extends State<ChooseUserTypeScreen> {
                 RegisterButton(
                   title: 'register_as_vendor',
                   onPressed: () {
+                    Fluttertoast.showToast(
+                      msg: 'Coming Soon...',
+                      backgroundColor: Theme.of(context).primaryColor,
+                    );
+                    return;
                     NavigationService.push(
                       page: RegisterScreen.routeName,
                       arguments: 1,
