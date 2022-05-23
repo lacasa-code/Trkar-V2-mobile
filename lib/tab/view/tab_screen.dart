@@ -73,7 +73,7 @@ class _TabScreenState extends State<TabScreen> {
           bottomNavigationBar: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
             currentIndex: tabCubit.tabIndex,
-            onTap: tabCubit.changeTabIndex,
+            onTap: (v) => tabCubit.changeTabIndex(v, context),
             selectedItemColor: Theme.of(context).primaryColor,
             unselectedItemColor: Colors.grey,
             selectedFontSize: ScreenUtil().setSp(10),

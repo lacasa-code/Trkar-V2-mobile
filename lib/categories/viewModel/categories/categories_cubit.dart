@@ -68,6 +68,7 @@ class CategoriesCubit extends Cubit<CategoriesState> {
     536,
     36,
     32,
+    513,
     // e-mobility .. .. ..
   ];
   final List<int> _homeCategoriesIds = [

@@ -15,6 +15,7 @@ class SearchableDropDownWidget extends StatelessWidget {
     this.thinBorder = false,
     this.enabled = true,
     this.initialValue,
+    this.removePadding = false,
     this.mode = Mode.MENU,
   }) : super(key: key);
   final int? selectedValueIndex;
@@ -25,13 +26,16 @@ class SearchableDropDownWidget extends StatelessWidget {
   final String labelText;
   final bool thinBorder;
   final bool enabled;
+  final bool removePadding;
   final Mode mode;
   final String? initialValue;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      padding: removePadding
+          ? EdgeInsets.zero
+          : const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: DropdownSearch<String>(
         validator: validator,
         showSearchBox: true,

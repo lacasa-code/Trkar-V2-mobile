@@ -28,6 +28,7 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
     }
     if (typesData.status == true) {
       _types = typesData.data;
+      getManufacturerByTabId(context);
 
       emit(Done());
     } else {
@@ -172,13 +173,13 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
   }
 
   void onSeasonDropdownChanged(
-    int? value,
+    String? value,
   ) {
     if (value == null) {
       return;
     }
     clearLists();
-    _selectedSeasonId = _seasons?[value].id ?? 0;
+    _selectedSeasonId = _seasons?.indexWhere((element) => false) ?? 0;
     getWidthBySeasonId(
       NavigationService.context,
       seasonId: _selectedSeasonId,
@@ -186,29 +187,37 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
   }
 
   void onWidthDropdownChanged(
-    int? value,
+    String? value,
   ) {
     if (value == null) {
       return;
     }
     _height?.clear();
     _diameter?.clear();
+    var index = _width?.indexWhere((element) => element.value == value) ?? 0;
+    if (index < 0) {
+      return;
+    }
     getHeightBySeasonId(
       NavigationService.context,
-      widthId: _width?[value].id,
+      widthId: _width?[index].id,
     );
   }
 
   void onHeightDropdownChanged(
-    int? value,
+    String? value,
   ) {
     if (value == null) {
       return;
     }
     _diameter?.clear();
+    var index = _height?.indexWhere((element) => element.value == value) ?? 0;
+    if (index < 0) {
+      return;
+    }
     getDiameterBySeasonId(
       NavigationService.context,
-      heightId: _height?[value].id,
+      heightId: _height?[index].id,
     );
   }
 

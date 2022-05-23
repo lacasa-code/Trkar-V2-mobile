@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 
-
 class HomeProductItem extends StatelessWidget {
   const HomeProductItem({
     Key? key,
@@ -24,7 +23,7 @@ class HomeProductItem extends StatelessWidget {
               Align(
                 alignment: Alignment.center,
                 child: Image.asset(
-                  imagePath ?? 'assets/icons/trkarLogoWhite.png',
+                  imagePath ?? 'assets/images/oil3.jpg',
                   width: ScreenUtil().setWidth(150),
                   height: ScreenUtil().setHeight(150),
                   fit: BoxFit.cover,

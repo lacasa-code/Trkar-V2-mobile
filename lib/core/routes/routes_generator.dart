@@ -41,6 +41,7 @@ import 'package:trkar/support/view/support_screen.dart';
 import 'package:trkar/tab/view/tab_screen.dart';
 import 'package:trkar/tab/viewModel/cubit/tab_cubit.dart';
 import 'package:trkar/terms/view/terms_screen.dart';
+import 'package:trkar/tools/view/tools_screen.dart';
 import 'package:trkar/tyres/view/tyres_screen.dart';
 import 'package:trkar/tyres/viewModel/tyresFilter/tyres_filter_cubit.dart';
 
@@ -65,10 +66,23 @@ class RoutesGenerator {
           settings: settings,
           builder: (_) => const ChooseUserTypeScreen(),
         );
+      case ToolsScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => const ToolsScreen(),
+        );
       case CarAccessoriesScreen.routeName:
         return MaterialPageRoute(
           settings: settings,
-          builder: (_) => const CarAccessoriesScreen(),
+          builder: (_) => BlocProvider<SubCategoriesCubit>(
+            create: (_) => SubCategoriesCubit(
+              categoryName: (settings.arguments
+                  as Map<String, dynamic>?)?['category_name'] as String?,
+              parentId:
+                  (settings.arguments as Map<String, dynamic>?)?['parent_id'],
+            ),
+            child: const CarAccessoriesScreen(),
+          ),
         );
       case RegisterScreen.routeName:
         return MaterialPageRoute(

@@ -9,6 +9,7 @@ import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.da
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
+import 'package:trkar/tools/view/tools_screen.dart';
 import 'package:trkar/tyres/view/tyres_screen.dart';
 import '../../core/extensions/string.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
@@ -132,12 +133,19 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       showDivider:
                           cat != categoriesCubit.categoriesScreenSubCat.last,
                       onPressed: () {
+                        if (cat.slug == 'tools-equipment') {
+                          NavigationService.push(page: ToolsScreen.routeName);
+                        }
                         if (cat.slug == 'tyres') {
                           NavigationService.push(page: TyresScreen.routeName);
                         }
                         if (cat.slug == 'car-accessories') {
                           NavigationService.push(
                             page: CarAccessoriesScreen.routeName,
+                            arguments: {
+                              'category_name': cat.name,
+                              'parent_id': cat.id,
+                            },
                           );
                           return;
                         }

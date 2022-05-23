@@ -95,55 +95,72 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
                   },
                 ),
                 Column(
-                  children: List.generate(
-                      subcategoriesCubit.subCategories
-                          .where((element) {
-                            return element.parentId ==
-                                subcategoriesCubit.parentId.toString();
-                          })
-                          .toList()
-                          .length, (index) {
-                    var cat = subcategoriesCubit.subCategories
-                        .where((element) =>
-                            element.parentId ==
-                            subcategoriesCubit.parentId.toString())
-                        .toList()[index];
-                    return CategoryItem(
-                      showDivider: cat !=
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 10),
+                      child: Text(
+                        '${'categories'.translate} :',
+                        textAlign: TextAlign.start,
+                        style: const TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    Column(
+                      children: List.generate(
                           subcategoriesCubit.subCategories
                               .where((element) {
                                 return element.parentId ==
                                     subcategoriesCubit.parentId.toString();
                               })
                               .toList()
-                              .last,
-                      onPressed: () async {
-                        log('catId =>${cat.id}');
-                        if (cat.slug == 'car-accessories') {
-                          NavigationService.push(
-                            page: CarAccessoriesScreen.routeName,
-                          );
-                          return;
-                        }
-                        var hasSubCat = await subcategoriesCubit
-                            .hasSubCategories(cat.id ?? 0, context);
-                        if (hasSubCat) {
-                          NavigationService.push(
-                              page: SubCategoriesScreen.routeName,
-                              arguments: {
-                                'category_name': Helper.currentLanguage == 'ar'
-                                    ? cat.nameAr
-                                    : cat.nameEn,
-                                'parent_id': cat.id,
-                              });
-                        }
-                      },
-                      categoryName: Helper.currentLanguage == 'ar'
-                          ? cat.nameAr
-                          : cat.nameEn,
-                      categoryImage: cat.image,
-                    );
-                  }),
+                              .length, (index) {
+                        var cat = subcategoriesCubit.subCategories
+                            .where((element) =>
+                                element.parentId ==
+                                subcategoriesCubit.parentId.toString())
+                            .toList()[index];
+                        return CategoryItem(
+                          showDivider: cat !=
+                              subcategoriesCubit.subCategories
+                                  .where((element) {
+                                    return element.parentId ==
+                                        subcategoriesCubit.parentId.toString();
+                                  })
+                                  .toList()
+                                  .last,
+                          onPressed: () async {
+                            log('catId =>${cat.id}');
+                            if (cat.slug == 'car-accessories') {
+                              NavigationService.push(
+                                page: CarAccessoriesScreen.routeName,
+                              );
+                              return;
+                            }
+                            var hasSubCat = await subcategoriesCubit
+                                .hasSubCategories(cat.id ?? 0, context);
+                            if (hasSubCat) {
+                              NavigationService.push(
+                                  page: SubCategoriesScreen.routeName,
+                                  arguments: {
+                                    'category_name':
+                                        Helper.currentLanguage == 'ar'
+                                            ? cat.nameAr
+                                            : cat.nameEn,
+                                    'parent_id': cat.id,
+                                  });
+                            }
+                          },
+                          categoryName: Helper.currentLanguage == 'ar'
+                              ? cat.nameAr
+                              : cat.nameEn,
+                          categoryImage: cat.image,
+                        );
+                      }),
+                    ),
+                  ],
                 ),
               ],
             ),

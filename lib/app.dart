@@ -12,6 +12,7 @@ import 'package:trkar/core/routes/routes_generator.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
 import 'package:trkar/profile/viewModel/userProfile/user_profile_cubit.dart';
+import 'package:trkar/tools/view/tools_screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -62,13 +63,15 @@ class MyApp extends StatelessWidget {
         locale: localization.locale,
         supportedLocales: localization.supportedLocales(),
         builder: (ctx, widget) => ScreenUtilInit(
-          builder: (_) => widget ?? const SizedBox(),
+          builder: (_, __) => widget ?? const SizedBox(),
         ),
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
         ],
+        home: ToolsScreen(),
+        // initialRoute: ToolsScreen.routeName,
         onGenerateRoute: RoutesGenerator.onRoutesGenerated,
       ),
     );

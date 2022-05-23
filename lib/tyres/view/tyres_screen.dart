@@ -7,8 +7,10 @@ import 'package:trkar/core/components/dropdown_widget.dart';
 import 'package:trkar/core/components/multiselect_dropdown_widget.dart';
 import 'package:trkar/core/components/register_button.dart';
 import 'package:trkar/core/components/search_modal_bottom_sheet.dart';
+import 'package:trkar/core/components/searchable_dropdown_widget.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
+import 'package:trkar/home/view/widgets/home_product_item.dart';
 import 'package:trkar/tyres/viewModel/tyresFilter/tyres_filter_cubit.dart';
 import '../../core/extensions/string.dart';
 
@@ -122,7 +124,8 @@ class _TyresScreenState extends State<TyresScreen>
                                   child: state is WidthLoading
                                       ? const LoaderWidget()
                                       : TyresDropDownView(
-                                        key:ValueKey(tyresFilterCubit.selectedSeasonId),
+                                          key: ValueKey(tyresFilterCubit
+                                              .selectedSeasonId),
                                           onChanged: tyresFilterCubit
                                               .onWidthDropdownChanged,
                                           title: 'width',
@@ -138,7 +141,8 @@ class _TyresScreenState extends State<TyresScreen>
                                   child: state is HeightLoading
                                       ? const LoaderWidget()
                                       : TyresDropDownView(
-                                        key:ValueKey(tyresFilterCubit.selectedSeasonId),
+                                          key: ValueKey(tyresFilterCubit
+                                              .selectedSeasonId),
                                           onChanged: tyresFilterCubit
                                               .onHeightDropdownChanged,
                                           title: 'height',
@@ -159,7 +163,8 @@ class _TyresScreenState extends State<TyresScreen>
                                   child: state is DiameterLoading
                                       ? const LoaderWidget()
                                       : TyresDropDownView(
-                                        key:ValueKey(tyresFilterCubit.selectedSeasonId),
+                                          key: ValueKey(tyresFilterCubit
+                                              .selectedSeasonId),
                                           onChanged: (value) {},
                                           title: 'diameter',
                                           values: List.generate(
@@ -310,53 +315,101 @@ class _TyresScreenState extends State<TyresScreen>
                           const BoxHelper(
                             height: 20,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 15),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 10),
-                                  child: Text(
-                                    'tyres_brands'.translate,
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: ScreenUtil().setSp(15),
-                                    ),
-                                  ),
-                                ),
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Wrap(
-                                    direction: Axis.horizontal,
-                                    runSpacing: ScreenUtil().setHeight(20),
-                                    spacing: ScreenUtil().setWidth(15),
-                                    children: List.generate(
-                                      4,
-                                      (index) {
-                                        return Image.asset(
-                                          'assets/images/brand${index + 1}.png',
-                                          fit: BoxFit.cover,
-                                          height: ScreenUtil().setHeight(60),
-                                          width: ScreenUtil().setHeight(60),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
                         ],
                       ),
+                BestSellersView(),
+                PremiumTyresBrand(),
               ],
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class PremiumTyresBrand extends StatelessWidget {
+  const PremiumTyresBrand({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Text(
+              'premium_tyres_brand'.translate,
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: ScreenUtil().setSp(15),
+              ),
+            ),
+          ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: List.generate(
+                4,
+                (index) {
+                  return Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    child: Image.asset(
+                      'assets/images/brand1.png',
+                      fit: BoxFit.cover,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BestSellersView extends StatelessWidget {
+  const BestSellersView({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const BoxHelper(
+            height: 10,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            child: Text(
+              'best_sellers'.translate,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: List.generate(
+                8,
+                (index) => const HomeProductItem(),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -372,26 +425,55 @@ class TypesTabsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Row(
       children: [
-        SingleChildScrollView(
-          controller: tyresFilterCubit.controller,
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: List.generate(
-              tyresFilterCubit.types.length,
-              (index) => TyresTabItem(
-                title: tyresFilterCubit.types[index].name ?? '',
-                imagePath: tyresFilterCubit.types[index].image ?? '',
-                onTap: () => tyresFilterCubit.changeTypesTabIndex(
-                  index,
-                  context,
-                ),
-                isSelected: tyresFilterCubit.tabIndex == index,
+        Visibility(
+          visible: tyresFilterCubit.isMax,
+          child: IconButton(
+            onPressed: () => tyresFilterCubit.animateTo(scrollToEnd: false),
+            icon: CircleAvatar(
+              backgroundColor: Theme.of(context).primaryColor,
+              child: const Icon(
+                Icons.arrow_back,
+                color: Colors.white,
               ),
             ),
           ),
         ),
+        Expanded(
+          child: SingleChildScrollView(
+            controller: tyresFilterCubit.controller,
+            scrollDirection: Axis.horizontal,
+            child: Row(children: [
+              ...List.generate(
+                tyresFilterCubit.types.length,
+                (index) => TyresTabItem(
+                  title: tyresFilterCubit.types[index].name ?? '',
+                  imagePath: tyresFilterCubit.types[index].image ?? '',
+                  onTap: () => tyresFilterCubit.changeTypesTabIndex(
+                    index,
+                    context,
+                  ),
+                  isSelected: tyresFilterCubit.tabIndex == index,
+                ),
+              ),
+            ]),
+          ),
+        ),
+        Visibility(
+          visible: !tyresFilterCubit.isMax,
+          child: IconButton(
+            onPressed: () => tyresFilterCubit.animateTo(scrollToEnd: true),
+            icon: CircleAvatar(
+              backgroundColor: Theme.of(context).primaryColor,
+              child: const Icon(
+                Icons.arrow_forward,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+        /*
         Positioned(
           left: ScreenUtil().setWidth(3),
           right: ScreenUtil().setWidth(3),
@@ -429,6 +511,7 @@ class TypesTabsView extends StatelessWidget {
             ],
           ),
         ),
+        */
       ],
     );
   }
@@ -445,7 +528,7 @@ class TyresDropDownView extends StatelessWidget {
   final String title;
   final List<String> values;
   final int? selectedValue;
-  final void Function(int?)? onChanged;
+  final void Function(String?)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -463,7 +546,7 @@ class TyresDropDownView extends StatelessWidget {
             ),
           ),
         ),
-        DropDownWidget(
+        SearchableDropDownWidget(
           removePadding: true,
           selectedValueIndex: selectedValue,
           thinBorder: true,

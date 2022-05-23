@@ -31,6 +31,21 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        leading: Visibility(
+          visible: Navigator.canPop(context),
+          child: IconButton(
+            onPressed: () {
+              NavigationService.goBack();
+            },
+            color: Colors.black,
+            icon: const Icon(
+              Icons.arrow_back,
+            ),
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Form(
           key: loginCubit.formKey,
