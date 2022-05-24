@@ -33,6 +33,8 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
         leading: Visibility(
           visible: Navigator.canPop(context),
           child: IconButton(

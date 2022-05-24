@@ -74,6 +74,7 @@ flutter:
     - assets/images/
     - assets/images/manufactorsLogo/
     - assets/icons/
+    - assets/icons/oliBrands/
     - assets/icons/lang/
     - assets/lang/
   # An image asset can refer to one or more resolution-specific "variants", see

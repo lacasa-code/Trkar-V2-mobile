@@ -5,6 +5,8 @@ import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
 import 'package:trkar/core/components/searchable_dropdown_widget.dart';
 import 'package:trkar/core/helper/helper.dart';
+import 'package:trkar/core/helper/navigator.dart';
+import 'package:trkar/core/extensions/media_query.dart';
 import 'package:trkar/search/viewModel/search/search_cubit.dart';
 import './dropdown_widget.dart';
 import './multiselect_dropdown_widget.dart';
@@ -14,18 +16,20 @@ import '../helper/enums.dart';
 import '../extensions/string.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SearchModalBottomSheet extends StatefulWidget {
-  const SearchModalBottomSheet({
+class SearchScreen extends StatefulWidget {
+  const SearchScreen({
     Key? key,
     this.categoryId,
   }) : super(key: key);
   final dynamic categoryId;
 
+  static const routeName = '/searchScreen';
+
   @override
-  State<SearchModalBottomSheet> createState() => _SearchModalBottomSheetState();
+  State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
+class _SearchScreenState extends State<SearchScreen> {
   // TODO :handling ids list after editing subCatsAPI ... ___ SPRINT 3 _____
   List<String> values = [
     'all'.translate,
@@ -65,11 +69,9 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
         log('selectedNull =>${searchCubit.selectedCarMadesItem == null}');
-        return Card(
-          margin: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewPadding.bottom),
-          elevation: 5,
-          child: SingleChildScrollView(
+        return SingleChildScrollView(
+          child: SizedBox(
+            height: context.height,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -158,7 +160,8 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                                 }
                                 searchCubit.changeSearchType(2);
 
-                                var categoryId = categoriesCubit.category[v].id;
+                                var categoryId =
+                                    categoriesCubit.category[v].id;
                                 subCategoriesCubit.getSubCategories(
                                   context,
                                   id: categoryId,
@@ -201,8 +204,8 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                                   ids[index])
                               .toList();
                           return Visibility(
-                            visible:
-                                widget.categoryId != null || subCat.isNotEmpty,
+                            visible: widget.categoryId != null ||
+                                subCat.isNotEmpty,
                             child: DropDownWidget(
                               key: ValueKey(ids[index]),
                               thinBorder: true,
@@ -246,13 +249,14 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                       child: state is CarMadesLoading
                           ? const LoaderWidget()
                           : SearchableDropDownWidget(
-                              initialValue: searchCubit.selectedCarMadesItem ==
-                                      null
-                                  ? null
-                                  : searchCubit
-                                      .carMadesEnglish[
-                                          searchCubit.selectedCarMadesItem ?? 0]
-                                      .name,
+                              initialValue:
+                                  searchCubit.selectedCarMadesItem == null
+                                      ? null
+                                      : searchCubit
+                                          .carMadesEnglish[searchCubit
+                                                  .selectedCarMadesItem ??
+                                              0]
+                                          .name,
                               onChanged: (v) {
                                 if (v == null) {
                                   return;
@@ -283,29 +287,35 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                       visible: searchCubit.searchBy > 1,
                       child: state is CarModelsLoading
                           ? const LoaderWidget()
-                          : SearchableDropDownWidget(
-                              onChanged: (v) {
-                                if (v == null) {
-                                  return;
-                                }
-                                searchCubit.changeSearchType(3);
+                          : Padding(
+                              padding: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).viewInsets.bottom,
+                              ),
+                              child: SearchableDropDownWidget(
+                                onChanged: (v) {
+                                  if (v == null) {
+                                    return;
+                                  }
+                                  searchCubit.changeSearchType(3);
 
-                                var carModelId = searchCubit.carModels
-                                    .firstWhere(
-                                      (element) => element.name == v,
-                                    )
-                                    .id;
-                                searchCubit.getCarEngines(
-                                  context,
-                                  carModelId: carModelId,
-                                );
-                              },
-                              labelText: 'model',
-                              thinBorder: true,
-                              values: List.generate(
-                                searchCubit.carModels.length,
-                                (index) =>
-                                    searchCubit.carModels[index].name ?? '',
+                                  var carModelId = searchCubit.carModels
+                                      .firstWhere(
+                                        (element) => element.name == v,
+                                      )
+                                      .id;
+                                  searchCubit.getCarEngines(
+                                    context,
+                                    carModelId: carModelId,
+                                  );
+                                },
+                                labelText: 'model',
+                                thinBorder: true,
+                                values: List.generate(
+                                  searchCubit.carModels.length,
+                                  (index) =>
+                                      searchCubit.carModels[index].name ?? '',
+                                ),
                               ),
                             ),
                     ),
@@ -320,7 +330,8 @@ class _SearchModalBottomSheetState extends State<SearchModalBottomSheet> {
                               values: List.generate(
                                 searchCubit.carEngines.length,
                                 (index) {
-                                  var carEngine = searchCubit.carEngines[index];
+                                  var carEngine =
+                                      searchCubit.carEngines[index];
                                   return '${carEngine.name}';
                                 },
                               ),

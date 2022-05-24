@@ -70,7 +70,6 @@ class MyApp extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
         ],
-        home: ToolsScreen(),
         // initialRoute: ToolsScreen.routeName,
         onGenerateRoute: RoutesGenerator.onRoutesGenerated,
       ),

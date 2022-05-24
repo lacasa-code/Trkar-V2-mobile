@@ -23,7 +23,10 @@ import 'package:trkar/categories/view/categories_screen.dart';
 import 'package:trkar/categories/view/sub_categories_screen.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
+import 'package:trkar/core/components/search_modal_bottom_sheet.dart';
 import 'package:trkar/delivery/view/delivery_screen.dart';
+import 'package:trkar/engineOil/view/engine_oil_screen.dart';
+import 'package:trkar/engineOil/viewModel/engineOil/engine_oil_cubit.dart';
 import 'package:trkar/favorites/view/favorites_screen.dart';
 import 'package:trkar/home/view/home_screen.dart';
 import 'package:trkar/legalNotice/view/legal_notice_screen.dart';
@@ -36,6 +39,7 @@ import 'package:trkar/profile/view/profile_screen.dart';
 import 'package:trkar/profile/viewModel/updateUserProfile/update_user_profile_cubit.dart';
 import 'package:trkar/returns/view/returns_refunds_screen.dart';
 import 'package:trkar/rightOfWithDrawal/view/rights_of_withdrawal.dart';
+import 'package:trkar/search/viewModel/search/search_cubit.dart';
 import 'package:trkar/splash/view/splash_screen.dart';
 import 'package:trkar/support/view/support_screen.dart';
 import 'package:trkar/tab/view/tab_screen.dart';
@@ -70,6 +74,31 @@ class RoutesGenerator {
         return MaterialPageRoute(
           settings: settings,
           builder: (_) => const ToolsScreen(),
+        );
+      case EngineOilScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => BlocProvider<EngineOilCubit>(
+            create: (_) => EngineOilCubit(),
+            child: const EngineOilScreen(),
+          ),
+        );
+      case SearchScreen.routeName:
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider<SearchCubit>(
+                create: (_) => SearchCubit(),
+              ),
+              BlocProvider<SubCategoriesCubit>(
+                create: (_) => SubCategoriesCubit(),
+              ),
+            ],
+            child: SearchScreen(
+              categoryId: settings.arguments,
+            ),
+          ),
         );
       case CarAccessoriesScreen.routeName:
         return MaterialPageRoute(

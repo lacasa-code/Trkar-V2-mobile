@@ -15,6 +15,7 @@ import 'package:trkar/core/components/search_icon.dart';
 import 'package:trkar/core/components/search_modal_bottom_sheet.dart';
 import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
+import 'package:trkar/engineOil/view/engine_oil_screen.dart';
 import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/extensions/string.dart';
@@ -105,6 +106,7 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
                         textAlign: TextAlign.start,
                         style: const TextStyle(
                           color: Colors.black,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -136,6 +138,12 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
                             if (cat.slug == 'car-accessories') {
                               NavigationService.push(
                                 page: CarAccessoriesScreen.routeName,
+                              );
+                              return;
+                            }
+                            if (cat.slug == 'engine-oil') {
+                              NavigationService.push(
+                                page: EngineOilScreen.routeName,
                               );
                               return;
                             }

@@ -36,6 +36,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     ...categoriesCubit.maincategory
                         .map(
                           (e) => ExpansionTile(
+                            initiallyExpanded: e.slug == 'car-parts',
                             onExpansionChanged: (v) {
                               if (v) {}
                             },

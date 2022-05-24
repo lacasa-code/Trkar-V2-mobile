@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:trkar/core/components/dropdown_title_view.dart';
 import 'package:trkar/core/components/dropdown_widget.dart';
 import 'package:trkar/core/components/multiselect_dropdown_widget.dart';
 import 'package:trkar/core/components/register_button.dart';
@@ -101,7 +102,7 @@ class _TyresScreenState extends State<TyresScreen>
                                 : Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 15, vertical: 10),
-                                    child: TyresDropDownView(
+                                    child: DropDownTileView(
                                       onChanged: tyresFilterCubit
                                           .onSeasonDropdownChanged,
                                       title: 'season',
@@ -123,7 +124,7 @@ class _TyresScreenState extends State<TyresScreen>
                                 Expanded(
                                   child: state is WidthLoading
                                       ? const LoaderWidget()
-                                      : TyresDropDownView(
+                                      : DropDownTileView(
                                           key: ValueKey(tyresFilterCubit
                                               .selectedSeasonId),
                                           onChanged: tyresFilterCubit
@@ -140,7 +141,7 @@ class _TyresScreenState extends State<TyresScreen>
                                 Expanded(
                                   child: state is HeightLoading
                                       ? const LoaderWidget()
-                                      : TyresDropDownView(
+                                      : DropDownTileView(
                                           key: ValueKey(tyresFilterCubit
                                               .selectedSeasonId),
                                           onChanged: tyresFilterCubit
@@ -162,7 +163,7 @@ class _TyresScreenState extends State<TyresScreen>
                                 Expanded(
                                   child: state is DiameterLoading
                                       ? const LoaderWidget()
-                                      : TyresDropDownView(
+                                      : DropDownTileView(
                                           key: ValueKey(tyresFilterCubit
                                               .selectedSeasonId),
                                           onChanged: (value) {},
@@ -517,47 +518,6 @@ class TypesTabsView extends StatelessWidget {
   }
 }
 
-class TyresDropDownView extends StatelessWidget {
-  const TyresDropDownView({
-    Key? key,
-    required this.title,
-    required this.values,
-    this.selectedValue,
-    required this.onChanged,
-  }) : super(key: key);
-  final String title;
-  final List<String> values;
-  final int? selectedValue;
-  final void Function(String?)? onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5),
-          child: Text(
-            title.translate,
-            style: TextStyle(
-              color: Colors.black,
-              // fontWeight: FontWeight.bold,
-              fontSize: ScreenUtil().setSp(14),
-            ),
-          ),
-        ),
-        SearchableDropDownWidget(
-          removePadding: true,
-          selectedValueIndex: selectedValue,
-          thinBorder: true,
-          values: values,
-          labelText: title,
-          onChanged: onChanged,
-        ),
-      ],
-    );
-  }
-}
 
 class TyresMultiselectDropDownView extends StatelessWidget {
   const TyresMultiselectDropDownView({

@@ -48,12 +48,23 @@ class _HomeScreenState extends State<HomeScreen>
       categoriesCubit = context.read<CategoriesCubit>()
         ..getAllCategories(context).then((value) {
           _controller = TabController(
-              length: categoriesCubit.maincategory.length, vsync: this);
+              length: categoriesCubit.maincategory.length, vsync: this)
+            ..addListener(() {
+              if (_controller.indexIsChanging) {
+                setState(() {});
+              }
+            });
           setState(() {});
         });
       isInit = false;
     }
     super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -184,63 +195,108 @@ class _HomeScreenState extends State<HomeScreen>
                   const HomeCarouselCard(),
                   Column(
                     children: [
-                      Align(
-                        alignment: Helper.appAlignment,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 10),
-                          child: Text(
-                            'all_categories'.translate,
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: ScreenUtil().setSp(15),
-                            ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 10),
+                        decoration: BoxDecoration(
+                            color: Colors.grey.shade200,
+                            borderRadius: BorderRadius.circular(25)),
+                        child: TabBar(
+                          indicator: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(25),
                           ),
+                          labelColor: Colors.white,
+                          unselectedLabelColor: Colors.black,
+                          labelPadding: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 10),
+                          controller: _controller,
+                          tabs: categoriesCubit.maincategory
+                              .map(
+                                (e) => Text(e.name ?? ''),
+                              )
+                              .toList(),
                         ),
                       ),
-                      ...List.generate(categoriesCubit.homeCategories.length,
-                          (index) {
-                        var cat = categoriesCubit.homeCategories[index];
-                        var hasSubCat = categoriesCubit.hasSubCategory(cat.id);
-                        return HomeCategoryItem(
-                          onTap: !hasSubCat
-                              ? null
-                              : () {
-                                  if (hasSubCat) {
-                                    context.read<FilterCarsCubit>()
-                                      ..getManufacturer(
-                                        context,
-                                        categoryId:
-                                            int.parse(cat.parentId ?? '0') == 0
-                                                ? cat.id
-                                                : cat.parentId,
-                                      )
-                                      ..getCarMades(
-                                        context,
-                                        categoryId:
-                                            int.parse(cat.parentId ?? '0') == 0
-                                                ? cat.id
-                                                : cat.parentId,
-                                      );
-                                    var subCat =
-                                        context.read<SubCategoriesCubit>();
-                                    subCat.categoryName = cat.name;
-                                    subCat.parentId = cat.id;
-                                    NavigationService.push(
-                                      page: SubCategoriesScreen.routeName,
-                                      arguments: {
-                                        'category_name': cat.name,
-                                        'parent_id': cat.id,
-                                      },
+                      SizedBox(
+                        height: ScreenUtil().setHeight(103 *
+                            (categoriesCubit
+                                        .subCategories(categoriesCubit
+                                                .maincategory[_controller.index]
+                                                .id ??
+                                            0)
+                                        .length >
+                                    40
+                                ? 40
+                                : categoriesCubit
+                                    .subCategories(categoriesCubit
+                                            .maincategory[_controller.index]
+                                            .id ??
+                                        0)
+                                    .length)),
+                        child: TabBarView(
+                          controller: _controller,
+                          children: categoriesCubit.maincategory.map(
+                            (e) {
+                              var subCategories =
+                                  categoriesCubit.subCategories(e.id ?? 0);
+                              return Column(
+                                children: List.generate(
+                                  subCategories.length > 40
+                                      ? 40
+                                      : subCategories.length,
+                                  (index) {
+                                    var cat = subCategories[index];
+                                    var hasSubCat =
+                                        categoriesCubit.hasSubCategory(cat.id);
+                                    return HomeCategoryItem(
+                                      onTap: !hasSubCat
+                                          ? null
+                                          : () {
+                                              if (hasSubCat) {
+                                                context.read<FilterCarsCubit>()
+                                                  ..getManufacturer(
+                                                    context,
+                                                    categoryId: int.parse(
+                                                                cat.parentId ??
+                                                                    '0') ==
+                                                            0
+                                                        ? cat.id
+                                                        : cat.parentId,
+                                                  )
+                                                  ..getCarMades(
+                                                    context,
+                                                    categoryId: int.parse(
+                                                                cat.parentId ??
+                                                                    '0') ==
+                                                            0
+                                                        ? cat.id
+                                                        : cat.parentId,
+                                                  );
+                                                var subCat = context
+                                                    .read<SubCategoriesCubit>();
+                                                subCat.categoryName = cat.name;
+                                                subCat.parentId = cat.id;
+                                                NavigationService.push(
+                                                  page: SubCategoriesScreen
+                                                      .routeName,
+                                                  arguments: {
+                                                    'category_name': cat.name,
+                                                    'parent_id': cat.id,
+                                                  },
+                                                );
+                                              }
+                                            },
+                                      title: cat.name,
+                                      imagePath: cat.image,
                                     );
-                                  }
-                                },
-                          title: cat.name,
-                          imagePath: cat.image,
-                        );
-                      }),
+                                  },
+                                ),
+                              );
+                            },
+                          ).toList(),
+                        ),
+                      ),
                     ],
                   ),
                   const RecentlyViewedProductsView(),

@@ -1,10 +1,13 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:meta/meta.dart';
 import 'package:trkar/auth/view/login_screen.dart';
+import 'package:trkar/core/components/custom_new_dialog.dart';
 import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
+import 'package:trkar/core/extensions/string.dart';
 import 'package:trkar/tab/view/tab_screen.dart';
 import '../../repo/validate_token_repo.dart';
 import '../../repo/refresh_token_repo.dart';
@@ -28,12 +31,18 @@ class ValidateTokenCubit extends Cubit<ValidateTokenState> {
 
     if (validateTokenData.data == true) {
       log('message ntrue');
+      await CustomDialog().showWarningDialog(
+        context: context,
+        msg: 'network'.translate,
+        btnOnPress: () {},
+      );
+      validateToken(context);
+    } else {
+      if (Helper.isLoggedIn) {
+        await Helper.clearUserData();
+      }
       NavigationService.pushReplacementAll(
         page: TabScreen.routeName,
-      );
-    } else {
-      NavigationService.pushReplacementAll(
-        page: LoginScreen.routeName,
       );
     }
   }
