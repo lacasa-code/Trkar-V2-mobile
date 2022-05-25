@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:trkar/core/components/search_app_bar.dart';
 import 'package:trkar/core/helper/navigator.dart';
+import 'package:trkar/home/view/widgets/my_drawer.dart';
 import '../../core/extensions/string.dart';
 
 class LegalNoticeScreen extends StatefulWidget {
@@ -12,28 +14,33 @@ class LegalNoticeScreen extends StatefulWidget {
 }
 
 class _LegalNoticeScreenState extends State<LegalNoticeScreen> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        leading: IconButton(
-          onPressed: () {
-            NavigationService.goBack();
-          },
-          color: Colors.black,
-          icon: const Icon(
-            Icons.arrow_back,
-          ),
-        ),
-        title: Text(
-          'legal_notice'.translate,
-          style: const TextStyle(
-            color: Colors.black,
-          ),
-        ),
-      ),
+      key: scaffoldKey,
+      appBar: SearchAppBar(scaffoldKey: scaffoldKey),
+        drawer: const MyDrawer(),
+
+      // appBar: AppBar(
+      //   elevation: 0,
+      //   backgroundColor: Colors.transparent,
+      //   leading: IconButton(
+      //     onPressed: () {
+      //       NavigationService.goBack();
+      //     },
+      //     color: Colors.black,
+      //     icon: const Icon(
+      //       Icons.arrow_back,
+      //     ),
+      //   ),
+      //   title: Text(
+      //     'legal_notice'.translate,
+      //     style: const TextStyle(
+      //       color: Colors.black,
+      //     ),
+      //   ),
+      // ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

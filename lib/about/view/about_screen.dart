@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:trkar/core/components/search_app_bar.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/delivery/view/delivery_screen.dart';
 import 'package:trkar/legalNotice/view/legal_notice_screen.dart';
@@ -20,24 +21,12 @@ class AboutScreen extends StatefulWidget {
 }
 
 class _AboutScreenState extends State<AboutScreen> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(
-          'about_trkar'.translate,
-          style: const TextStyle(color: Colors.black),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          color: Colors.black,
-          onPressed: () {
-            NavigationService.goBack();
-          },
-        ),
-      ),
+      key: scaffoldKey,
+      appBar: SearchAppBar(scaffoldKey: scaffoldKey),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

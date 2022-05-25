@@ -160,8 +160,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 }
                                 searchCubit.changeSearchType(2);
 
-                                var categoryId =
-                                    categoriesCubit.category[v].id;
+                                var categoryId = categoriesCubit.category[v].id;
                                 subCategoriesCubit.getSubCategories(
                                   context,
                                   id: categoryId,
@@ -204,8 +203,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                   ids[index])
                               .toList();
                           return Visibility(
-                            visible: widget.categoryId != null ||
-                                subCat.isNotEmpty,
+                            visible:
+                                widget.categoryId != null || subCat.isNotEmpty,
                             child: DropDownWidget(
                               key: ValueKey(ids[index]),
                               thinBorder: true,
@@ -246,17 +245,16 @@ class _SearchScreenState extends State<SearchScreen> {
                   children: [
                     Visibility(
                       visible: searchCubit.searchBy > 0,
-                      child: state is CarMadesLoading
+                      child: state is SearchCarMadesLoading
                           ? const LoaderWidget()
                           : SearchableDropDownWidget(
-                              initialValue:
-                                  searchCubit.selectedCarMadesItem == null
-                                      ? null
-                                      : searchCubit
-                                          .carMadesEnglish[searchCubit
-                                                  .selectedCarMadesItem ??
-                                              0]
-                                          .name,
+                              initialValue: searchCubit.selectedCarMadesItem ==
+                                      null
+                                  ? null
+                                  : searchCubit
+                                      .carMadesEnglish[
+                                          searchCubit.selectedCarMadesItem ?? 0]
+                                      .name,
                               onChanged: (v) {
                                 if (v == null) {
                                   return;
@@ -285,7 +283,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                     Visibility(
                       visible: searchCubit.searchBy > 1,
-                      child: state is CarModelsLoading
+                      child: state is SearchCarModelsLoading
                           ? const LoaderWidget()
                           : Padding(
                               padding: EdgeInsets.only(
@@ -321,7 +319,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                     Visibility(
                       visible: searchCubit.searchBy > 2,
-                      child: state is CarEngineLoading
+                      child: state is SearchCarEngineLoading
                           ? const LoaderWidget()
                           : SearchableDropDownWidget(
                               onChanged: (v) {},
@@ -330,8 +328,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               values: List.generate(
                                 searchCubit.carEngines.length,
                                 (index) {
-                                  var carEngine =
-                                      searchCubit.carEngines[index];
+                                  var carEngine = searchCubit.carEngines[index];
                                   return '${carEngine.name}';
                                 },
                               ),

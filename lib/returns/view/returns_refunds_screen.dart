@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trkar/core/components/register_button.dart';
 import 'package:trkar/core/components/register_field.dart';
+import 'package:trkar/core/components/search_app_bar.dart';
 import 'package:trkar/core/helper/navigator.dart';
+import 'package:trkar/home/view/widgets/my_drawer.dart';
 import '../../core/extensions/string.dart';
 
 class ReturnsAndRefundsScreen extends StatefulWidget {
@@ -17,31 +19,36 @@ class ReturnsAndRefundsScreen extends StatefulWidget {
 }
 
 class _ReturnsAndRefundsScreenState extends State<ReturnsAndRefundsScreen> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     var list = 'returns_refunds_body'.translate.split('\n').where((element) {
       return element != 'returns_refunds_body'.translate.split('\n').first;
     }).toList();
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-          ),
-          color: Colors.black,
-          onPressed: () {
-            NavigationService.goBack();
-          },
-        ),
-        title: Text(
-          'returns_refunds'.translate,
-          style: const TextStyle(
-            color: Colors.black,
-          ),
-        ),
-      ),
+      key: scaffoldKey,
+      appBar: SearchAppBar(scaffoldKey: scaffoldKey),
+      drawer: const MyDrawer(),
+
+      // appBar: AppBar(
+      //   backgroundColor: Colors.transparent,
+      //   elevation: 0,
+      //   leading: IconButton(
+      //     icon: const Icon(
+      //       Icons.arrow_back,
+      //     ),
+      //     color: Colors.black,
+      //     onPressed: () {
+      //       NavigationService.goBack();
+      //     },
+      //   ),
+      //   title: Text(
+      //     'returns_refunds'.translate,
+      //     style: const TextStyle(
+      //       color: Colors.black,
+      //     ),
+      //   ),
+      // ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

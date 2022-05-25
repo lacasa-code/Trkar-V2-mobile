@@ -11,17 +11,24 @@ import 'package:trkar/categories/manufacturers/view/all_manufacturers_screen.dar
 import 'package:trkar/categories/view/widgets/category_item.dart';
 import 'package:trkar/categories/view/widgets/manufacturers_details_item.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
+import 'package:trkar/core/components/register_button.dart';
+import 'package:trkar/core/components/register_field.dart';
+import 'package:trkar/core/components/search_app_bar.dart';
 import 'package:trkar/core/components/search_icon.dart';
 import 'package:trkar/core/components/search_modal_bottom_sheet.dart';
+import 'package:trkar/core/components/search_view.dart';
+import 'package:trkar/core/components/searchable_dropdown_widget.dart';
 import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/engineOil/view/engine_oil_screen.dart';
 import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
+import 'package:trkar/home/view/widgets/my_drawer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/extensions/string.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
 import 'package:trkar/tab/viewModel/cubit/tab_cubit.dart';
 import '../../core/extensions/media_query.dart';
+import '../../search/viewModel/search/search_cubit.dart';
 
 class SubCategoriesScreen extends StatefulWidget {
   const SubCategoriesScreen({Key? key}) : super(key: key);
@@ -34,9 +41,13 @@ class SubCategoriesScreen extends StatefulWidget {
 class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
   late SubCategoriesCubit subcategoriesCubit;
   late FilterCarsCubit filterCarsCubit;
+  late SearchCubit searchCubit;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     filterCarsCubit = context.read<FilterCarsCubit>();
+    searchCubit = context.read<SearchCubit>()..getCarMades(context);
     subcategoriesCubit = BlocProvider.of<SubCategoriesCubit>(context)
       ..getSubCategories(context);
     super.initState();
@@ -45,30 +56,35 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          SearchIcon(
-            categoryId: subcategoriesCubit.parentId,
-          ),
-        ],
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(
-          subcategoriesCubit.categoryName ?? 'categories'.translate,
-          style: const TextStyle(
-            color: Colors.black,
-          ),
-        ),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-          ),
-          color: Colors.black,
-          onPressed: () {
-            NavigationService.goBack();
-          },
-        ),
-      ),
+      key: scaffoldKey,
+      drawer: const MyDrawer(),
+
+      // appBar: AppBar(
+      //   actions: [
+      //     SearchIcon(
+      //       categoryId: subcategoriesCubit.parentId,
+      //     ),
+      //   ],
+      //   backgroundColor: Colors.transparent,
+      //   elevation: 0,
+      //   bottom: const SearchBottomAppBar(),
+      //   title: Text(
+      //     subcategoriesCubit.categoryName ?? 'categories'.translate,
+      //     style: const TextStyle(
+      //       color: Colors.black,
+      //     ),
+      //   ),
+      //   leading: IconButton(
+      //     icon: const Icon(
+      //       Icons.arrow_back,
+      //     ),
+      //     color: Colors.black,
+      //     onPressed: () {
+      //       NavigationService.goBack();
+      //     },
+      //   ),
+      // ),
+      appBar: SearchAppBar(scaffoldKey: scaffoldKey),
       body: BlocBuilder<SubCategoriesCubit, SubCategoriesState>(
         builder: (context, state) {
           if (state is SubCategoriesLoading) {
@@ -80,6 +96,7 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SearchView(searchCubit: searchCubit),
                 BlocBuilder<FilterCarsCubit, FilterCarsState>(
                   builder: (context, state) {
                     return Column(

@@ -37,6 +37,7 @@ class SearchableDropDownWidget extends StatelessWidget {
           ? EdgeInsets.zero
           : const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: DropdownSearch<String>(
+        
         validator: validator,
         showSearchBox: true,
         selectedItem: initialValue,

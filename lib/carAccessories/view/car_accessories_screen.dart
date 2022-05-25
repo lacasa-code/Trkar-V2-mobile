@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
+import 'package:trkar/core/components/search_app_bar.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/home/view/widgets/home_product_item.dart';
+import 'package:trkar/home/view/widgets/my_drawer.dart';
 import 'package:trkar/home/view/widgets/sub_cat_card.dart';
 import '../../core/extensions/string.dart';
 
@@ -36,27 +38,32 @@ class _CarAccessoriesScreenState extends State<CarAccessoriesScreen>
     super.initState();
   }
 
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            NavigationService.goBack();
-          },
-          color: Colors.black,
-          icon: const Icon(Icons.arrow_back),
-        ),
-        title: Text(
-          'car_accessories'.translate,
-          style: const TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
+      key: scaffoldKey,
+      drawer: const MyDrawer(),
+
+      appBar: SearchAppBar(scaffoldKey: scaffoldKey),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.transparent,
+      //   elevation: 0,
+      //   leading: IconButton(
+      //     onPressed: () {
+      //       NavigationService.goBack();
+      //     },
+      //     color: Colors.black,
+      //     icon: const Icon(Icons.arrow_back),
+      //   ),
+      //   title: Text(
+      //     'car_accessories'.translate,
+      //     style: const TextStyle(
+      //       color: Colors.black,
+      //       fontWeight: FontWeight.bold,
+      //     ),
+      //   ),
+      // ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -180,7 +187,6 @@ class CarAccessoriesSubCategoriesView extends StatelessWidget {
     );
   }
 }
-
 
 class CarAccessoriesStoreView extends StatelessWidget {
   const CarAccessoriesStoreView({

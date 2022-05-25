@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:trkar/core/components/search_app_bar.dart';
 import 'package:trkar/core/helper/navigator.dart';
+import 'package:trkar/home/view/widgets/my_drawer.dart';
 import '../../core/extensions/string.dart';
 
 class TermsAndConitionsScreen extends StatefulWidget {
@@ -13,28 +15,33 @@ class TermsAndConitionsScreen extends StatefulWidget {
 }
 
 class _TermsAndConitionsScreenState extends State<TermsAndConitionsScreen> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        title: Text(
-          'terms'.translate,
-          style: const TextStyle(
-            color: Colors.black,
-          ),
-        ),
-        leading: IconButton(
-          onPressed: () {
-            NavigationService.goBack();
-          },
-          color: Colors.black,
-          icon: const Icon(
-            Icons.arrow_back,
-          ),
-        ),
-      ),
+      appBar: SearchAppBar(scaffoldKey: scaffoldKey),
+      key: scaffoldKey,
+      drawer: const MyDrawer(),
+
+      // appBar: AppBar(
+      // elevation: 0,
+      // backgroundColor: Colors.transparent,
+      // title: Text(
+      //   'terms'.translate,
+      //   style: const TextStyle(
+      //     color: Colors.black,
+      //   ),
+      // ),
+      // leading: IconButton(
+      //   onPressed: () {
+      //     NavigationService.goBack();
+      //   },
+      //   color: Colors.black,
+      //   icon: const Icon(
+      //     Icons.arrow_back,
+      //   ),
+      // ),
+      // ),
       body: SingleChildScrollView(
           child: Column(
         children: [

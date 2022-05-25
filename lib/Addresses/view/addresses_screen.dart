@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trkar/Addresses/viewModel/addNewAddress/add_new_address_cubit.dart';
+import 'package:trkar/core/components/search_app_bar.dart';
+import 'package:trkar/home/view/widgets/my_drawer.dart';
 import '../../core/themes/themes.dart';
 import '../../core/helper/helper.dart';
 
@@ -23,28 +25,32 @@ class AddressesScreen extends StatefulWidget {
 }
 
 class _AddressesScreenState extends State<AddressesScreen> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: Helper.appDirection,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          title: Text(
-            'addresses'.translate,
-            style: const TextStyle(color: Colors.black),
-          ),
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back,
-            ),
-            onPressed: () {
-              NavigationService.goBack();
-            },
-            color: Colors.black,
-          ),
-        ),
+        key: scaffoldKey,
+        drawer: const MyDrawer(),
+        appBar: SearchAppBar(scaffoldKey: scaffoldKey),
+        // appBar: AppBar(
+        //   backgroundColor: Colors.transparent,
+        //   elevation: 0,
+        //   title: Text(
+        //     'addresses'.translate,
+        //     style: const TextStyle(color: Colors.black),
+        //   ),
+        //   leading: IconButton(
+        //     icon: const Icon(
+        //       Icons.arrow_back,
+        //     ),
+        //     onPressed: () {
+        //       NavigationService.goBack();
+        //     },
+        //     color: Colors.black,
+        //   ),
+        // ),
         body: SingleChildScrollView(
           child: Column(
             children: [

@@ -1,8 +1,10 @@
 import 'dart:developer';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
 import 'package:trkar/core/helper/laravel_exception.dart';
+import 'package:trkar/search/viewModel/search/search_cubit.dart';
 import '../../model/categories_model.dart';
 import '../../repo/categories_repo.dart';
 import '../../../core/extensions/string.dart';
@@ -61,7 +63,6 @@ class CategoriesCubit extends Cubit<CategoriesState> {
   List<Category>? _category = [];
   List<Category>? _allcategory = [];
   final List<int> _categoriesScreenSubCatIds = [
-
     // motorcycle parts ..
     519,
     33,
@@ -119,6 +120,26 @@ class CategoriesCubit extends Cubit<CategoriesState> {
   List<Category> get maincategory => [
         ...?_allcategory?.where((e) => e.parentId == '0').toList(),
       ];
+
+  onTabBarChanging({
+    required BuildContext context,
+    required int index,
+  }) {
+    log('hi From NewMessage');
+    if (maincategory.isNotEmpty) {
+
+    context.read<SearchCubit>().getCarMades(
+          context,
+          categoryId: maincategory[index].id,
+        );
+    emit(TabBarChanged());
+    }
+  }
+
+  double getTabBarSize(int index) => ScreenUtil().setHeight(103 *
+      (subCategories(maincategory[index].id ?? 0).length > 40
+          ? 40
+          : subCategories(maincategory[index].id ?? 0).length));
   List<Category> get homeCategories {
     List<Category> _myCat = [];
     for (var i = 0; i < _homeCategoriesIds.length; i++) {

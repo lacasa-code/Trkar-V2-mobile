@@ -13,25 +13,25 @@ class VinNumberDone extends SearchState {}
 
 class VinNumberError extends SearchState {}
 
-class CarMadesLoading extends SearchState {}
+class SearchCarMadesLoading extends SearchState {}
 
-class CarEngineError extends SearchState {
-  CarEngineError({this.message});
+class SearchCarEngineError extends SearchState {
+  SearchCarEngineError({this.message});
   final String? message;
 }
 
-class CarEngineDone extends SearchState {}
+class SearchCarEngineDone extends SearchState {}
 
-class CarModelsLoading extends SearchState {}
+class SearchCarModelsLoading extends SearchState {}
 
 class CarModelsError extends SearchState {
   CarModelsError({this.message});
   final String? message;
 }
 
-class CarModelsDone extends SearchState {}
+class SearchCarModelsDone extends SearchState {}
 
-class CarEngineLoading extends SearchState {}
+class SearchCarEngineLoading extends SearchState {}
 
 class CarMadesError extends SearchState {
   CarMadesError({this.message});

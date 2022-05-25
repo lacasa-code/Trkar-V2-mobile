@@ -16,7 +16,10 @@ import '../../repo/width_by_seasonid_repo.dart';
 part 'tyres_filter_state.dart';
 
 class TyresFilterCubit extends Cubit<TyresFilterState> {
-  TyresFilterCubit() : super(TyresFilterInitial());
+  TyresFilterCubit({
+    this.myTabIndex,
+  }) : super(TyresFilterInitial());
+  final int? myTabIndex;
 
   Future<void> getTypes(context) async {
     emit(TypesLoaing());
@@ -179,7 +182,8 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
       return;
     }
     clearLists();
-    _selectedSeasonId = _seasons?.indexWhere((element) => false) ?? 0;
+    _selectedSeasonId =
+        _seasons?.indexWhere((element) => element.name == value) ?? 0;
     getWidthBySeasonId(
       NavigationService.context,
       seasonId: _selectedSeasonId,
@@ -234,6 +238,20 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
 
   init(context) async {
     controller.addListener(_onScroll);
+
+    if (myTabIndex != null) {
+      _tabIndex = myTabIndex == 844 ? 3 : 0;
+      log('tab => $_tabIndex');
+      if (_tabIndex == 3) {
+        Future.delayed(
+          const Duration(seconds: 1),
+          () {
+            animateTo(scrollToEnd: true);
+          },
+        );
+      }
+    }
+
     await getTypes(context);
     await getSeasons(context);
   }

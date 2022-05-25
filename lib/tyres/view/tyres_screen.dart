@@ -7,11 +7,13 @@ import 'package:trkar/core/components/dropdown_title_view.dart';
 import 'package:trkar/core/components/dropdown_widget.dart';
 import 'package:trkar/core/components/multiselect_dropdown_widget.dart';
 import 'package:trkar/core/components/register_button.dart';
+import 'package:trkar/core/components/search_app_bar.dart';
 import 'package:trkar/core/components/search_modal_bottom_sheet.dart';
 import 'package:trkar/core/components/searchable_dropdown_widget.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/home/view/widgets/home_product_item.dart';
+import 'package:trkar/home/view/widgets/my_drawer.dart';
 import 'package:trkar/tyres/viewModel/tyresFilter/tyres_filter_cubit.dart';
 import '../../core/extensions/string.dart';
 
@@ -44,6 +46,7 @@ class _TyresScreenState extends State<TyresScreen>
     },
   ];
   late TyresFilterCubit tyresFilterCubit;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   bool isWinter = false;
   bool isMaxScroll = false;
 
@@ -63,24 +66,27 @@ class _TyresScreenState extends State<TyresScreen>
   Widget build(BuildContext context) {
     log('width length=> ${tyresFilterCubit.width.length}');
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        leading: IconButton(
-            onPressed: () {
-              NavigationService.goBack();
-            },
-            icon: const Icon(
-              Icons.arrow_back,
-              color: Colors.black,
-            )),
-        backgroundColor: Colors.transparent,
-        title: Text(
-          'tyres'.translate,
-          style: const TextStyle(
-            color: Colors.black,
-          ),
-        ),
-      ),
+      key: scaffoldKey,
+      appBar: SearchAppBar(scaffoldKey: scaffoldKey),
+      // appBar: AppBar(
+      //   elevation: 0,
+      //   leading: IconButton(
+      //       onPressed: () {
+      //         NavigationService.goBack();
+      //       },
+      //       icon: const Icon(
+      //         Icons.arrow_back,
+      //         color: Colors.black,
+      //       )),
+      //   backgroundColor: Colors.transparent,
+      //   title: Text(
+      //     'tyres'.translate,
+      //     style: const TextStyle(
+      //       color: Colors.black,
+      //     ),
+      //   ),
+      // ),
+      drawer: const MyDrawer(),
       body: BlocBuilder<TyresFilterCubit, TyresFilterState>(
         builder: (context, state) {
           if (state is TypesLoaing) {
@@ -517,7 +523,6 @@ class TypesTabsView extends StatelessWidget {
     );
   }
 }
-
 
 class TyresMultiselectDropDownView extends StatelessWidget {
   const TyresMultiselectDropDownView({

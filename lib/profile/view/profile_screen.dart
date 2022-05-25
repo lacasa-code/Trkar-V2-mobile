@@ -9,10 +9,12 @@ import 'package:trkar/Addresses/view/addresses_screen.dart';
 import 'package:trkar/about/view/about_screen.dart';
 import 'package:trkar/auth/view/login_screen.dart';
 import 'package:trkar/auth/viewModel/logout/logout_cubit.dart';
+import 'package:trkar/core/components/search_app_bar.dart';
 import 'package:trkar/core/components/search_modal_bottom_sheet.dart';
 import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/delivery/view/delivery_screen.dart';
+import 'package:trkar/home/view/widgets/my_drawer.dart';
 import 'package:trkar/localization/view/change_language_screen.dart';
 import 'package:trkar/privacy/view/privacy_screen.dart';
 import 'package:trkar/profile/view/edit_profile_screen.dart';
@@ -36,6 +38,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   late TabCubit tabCubit;
   late UserProfileCubit userProfileCubit;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     tabCubit = context.read<TabCubit>();
@@ -50,30 +53,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return WillPopScope(
       onWillPop: () async => tabCubit.onBackButtonPressed(context),
       child: Scaffold(
-        appBar: AppBar(
-          // actions: [
-          //   IconButton(
-          //     onPressed: () {},
-          //     icon: const Icon(
-          //       Icons.settings_outlined,
-          //     ),
-          //     color: Theme.of(context).primaryColor,
-          //   ),
-          // ],
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          title: Text(
-            'my_account'.translate,
-            style: const TextStyle(color: Colors.black),
-          ),
-          leading: IconButton(
-            onPressed: () => tabCubit.onBackButtonPressed(context),
-            icon: const Icon(
-              Icons.arrow_back,
-            ),
-            color: Colors.black,
-          ),
-        ),
+        key: scaffoldKey,
+        appBar: SearchAppBar(scaffoldKey: scaffoldKey),
+        drawer: const MyDrawer(),
+
+        // appBar: AppBar(
+        //   // actions: [
+        //   //   IconButton(
+        //   //     onPressed: () {},
+        //   //     icon: const Icon(
+        //   //       Icons.settings_outlined,
+        //   //     ),
+        //   //     color: Theme.of(context).primaryColor,
+        //   //   ),
+        //   // ],
+        //   elevation: 0,
+        //   backgroundColor: Colors.transparent,
+        //   title: Text(
+        //     'my_account'.translate,
+        //     style: const TextStyle(color: Colors.black),
+        //   ),
+        //   leading: IconButton(
+        //     onPressed: () => tabCubit.onBackButtonPressed(context),
+        //     icon: const Icon(
+        //       Icons.arrow_back,
+        //     ),
+        //     color: Colors.black,
+        //   ),
+        // ),
         body: SingleChildScrollView(
           child: Column(
             children: !Helper.isLoggedIn

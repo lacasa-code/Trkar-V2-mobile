@@ -224,7 +224,9 @@ class RoutesGenerator {
         return MaterialPageRoute(
           settings: settings,
           builder: (_) => BlocProvider(
-            create: (_) => TyresFilterCubit(),
+            create: (_) => TyresFilterCubit(
+              myTabIndex: settings.arguments as int?,
+            ),
             child: const TyresScreen(),
           ),
         );
@@ -265,6 +267,9 @@ class RoutesGenerator {
           settings: settings,
           builder: (_) => MultiBlocProvider(
             providers: [
+              BlocProvider<SearchCubit>(
+                create: (_) => SearchCubit(),
+              ),
               // BlocProvider<CategoriesCubit>.value(
               //   value: (settings.arguments
               //       as Map<String, dynamic>?)?['categories_cubit'],
@@ -312,8 +317,15 @@ class RoutesGenerator {
       case TabScreen.routeName:
         return MaterialPageRoute(
           settings: settings,
-          builder: (_) => BlocProvider<TabCubit>(
-            create: (_) => TabCubit(),
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider<TabCubit>(
+                create: (_) => TabCubit(),
+              ),
+              BlocProvider<SearchCubit>(
+                create: (_) => SearchCubit(),
+              ),
+            ],
             child: const TabScreen(),
           ),
         );

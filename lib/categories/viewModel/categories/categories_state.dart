@@ -6,6 +6,7 @@ abstract class CategoriesState {}
 class CategoriesInitial extends CategoriesState {}
 
 class CategoriesLoading extends CategoriesState {}
+class TabBarChanged extends CategoriesState {}
 
 class AllCategoriesLoading extends CategoriesState {}
 

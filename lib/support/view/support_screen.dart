@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trkar/core/components/register_button.dart';
+import 'package:trkar/core/components/search_app_bar.dart';
+import 'package:trkar/home/view/widgets/my_drawer.dart';
 import '../../core/extensions/media_query.dart';
 import 'package:trkar/addressesData/viewModel/countries/countries_cubit.dart';
 import 'package:trkar/core/components/searchable_dropdown_widget.dart';
@@ -21,6 +23,7 @@ class SupportScreen extends StatefulWidget {
 
 class _SupportScreenState extends State<SupportScreen> {
   late AddressDataCubit addressDataCubit;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -31,23 +34,27 @@ class _SupportScreenState extends State<SupportScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-          ),
-          color: Colors.black,
-          onPressed: () {
-            NavigationService.goBack();
-          },
-        ),
-        title: Text(
-          'support'.translate,
-          style: const TextStyle(color: Colors.black),
-        ),
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-      ),
+      key: scaffoldKey,
+      appBar: SearchAppBar(scaffoldKey: scaffoldKey),
+      drawer: const MyDrawer(),
+
+      // appBar: AppBar(
+      //   leading: IconButton(
+      //     icon: const Icon(
+      //       Icons.arrow_back,
+      //     ),
+      //     color: Colors.black,
+      //     onPressed: () {
+      //       NavigationService.goBack();
+      //     },
+      //   ),
+      //   title: Text(
+      //     'support'.translate,
+      //     style: const TextStyle(color: Colors.black),
+      //   ),
+      //   elevation: 0,
+      //   backgroundColor: Colors.transparent,
+      // ),
       body: Column(
         children: [
           Expanded(

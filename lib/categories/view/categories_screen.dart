@@ -6,9 +6,11 @@ import 'package:trkar/carAccessories/view/car_accessories_screen.dart';
 import 'package:trkar/categories/view/sub_categories_screen.dart';
 import 'package:trkar/categories/view/widgets/category_item.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
+import 'package:trkar/core/components/search_app_bar.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
+import 'package:trkar/home/view/widgets/my_drawer.dart';
 import 'package:trkar/tools/view/tools_screen.dart';
 import 'package:trkar/tyres/view/tyres_screen.dart';
 import '../../core/extensions/string.dart';
@@ -38,29 +40,36 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     return false;
   }
 
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => _onBackButtonPressed(context),
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          title: Text(
-            'categories'.translate,
-            style: const TextStyle(
-              color: Colors.black,
-            ),
-          ),
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back,
-            ),
-            color: Colors.black,
-            onPressed: () {
-              _onBackButtonPressed(context);
-            },
-          ),
+        key: scaffoldKey,
+        drawer: const MyDrawer(),
+        // appBar: AppBar(
+        //   bottom:
+        //   backgroundColor: Colors.transparent,
+        //   elevation: 0,
+        //   title: Text(
+        //     'categories'.translate,
+        //     style: const TextStyle(
+        //       color: Colors.black,
+        //     ),
+        //   ),
+        //   leading: IconButton(
+        //     icon: const Icon(
+        //       Icons.arrow_back,
+        //     ),
+        //     color: Colors.black,
+        //     onPressed: () {
+        //       _onBackButtonPressed(context);
+        //     },
+        //   ),
+        // ),
+        appBar: SearchAppBar(
+          scaffoldKey: scaffoldKey,
         ),
         body: BlocBuilder<CategoriesCubit, CategoriesState>(
           builder: (context, state) {
@@ -137,7 +146,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           NavigationService.push(page: ToolsScreen.routeName);
                         }
                         if (cat.slug == 'tyres') {
-                          NavigationService.push(page: TyresScreen.routeName);
+                          NavigationService.push(
+                            page: TyresScreen.routeName,
+                            arguments: cat.id,
+                          );
                         }
                         if (cat.slug == 'car-accessories') {
                           NavigationService.push(

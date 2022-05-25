@@ -9,6 +9,7 @@ class NavigationService {
   static get context => navigationKey.currentState?.context;
 
   static removeAllFocus() {
+    FocusManager.instance.primaryFocus?.unfocus();
     FocusScope.of(context).requestFocus(FocusNode());
   }
 
@@ -16,13 +17,12 @@ class NavigationService {
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
   }
 
-  static Future<dynamic> push({
-    bool isNamed = true,
-    required dynamic page,
-    dynamic arguments,
-    bool preventDuplicates = true,
-    bool closeOverlays = false,
-  }) async {
+  static Future<dynamic> push(
+      {bool isNamed = true,
+      required dynamic page,
+      dynamic arguments,
+      bool preventDuplicates = true,
+      bool closeOverlays = false}) async {
     removeAllFocus();
     if (closeOverlays) {
       removeOverlays();

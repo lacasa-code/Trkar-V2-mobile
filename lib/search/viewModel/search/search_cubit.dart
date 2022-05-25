@@ -59,7 +59,10 @@ class SearchCubit extends Cubit<SearchState> {
     categoryId,
     String? carMadeName,
   }) async {
-    emit(CarMadesLoading());
+    _carMadesEnglish?.clear();
+    _carModels?.clear();
+
+    emit(SearchCarMadesLoading());
     try {
       var carMadesData = await CarMadesRepo.getCarMades(
         context,
@@ -106,14 +109,15 @@ class SearchCubit extends Cubit<SearchState> {
     context, {
     carMadeId,
   }) async {
-    emit(CarModelsLoading());
+    _carEngines?.clear();
+    emit(SearchCarModelsLoading());
     try {
       var carYearsData = await CarModelsRepo.getCarModels(
         context,
         carMadeId: carMadeId,
       );
       if (carYearsData == null) {
-        emit(CarEngineError(
+        emit(SearchCarEngineError(
           message: 'network'.translate,
         ));
         return;
@@ -122,12 +126,12 @@ class SearchCubit extends Cubit<SearchState> {
         _carModels = carYearsData.data;
         changeSearchType(2);
 
-        emit(CarEngineDone());
+        emit(SearchCarEngineDone());
       } else {
-        emit(CarEngineError(message: 'something_wrong'));
+        emit(SearchCarEngineError(message: 'something_wrong'));
       }
     } on LaravelException catch (error) {
-      emit(CarEngineError(
+      emit(SearchCarEngineError(
         message: error.exception,
       ));
     }
@@ -137,14 +141,14 @@ class SearchCubit extends Cubit<SearchState> {
     context, {
     carModelId,
   }) async {
-    emit(CarEngineLoading());
+    emit(SearchCarEngineLoading());
     try {
       var carMadesData = await CarEnginesRepo.getCarEngine(
         context,
         carModelId: carModelId,
       );
       if (carMadesData == null) {
-        emit(CarEngineError(
+        emit(SearchCarEngineError(
           message: 'network'.translate,
         ));
         return;
@@ -153,12 +157,12 @@ class SearchCubit extends Cubit<SearchState> {
         _carEngines = carMadesData.data;
         changeSearchType(3);
 
-        emit(CarEngineDone());
+        emit(SearchCarEngineDone());
       } else {
-        emit(CarEngineError(message: 'something_wrong'));
+        emit(SearchCarEngineError(message: 'something_wrong'));
       }
     } on LaravelException catch (error) {
-      emit(CarEngineError(
+      emit(SearchCarEngineError(
         message: error.exception,
       ));
     }

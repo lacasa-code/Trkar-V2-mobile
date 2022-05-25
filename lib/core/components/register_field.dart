@@ -21,6 +21,7 @@ class RegisterField extends StatelessWidget {
     this.formatters,
     this.hideBorder = false,
     this.removePadding = false,
+    this.textInputAction,
   }) : super(key: key);
   final String? labelText;
   final String? hintText;
@@ -37,6 +38,7 @@ class RegisterField extends StatelessWidget {
   final String? Function(String?)? validator;
   final bool removePadding;
   final bool hideBorder;
+  final TextInputAction? textInputAction;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,7 @@ class RegisterField extends StatelessWidget {
           ? EdgeInsets.zero
           : const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: TextFormField(
+        textInputAction: textInputAction,
         maxLength: maxLength,
         maxLines: maxLines,
         inputFormatters: formatters,

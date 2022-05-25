@@ -6,9 +6,11 @@ import 'package:trkar/core/components/map_dialog.dart';
 import 'package:trkar/core/components/profile_picture_widget.dart';
 import 'package:trkar/core/components/register_button.dart';
 import 'package:trkar/core/components/register_field.dart';
+import 'package:trkar/core/components/search_app_bar.dart';
 import 'package:trkar/core/components/searchable_dropdown_widget.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
+import 'package:trkar/home/view/widgets/my_drawer.dart';
 import 'package:trkar/profile/viewModel/updateUserProfile/update_user_profile_cubit.dart';
 import 'package:trkar/profile/viewModel/userProfile/user_profile_cubit.dart';
 import '../../core/extensions/string.dart';
@@ -29,6 +31,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late AddressDataCubit addressDataCubit;
   var securePassword = true;
   var securePasswordConfirmation = true;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
     addressDataCubit = context.read<AddressDataCubit>();
@@ -43,23 +46,27 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        leading: IconButton(
-          onPressed: () {
-            NavigationService.goBack();
-          },
-          color: Colors.black,
-          icon: const Icon(
-            Icons.arrow_back,
-          ),
-        ),
-        title: Text(
-          'edit_profile'.translate,
-          style: const TextStyle(color: Colors.black),
-        ),
-      ),
+      key: scaffoldKey,
+      appBar: SearchAppBar(scaffoldKey: scaffoldKey),
+      drawer: const MyDrawer(),
+
+      // appBar: AppBar(
+      //   elevation: 0,
+      //   backgroundColor: Colors.transparent,
+      //   leading: IconButton(
+      //     onPressed: () {
+      //       NavigationService.goBack();
+      //     },
+      //     color: Colors.black,
+      //     icon: const Icon(
+      //       Icons.arrow_back,
+      //     ),
+      //   ),
+      //   title: Text(
+      //     'edit_profile'.translate,
+      //     style: const TextStyle(color: Colors.black),
+      //   ),
+      // ),
       body: BlocBuilder<UserProfileCubit, UserProfileState>(
         builder: (context, userDataState) {
           if (userDataState is UserProfileLoading) {

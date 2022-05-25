@@ -14,13 +14,15 @@ class SearchIcon extends StatelessWidget {
   final dynamic categoryId;
   @override
   Widget build(BuildContext context) {
-    return IconButton(
+    return const SizedBox();
+    /**
+      return IconButton(
       onPressed: () {
         showDialog(
-          
           // isScrollControlled: true,
           context: context,
-          builder: (_) => AlertDialog(contentPadding: EdgeInsets.zero,
+          builder: (_) => AlertDialog(
+            contentPadding: EdgeInsets.zero,
             content: Container(
               height: ScreenUtil().setHeight(285),
               padding: EdgeInsets.only(
@@ -52,5 +54,6 @@ class SearchIcon extends StatelessWidget {
         Icons.search,
       ),
     );
+     */
   }
 }

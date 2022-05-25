@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trkar/categories/view/widgets/manufacturers_details_item.dart';
+import 'package:trkar/core/components/search_app_bar.dart';
 import 'package:trkar/core/helper/navigator.dart';
+import 'package:trkar/home/view/widgets/my_drawer.dart';
 import '../../../core/extensions/string.dart';
 import '../../../core/extensions/media_query.dart';
 import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
@@ -17,6 +19,7 @@ class AllManufacturersScreen extends StatefulWidget {
 
 class _AllManufacturersScreenState extends State<AllManufacturersScreen> {
   late FilterCarsCubit filterCarsCubit;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -27,25 +30,29 @@ class _AllManufacturersScreenState extends State<AllManufacturersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            NavigationService.goBack();
-          },
-          color: Colors.black,
-          icon: const Icon(
-            Icons.arrow_back,
-          ),
-        ),
-        title: Text(
-          'all_manufacturers'.translate,
-          style: const TextStyle(
-            color: Colors.black,
-          ),
-        ),
-      ),
+      key: scaffoldKey,
+      appBar: SearchAppBar(scaffoldKey: scaffoldKey),
+      drawer: const MyDrawer(),
+
+      // appBar: AppBar(
+      //   backgroundColor: Colors.transparent,
+      //   elevation: 0,
+      //   leading: IconButton(
+      //     onPressed: () {
+      //       NavigationService.goBack();
+      //     },
+      //     color: Colors.black,
+      //     icon: const Icon(
+      //       Icons.arrow_back,
+      //     ),
+      //   ),
+      //   title: Text(
+      //     'all_manufacturers'.translate,
+      //     style: const TextStyle(
+      //       color: Colors.black,
+      //     ),
+      //   ),
+      // ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

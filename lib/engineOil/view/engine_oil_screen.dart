@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trkar/core/components/dropdown_title_view.dart';
 import 'package:trkar/core/components/register_button.dart';
+import 'package:trkar/core/components/search_app_bar.dart';
 import 'package:trkar/core/components/search_modal_bottom_sheet.dart';
 import 'package:trkar/core/components/searchable_dropdown_widget.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
@@ -10,6 +11,7 @@ import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/engineOil/view/widgets/select_vehicle_view.dart';
 import 'package:trkar/engineOil/viewModel/engineOil/engine_oil_cubit.dart';
 import 'package:trkar/home/view/widgets/home_product_item.dart';
+import 'package:trkar/home/view/widgets/my_drawer.dart';
 import '../../core/extensions/string.dart';
 
 class EngineOilScreen extends StatefulWidget {
@@ -22,6 +24,7 @@ class EngineOilScreen extends StatefulWidget {
 
 class _EngineOilScreenState extends State<EngineOilScreen> {
   late EngineOilCubit engineOilCubit;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -32,28 +35,32 @@ class _EngineOilScreenState extends State<EngineOilScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        // titleTextStyle: const TextStyle(
-        //   color: Colors.black,
-        // ),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-          ),
-          color: Colors.black,
-          onPressed: () {
-            NavigationService.goBack();
-          },
-        ),
-        title: Text(
-          'engine_oil'.translate,
-          style: const TextStyle(
-            color: Colors.black,
-          ),
-        ),
-      ),
+      key: scaffoldKey,
+      appBar: SearchAppBar(scaffoldKey: scaffoldKey),
+      drawer: const MyDrawer(),
+
+      // appBar: AppBar(
+      //   backgroundColor: Colors.transparent,
+      //   elevation: 0,
+      //   // titleTextStyle: const TextStyle(
+      //   //   color: Colors.black,
+      //   // ),
+      //   leading: IconButton(
+      //     icon: const Icon(
+      //       Icons.arrow_back,
+      //     ),
+      //     color: Colors.black,
+      //     onPressed: () {
+      //       NavigationService.goBack();
+      //     },
+      //   ),
+      //   title: Text(
+      //     'engine_oil'.translate,
+      //     style: const TextStyle(
+      //       color: Colors.black,
+      //     ),
+      //   ),
+      // ),
       body: BlocBuilder<EngineOilCubit, EngineOilState>(
         builder: (context, state) {
           return SingleChildScrollView(

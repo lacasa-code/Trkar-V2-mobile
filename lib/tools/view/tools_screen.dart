@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:trkar/core/components/search_app_bar.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/components/sub_cat_card.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/home/view/widgets/home_product_item.dart';
+import 'package:trkar/home/view/widgets/my_drawer.dart';
 import '.././../core/extensions/string.dart';
 
 class ToolsScreen extends StatefulWidget {
@@ -14,28 +16,33 @@ class ToolsScreen extends StatefulWidget {
 }
 
 class _ToolsScreenState extends State<ToolsScreen> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-          ),
-          color: Colors.black,
-          onPressed: () {
-            NavigationService.goBack();
-          },
-        ),
-        title: Text(
-          'tools'.translate,
-          style: const TextStyle(
-            color: Colors.black,
-          ),
-        ),
-      ),
+      key: scaffoldKey,
+      appBar: SearchAppBar(scaffoldKey: scaffoldKey),
+      drawer: const MyDrawer(),
+
+      // appBar: AppBar(
+      //   backgroundColor: Colors.transparent,
+      //   elevation: 0,
+      //   leading: IconButton(
+      //     icon: const Icon(
+      //       Icons.arrow_back,
+      //     ),
+      //     color: Colors.black,
+      //     onPressed: () {
+      //       NavigationService.goBack();
+      //     },
+      //   ),
+      //   title: Text(
+      //     'tools'.translate,
+      //     style: const TextStyle(
+      //       color: Colors.black,
+      //     ),
+      //   ),
+      // ),
       body: SingleChildScrollView(
         child: Column(
           children: [
