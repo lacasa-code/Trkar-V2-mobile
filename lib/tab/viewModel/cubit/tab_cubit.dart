@@ -28,9 +28,7 @@ class TabCubit extends Cubit<TabState> {
           );
         },
         cancelMsg: 'cancel',
-        cancelFun: () {
-          NavigationService.goBack();
-        },
+        cancelFun: () {},
       );
       return;
     }
