@@ -117,71 +117,102 @@ class _TyresScreenState extends State<TyresScreen>
                                             (e) => e.name ?? '',
                                           )
                                           .toList(),
-                                      selectedValue: 0,
+                                      selectedValue: tyresFilterCubit
+                                              .seasons.isEmpty
+                                          ? null
+                                          : tyresFilterCubit.seasons.first.name,
                                     ),
                                   ),
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 15, vertical: 10),
-                            child: Row(
-                              textDirection: TextDirection.ltr,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                Expanded(
-                                  child: state is WidthLoading
-                                      ? const LoaderWidget()
-                                      : DropDownTileView(
-                                          key: ValueKey(tyresFilterCubit
-                                              .selectedSeasonId),
-                                          onChanged: tyresFilterCubit
-                                              .onWidthDropdownChanged,
-                                          title: 'width',
-                                          values: tyresFilterCubit.width
-                                              .map((e) => e.value ?? '')
-                                              .toList(),
-                                        ),
+                                Visibility(
+                                  visible: tyresFilterCubit.canBeCleared,
+                                  child: IconButton(
+                                    onPressed: () =>
+                                        tyresFilterCubit.clearLists(),
+                                    icon: const Icon(
+                                      Icons.refresh,
+                                    ),
+                                  ),
                                 ),
-                                const BoxHelper(
-                                  width: 5,
-                                ),
-                                Expanded(
-                                  child: state is HeightLoading
-                                      ? const LoaderWidget()
-                                      : DropDownTileView(
-                                          key: ValueKey(tyresFilterCubit
-                                              .selectedSeasonId),
-                                          onChanged: tyresFilterCubit
-                                              .onHeightDropdownChanged,
-                                          title: 'height',
-                                          values: List.generate(
-                                            tyresFilterCubit.height.length,
-                                            (index) {
-                                              var height = tyresFilterCubit
-                                                  .height[index];
-                                              return height.value ?? '';
-                                            },
-                                          ),
-                                        ),
-                                ),
-                                const BoxHelper(
-                                  width: 5,
-                                ),
-                                Expanded(
-                                  child: state is DiameterLoading
-                                      ? const LoaderWidget()
-                                      : DropDownTileView(
-                                          key: ValueKey(tyresFilterCubit
-                                              .selectedSeasonId),
-                                          onChanged: (value) {},
-                                          title: 'diameter',
-                                          values: List.generate(
-                                              tyresFilterCubit.diameter.length,
-                                              (index) {
-                                            var diameter = tyresFilterCubit
-                                                .diameter[index];
-                                            return diameter.value ?? '';
-                                          }),
-                                        ),
+                                Row(
+                                  textDirection: TextDirection.ltr,
+                                  children: [
+                                    Expanded(
+                                      child: state is WidthLoading
+                                          ? const LoaderWidget()
+                                          : DropDownTileView(
+                                              key: ValueKey(tyresFilterCubit
+                                                  .selectedWidthValueIndex),
+                                              selectedValue: tyresFilterCubit
+                                                  .selectedWidthValue,
+                                              enabled: tyresFilterCubit
+                                                      .width.length >
+                                                  1,
+                                              onChanged: tyresFilterCubit
+                                                  .onWidthDropdownChanged,
+                                              title: 'width',
+                                              values: tyresFilterCubit.width,
+                                            ),
+                                    ),
+                                    const BoxHelper(
+                                      width: 5,
+                                    ),
+                                    Expanded(
+                                      child: state is HeightLoading
+                                          ? const LoaderWidget()
+                                          : DropDownTileView(
+                                              key: ValueKey(tyresFilterCubit
+                                                  .selectedHeightValueIndex),
+                                              selectedValue: tyresFilterCubit
+                                                  .selectedHeightValue,
+                                              enabled: tyresFilterCubit
+                                                      .height.length >
+                                                  1,
+                                              onChanged: tyresFilterCubit
+                                                  .onHeightDropdownChanged,
+                                              title: 'height',
+                                              values: List.generate(
+                                                tyresFilterCubit.height.length,
+                                                (index) {
+                                                  var height = tyresFilterCubit
+                                                      .height[index];
+                                                  return height;
+                                                },
+                                              ),
+                                            ),
+                                    ),
+                                    const BoxHelper(
+                                      width: 5,
+                                    ),
+                                    Expanded(
+                                      child: state is DiameterLoading
+                                          ? const LoaderWidget()
+                                          : DropDownTileView(
+                                              key: ValueKey(tyresFilterCubit
+                                                  .selectedDiameterValueIndex),
+                                              selectedValue: tyresFilterCubit
+                                                  .diameter.first,
+                                              enabled: tyresFilterCubit
+                                                      .diameter.length >
+                                                  1,
+                                              onChanged: (value) {},
+                                              title: 'diameter',
+                                              values: List.generate(
+                                                  tyresFilterCubit.diameter
+                                                      .length, (index) {
+                                                var diameter = tyresFilterCubit
+                                                    .diameter[index];
+                                                return diameter;
+                                              }),
+                                            ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),

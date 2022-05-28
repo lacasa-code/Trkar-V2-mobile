@@ -106,11 +106,21 @@ class EngineOilCubit extends Cubit<EngineOilState> {
     }
   }
 
+  void changeSearchType(int? value) {
+    if (value == null) {
+      return;
+    }
+    _selectedSearchValue = value;
+    emit(SearchStateChanged());
+  }
+
   List<CarMades>? _carMadesEnglish = [];
   List<Car>? _carModels = [];
   List<CarEngine>? _carEngines = [];
+  int _selectedSearchValue = 0;
 
   List<CarMades> get carMadesEnglish => [...?_carMadesEnglish];
+  int get selectedSearchValue => _selectedSearchValue;
   List<Car> get carModels => [...?_carModels];
   List<CarEngine> get carEngines => [...?_carEngines];
 }

@@ -4,6 +4,7 @@ part of 'engine_oil_cubit.dart';
 abstract class EngineOilState {}
 
 class EngineOilInitial extends EngineOilState {}
+
 class CarMadesLoading extends EngineOilState {}
 
 class CarEngineError extends EngineOilState {
@@ -30,3 +31,5 @@ class CarMadesError extends EngineOilState {
 }
 
 class CarMadesDone extends EngineOilState {}
+
+class SearchStateChanged extends EngineOilState {}

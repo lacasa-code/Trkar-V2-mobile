@@ -1,11 +1,12 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:dropdown_plus/dropdown_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import '../../model/tyres_types_model.dart';
 import '../../model/seasons_model.dart';
+import '../../../core/extensions/string.dart';
 import '../../model/attributes_model.dart';
 import '../../repo/tyres_types_repo.dart';
 import '../../repo/seasons_repo.dart';
@@ -57,7 +58,7 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
       _seasons = seasonsData.data;
       getWidthBySeasonId(
         NavigationService.context,
-        seasonId: _seasons?[0].id,
+        seasonIndex: _seasons?[_selectedSeasonIndex].id,
       );
       emit(Done());
     } else {
@@ -67,13 +68,13 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
 
   Future<void> getWidthBySeasonId(
     context, {
-    seasonId,
+    seasonIndex,
   }) async {
     emit(WidthLoading());
     var widthData = await AttributesRepo.getAttributeByParentId(
       context,
       path: 'seasons',
-      parentId: seasonId,
+      parentId: _seasons?[seasonIndex].id,
       typeId: _types?[tabIndex].id,
     );
 
@@ -115,7 +116,7 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
     }
   }
 
-  Future<void> getDiameterBySeasonId(
+  Future<void> getDiameterByHeightId(
     context, {
     heightId,
   }) async {
@@ -182,11 +183,11 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
       return;
     }
     clearLists();
-    _selectedSeasonId =
+    _selectedSeasonIndex =
         _seasons?.indexWhere((element) => element.name == value) ?? 0;
     getWidthBySeasonId(
       NavigationService.context,
-      seasonId: _selectedSeasonId,
+      seasonIndex: _selectedSeasonIndex,
     );
   }
 
@@ -196,6 +197,8 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
     if (value == null) {
       return;
     }
+    log('diameterVal => $_selectedDiameterValue');
+    _selectedDiameterValueIndex++;
     _height?.clear();
     _diameter?.clear();
     var index = _width?.indexWhere((element) => element.value == value) ?? 0;
@@ -219,7 +222,7 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
     if (index < 0) {
       return;
     }
-    getDiameterBySeasonId(
+    getDiameterByHeightId(
       NavigationService.context,
       heightId: _height?[index].id,
     );
@@ -257,10 +260,12 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
   }
 
   clearLists() {
-    _width?.clear();
+    _selectedWidthValueIndex++;
+    _selectedHeightValueIndex++;
+    _selectedDiameterValueIndex++;
     _height?.clear();
     _diameter?.clear();
-    _manufacturer?.clear();
+    emit(Cleared());
   }
 
   animateTo({
@@ -282,15 +287,52 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
   List<Manufacturer>? _manufacturer = [];
   List<Type>? _types = [];
   int _tabIndex = 0;
-  int _selectedSeasonId = 0;
+  DropdownEditingController<String> diameterKey =
+      DropdownEditingController<String>();
+  String? _selectedWidthValue = 'select'.translate;
+  String? _selectedHeightValue = 'select'.translate;
+  String _selectedManufactorValue = 'select'.translate;
+  String? _selectedDiameterValue = 'select'.translate;
+  int _selectedWidthValueIndex = 0;
+  int get selectedWidthValueIndex => _selectedWidthValueIndex;
+  int _selectedHeightValueIndex = 0;
+  int get selectedHeightValueIndex => _selectedHeightValueIndex;
+  int _selectedDiameterValueIndex = 0;
+  int get selectedDiameterValueIndex => _selectedDiameterValueIndex;
+
+  String? get selectedWidthValue => _selectedWidthValue;
+  String? get selectedHeightValue => _selectedHeightValue;
+  String? get selectedManufactorValue => _selectedManufactorValue;
+  String? get selectedDiameterValue => _selectedDiameterValue;
+  int _selectedSeasonIndex = 0;
+  bool get canBeCleared =>
+      (width.length > 1 && height.length > 1 && diameter.length > 1);
   List<Season> get seasons => [...?_seasons];
-  List<Attribute> get width => [...?_width];
-  List<Attribute> get height => [...?_height];
-  List<Attribute> get diameter => [...?_diameter];
+  List<String> get width => [
+        ...?_width?.map((e) => e.value ?? '').toList()
+          ?..insert(
+            0,
+            'select'.translate,
+          )
+      ];
+  List<String> get height => [
+        ...?_height?.map((e) => e.value ?? '').toList()
+          ?..insert(
+            0,
+            'select'.translate,
+          )
+      ];
+  List<String> get diameter => [
+        ...?_diameter?.map((e) => e.value ?? '').toList()
+          ?..insert(
+            0,
+            'select'.translate,
+          )
+      ];
   List<Manufacturer> get manufacturer => [...?_manufacturer];
   List<Type> get types => [...?_types];
   int get tabIndex => _tabIndex;
-  int get selectedSeasonId => _selectedSeasonId;
+  int get selectedSeasonIndex => _selectedSeasonIndex;
   bool get isMax => !controller.hasClients
       ? false
       : controller.position.maxScrollExtent == controller.offset;

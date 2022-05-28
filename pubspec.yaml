@@ -31,6 +31,7 @@ dependencies:
   carousel_slider: ^4.1.1
   cupertino_icons: ^1.0.2
   dio: ^4.0.6
+  dropdown_plus: ^0.0.9
   dropdown_search: ^2.0.1
   flag: ^5.0.1
   flutter:

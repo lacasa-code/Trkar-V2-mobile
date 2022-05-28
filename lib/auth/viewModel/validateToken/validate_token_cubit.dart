@@ -23,28 +23,16 @@ class ValidateTokenCubit extends Cubit<ValidateTokenState> {
 
     if (validateTokenData == null) {
       log('message null');
-      NavigationService.pushReplacementAll(
-        page: LoginScreen.routeName,
-      );
+      validateToken(context);
       return;
     }
 
-    if (validateTokenData.data == true) {
-      log('message ntrue');
-      await CustomDialog().showWarningDialog(
-        context: context,
-        msg: 'network'.translate,
-        btnOnPress: () {},
-      );
-      validateToken(context);
-    } else {
-      if (Helper.isLoggedIn) {
-        await Helper.clearUserData();
-      }
-      NavigationService.pushReplacementAll(
-        page: TabScreen.routeName,
-      );
+    if (Helper.isLoggedIn && validateTokenData.status == false) {
+      await Helper.clearUserData();
     }
+    NavigationService.pushReplacementAll(
+      page: TabScreen.routeName,
+    );
   }
 
   Future<void> refreshToken(context) async {

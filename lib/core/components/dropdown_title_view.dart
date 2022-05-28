@@ -10,13 +10,17 @@ class DropDownTileView extends StatelessWidget {
     required this.values,
     this.selectedValue,
     required this.onChanged,
+    this.enabled = true,
     this.removePadding = true,
+    this.dropdownKey,
   }) : super(key: key);
   final String title;
   final List<String> values;
-  final int? selectedValue;
+  final String? selectedValue;
   final bool removePadding;
+  final bool enabled;
   final void Function(String?)? onChanged;
+  final GlobalKey<FormFieldState>? dropdownKey;
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +39,11 @@ class DropDownTileView extends StatelessWidget {
             ),
           ),
         ),
-        SearchableDropDownWidget(
+      SearchableDropDownWidget(
+      
           removePadding: removePadding,
-          selectedValueIndex: selectedValue,
+          initialValue: selectedValue,
+          enabled: enabled,
           thinBorder: true,
           values: values,
           labelText: title,

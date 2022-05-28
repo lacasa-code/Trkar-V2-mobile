@@ -19,7 +19,14 @@ class SearchCubit extends Cubit<SearchState> {
   var vinNumberController = TextEditingController();
   int _searchBy = 0;
   int? _selectedCarMadesItem;
+  int _selectedCarMadeIndex = 0;
+  int _selectedCarModelIndex = 0;
+  int _selectedCarEngineIndex = 0;
+
   int? get selectedCarMadesItem => _selectedCarMadesItem;
+  int get selectedCarMadeIndex => _selectedCarMadeIndex;
+  int get selectedCarModelIndex => _selectedCarModelIndex;
+  int get selectedCarEngineIndex => _selectedCarEngineIndex;
 
   /// 1=> show CarMades, 2=>show carModels, 3=> show carEngine
   int get searchBy => _searchBy;
@@ -173,6 +180,7 @@ class SearchCubit extends Cubit<SearchState> {
       return 'vin_number_required'.translate;
     }
     var vin = VIN(number: value, extended: true).valid();
+
     if (value.length < 17 || !vin) {
       return 'vin_number_invalid'.translate;
     }
@@ -182,6 +190,11 @@ class SearchCubit extends Cubit<SearchState> {
   void changeSearchType(int type) {
     _searchBy = type;
     emit(SearchTypeChanged());
+  }
+
+  void clearLists() {
+    _carModels?.clear();
+    _carEngines?.clear();
   }
 
   List<CarMades>? _carMadesEnglish = [];

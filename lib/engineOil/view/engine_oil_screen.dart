@@ -66,11 +66,28 @@ class _EngineOilScreenState extends State<EngineOilScreen> {
           return SingleChildScrollView(
             child: Column(
               children: [
-                SelectVehicleView(engineOilCubit: engineOilCubit),
+                RadioListTile(
+                  value: 0,
+                  groupValue: engineOilCubit.selectedSearchValue,
+                  onChanged: engineOilCubit.changeSearchType,
+                  title: Text(
+                    'search_by_car'.translate,
+                  ),
+                ),
+                RadioListTile(
+                  value: 1,
+                  groupValue: engineOilCubit.selectedSearchValue,
+                  onChanged: engineOilCubit.changeSearchType,
+                  title: Text(
+                    'search_by_viscosity_grade'.translate,
+                  ),
+                ),
                 const BoxHelper(
                   height: 20,
                 ),
-                const EngineOilRequirementsView(),
+                engineOilCubit.selectedSearchValue == 0
+                    ? SelectVehicleView(engineOilCubit: engineOilCubit)
+                    : const EngineOilRequirementsView(),
                 const BoxHelper(
                   height: 20,
                 ),

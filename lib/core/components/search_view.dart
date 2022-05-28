@@ -32,7 +32,7 @@ class SearchView extends StatelessWidget {
                   child: Text(
                     'search_car_helper'.translate,
                     textAlign: TextAlign.start,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       // fontSize: ScreenUtil().setSp(16),
                     ),
@@ -53,6 +53,7 @@ class SearchView extends StatelessWidget {
                 state is SearchCarMadesLoading
                     ? const LoaderWidget()
                     : SearchableDropDownWidget(
+                        key: ValueKey(searchCubit.carMadesEnglish.length),
                         enabled: searchCubit.carMadesEnglish.isNotEmpty,
                         initialValue: searchCubit.selectedCarMadesItem == null
                             ? null
@@ -91,6 +92,7 @@ class SearchView extends StatelessWidget {
                           bottom: MediaQuery.of(context).viewInsets.bottom,
                         ),
                         child: SearchableDropDownWidget(
+                          key: ValueKey(searchCubit.carModels.length),
                           enabled: searchCubit.carModels.isNotEmpty,
                           onChanged: (v) {
                             if (v == null) {
@@ -118,6 +120,7 @@ class SearchView extends StatelessWidget {
                 state is SearchCarEngineLoading
                     ? const LoaderWidget()
                     : SearchableDropDownWidget(
+                        key: ValueKey(searchCubit.carEngines.length),
                         enabled: searchCubit.carEngines.isNotEmpty,
                         onChanged: (v) {},
                         labelText: 'car_engine',
