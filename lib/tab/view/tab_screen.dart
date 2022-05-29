@@ -14,6 +14,7 @@ import 'package:trkar/profile/view/profile_screen.dart';
 import 'package:trkar/tab/viewModel/cubit/tab_cubit.dart';
 import '../../core/extensions/string.dart';
 
+
 class TabScreen extends StatefulWidget {
   const TabScreen({
     Key? key,

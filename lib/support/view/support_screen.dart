@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,12 +14,21 @@ import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/home/view/widgets/send_offers_email_view.dart';
 import '../../core/extensions/string.dart';
 
-class SupportScreen extends StatefulWidget {
+class SupportScreen extends StatefulWidget implements AutoRouteWrapper {
   const SupportScreen({Key? key}) : super(key: key);
   static const routeName = '/support-screen';
 
   @override
   State<SupportScreen> createState() => _SupportScreenState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    // TODO: implement wrappedRoute
+    return BlocProvider(
+      create: (_) => AddressDataCubit(),
+      child: this,
+    );
+  }
 }
 
 class _SupportScreenState extends State<SupportScreen> {

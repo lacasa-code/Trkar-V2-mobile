@@ -94,9 +94,19 @@ class UpdateUserProfileCubit extends Cubit<UpdateUserProfileState> {
         }
         emit(UpdateUserProfileDone());
       } else {
+        String errorMessage = '';
+        if (updateData.erroressages != null) {
+          updateData.erroressages?.forEach((key, value) {
+            if (value.isNotEmpty) {
+              errorMessage.isEmpty
+                  ? errorMessage += value.first
+                  : errorMessage += '\n ${value.first}';
+            }
+          });
+        }
         _dialog.showWarningDialog(
           context: context,
-          msg: updateData.message ?? '',
+          msg: updateData.message ?? errorMessage,
           btnOnPress: () {},
         );
         emit(UpdateUserProfileError());

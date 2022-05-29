@@ -21,6 +21,8 @@ class EngineOilCubit extends Cubit<EngineOilState> {
   }) async {
     emit(CarMadesLoading());
     try {
+      _carModels?.clear();
+
       var carMadesData = await CarMadesRepo.getCarMades(
         context,
         categoryId: categoryId ?? 1,
@@ -52,6 +54,7 @@ class EngineOilCubit extends Cubit<EngineOilState> {
   }) async {
     emit(CarModelsLoading());
     try {
+      _carEngines?.clear();
       var carYearsData = await CarModelsRepo.getCarModels(
         context,
         carMadeId: carMadeId,

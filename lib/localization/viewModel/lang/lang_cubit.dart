@@ -1,8 +1,10 @@
 import 'package:bloc/bloc.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:trkar/core/router/router.gr.dart';
 import '../../../auth/view/login_screen.dart';
 import '../../../core/helper/navigator.dart';
 
@@ -37,13 +39,17 @@ class LangCubit extends Cubit<LangState> {
         language: _currentLanugage,
       ),
     );
-    NavigationService.pushAndRemoveUntil(
-      page: canPop
-          ?  '/'
-          : LoginScreen.routeName,
-          isNamed: true,
+    // var canPop = context.router.canNavigateBack;
+    context.router.pushAndPopUntil(
+      const SplashRouter(),
       predicate: (_) => false,
     );
+
+    // NavigationService.pushAndRemoveUntil(
+    //   page: canPop ? '/' : LoginScreen.routeName,
+    //   isNamed: true,
+    //   predicate: (_) => false,
+    // );
     Phoenix.rebirth(context);
   }
 

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,12 +18,28 @@ import 'package:trkar/home/view/widgets/my_drawer.dart';
 import 'package:trkar/tyres/viewModel/tyresFilter/tyres_filter_cubit.dart';
 import '../../core/extensions/string.dart';
 
-class TyresScreen extends StatefulWidget {
-  const TyresScreen({Key? key}) : super(key: key);
+class TyresScreen extends StatefulWidget implements AutoRouteWrapper {
+  const TyresScreen({
+    Key? key,
+    this.tabIndex,
+  }) : super(key: key);
+  final int? tabIndex;
+
   static const routeName = '/tyres-screen';
 
   @override
   State<TyresScreen> createState() => _TyresScreenState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    // TODO: implement wrappedRoute
+    return BlocProvider(
+      create: (_) => TyresFilterCubit(
+        myTabIndex: tabIndex,
+      ),
+      child: this,
+    );
+  }
 }
 
 class _TyresScreenState extends State<TyresScreen>
@@ -355,8 +372,8 @@ class _TyresScreenState extends State<TyresScreen>
                           ),
                         ],
                       ),
-                BestSellersView(),
-                PremiumTyresBrand(),
+                const BestSellersView(),
+                const PremiumTyresBrand(),
               ],
             ),
           );

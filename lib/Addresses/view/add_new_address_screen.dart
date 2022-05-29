@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +13,7 @@ import '../../core/extensions/string.dart';
 import '../../core/components//register_button.dart';
 import '../../core/components//register_field.dart';
 
-class AddNewAddressScreen extends StatefulWidget {
+class AddNewAddressScreen extends StatefulWidget implements AutoRouteWrapper {
   const AddNewAddressScreen({
     Key? key,
   }) : super(key: key);
@@ -20,6 +21,14 @@ class AddNewAddressScreen extends StatefulWidget {
 
   @override
   _AddNewAddressScreenState createState() => _AddNewAddressScreenState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider(
+      create: (_) => AddNewAddressCubit(),
+      child: this,
+    );
+  }
 }
 
 class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
@@ -55,7 +64,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
             ),
             color: Colors.black,
             onPressed: () {
-              NavigationService.goBack();
+              context.router.pop();
             },
           ),
           backgroundColor: Colors.transparent,

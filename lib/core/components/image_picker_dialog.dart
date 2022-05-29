@@ -1,7 +1,7 @@
 import 'dart:io';
 
 // import 'package:afran/helper/appLocalization.dart';
-
+import 'package:auto_route/auto_route.dart';
 import '../helper/navigator.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -51,13 +51,13 @@ class ImagePickerDialog {
       File _compressed = await _compress(File(image.path));
       if (!back || !allowCrop) {
         onGet(_compressed);
-        // NavigationService.goBack();
+        // context.router.pop();
         // N.back();
         return;
       }
       _cropImage(_compressed, onGet, context);
     } else {
-      NavigationService.goBack();
+      context.router.pop();
     }
   }
 
@@ -83,7 +83,7 @@ class ImagePickerDialog {
       }
       _cropImage(_compressed, onGet, context);
     } else {
-      NavigationService.goBack();
+      context.router.pop();
     }
   }
 
@@ -111,7 +111,7 @@ class ImagePickerDialog {
           minimumAspectRatio: 1.0,
         ));
     onGet(_croppedFile);
-    NavigationService.goBack();
+    context.router.pop();
   }
 
   Future<File> _compress(File file) async {

@@ -1,19 +1,13 @@
 import 'dart:developer';
-
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trkar/Addresses/viewModel/addNewAddress/add_new_address_cubit.dart';
 import 'package:trkar/core/components/search_app_bar.dart';
 import 'package:trkar/home/view/widgets/my_drawer.dart';
 import '../../core/themes/themes.dart';
 import '../../core/helper/helper.dart';
-
-import '../../../core/themes/screen_utility.dart';
-import '../../../core/helper/navigator.dart';
-import '../../core/extensions/string.dart';
+import '../../core/router/router.gr.dart';
 import '../../core/components//register_button.dart';
 import '../../core/components//sized_box_helper.dart';
-import 'add_new_address_screen.dart';
 import 'widgets/address_widget.dart';
 
 class AddressesScreen extends StatefulWidget {
@@ -59,8 +53,8 @@ class _AddressesScreenState extends State<AddressesScreen> {
                 // removePadding: true,
                 radius: 12,
                 onPressed: () {
-                  NavigationService.push(
-                    page: AddNewAddressScreen.routeName,
+                  context.router.push(
+                   const AddNewAddressScreen(),
                   );
                 },
                 icon: const Icon(

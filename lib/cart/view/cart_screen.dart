@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:trkar/cart/view/cart_item.dart';
 import '../../core/extensions/string.dart';
@@ -13,46 +14,32 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  late TabCubit tabCubit;
-
   @override
   void initState() {
-    tabCubit = context.read<TabCubit>();
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => tabCubit.onBackButtonPressed(context),
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back,
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: false,
+        // leading: const AutoLeadingButton(),
+        title: Text(
+          'cart'.translate,
+          style: const TextStyle(
             color: Colors.black,
-            onPressed: () {
-              tabCubit.onBackButtonPressed(context);
-            },
-          ),
-          title: Text(
-            'cart'.translate,
-            style: const TextStyle(
-              color: Colors.black,
-            ),
           ),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: List.generate(
-              1,
-              (index) => CartItem(
-                imagePath: 'assets/images/oil${index + 1}.jpg',
-              ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: List.generate(
+            1,
+            (index) => CartItem(
+              imagePath: 'assets/images/oil${index + 1}.jpg',
             ),
           ),
         ),

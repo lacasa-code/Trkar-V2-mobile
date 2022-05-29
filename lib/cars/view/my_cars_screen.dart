@@ -7,6 +7,7 @@ import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
 import '../../core/extensions/string.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:auto_route/auto_route.dart';
 
 class MyCarsScreen extends StatefulWidget {
   const MyCarsScreen({Key? key}) : super(key: key);
@@ -45,7 +46,7 @@ class _MyCarsScreenState extends State<MyCarsScreen>
         backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () {
-            NavigationService.goBack();
+            context.router.pop();
           },
           color: Colors.black,
           icon: Icon(

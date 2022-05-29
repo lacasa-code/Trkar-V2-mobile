@@ -27,6 +27,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  auto_route: ^4.0.1
   awesome_dialog: ^2.2.0
   carousel_slider: ^4.1.1
   cupertino_icons: ^1.0.2
@@ -58,6 +59,8 @@ dependencies:
   vin_decoder: 0.2.1-nullsafety
 
 dev_dependencies:
+  auto_route_generator: ^4.0.0
+  build_runner: ^2.1.11
   flutter_lints: ^1.0.0
   flutter_test:
     sdk: flutter

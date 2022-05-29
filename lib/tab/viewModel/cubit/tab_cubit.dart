@@ -23,9 +23,9 @@ class TabCubit extends Cubit<TabState> {
         msg: 'login_required'.translate,
         okMsg: 'login',
         okFun: () {
-          NavigationService.push(
-            page: LoginScreen.routeName,
-          );
+          // NavigationService.push(
+          //   page: LoginScreen.routeName,
+          // );
         },
         cancelMsg: 'cancel',
         cancelFun: () {},
@@ -41,7 +41,7 @@ class TabCubit extends Cubit<TabState> {
   Future<bool> onBackButtonPressed(BuildContext context) async {
     var canPop = Navigator.canPop(context);
     if (canPop) {
-      NavigationService.goBack();
+      // NavigationService.goBack();
       return true;
     } else {
       changeTabIndex(0);

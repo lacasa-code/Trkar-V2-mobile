@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +16,7 @@ import 'package:trkar/profile/viewModel/updateUserProfile/update_user_profile_cu
 import 'package:trkar/profile/viewModel/userProfile/user_profile_cubit.dart';
 import '../../core/extensions/string.dart';
 
-class EditProfileScreen extends StatefulWidget {
+class EditProfileScreen extends StatefulWidget implements AutoRouteWrapper {
   const EditProfileScreen({
     Key? key,
   }) : super(key: key);
@@ -23,6 +24,22 @@ class EditProfileScreen extends StatefulWidget {
 
   @override
   _EditProfileScreenState createState() => _EditProfileScreenState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    // TODO: implement wrappedRoute
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => UpdateUserProfileCubit(),
+        ),
+        BlocProvider(
+          create: (_) => AddressDataCubit(),
+        ),
+      ],
+      child: this,
+    );
+  }
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {

@@ -1,22 +1,31 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trkar/auth/view/choose_user_type_screen.dart';
-import 'package:trkar/auth/view/forget_password_screen.dart';
 import 'package:trkar/auth/viewModel/login/login_cubit.dart';
 import 'package:trkar/core/components/or_widget.dart';
 import 'package:trkar/core/components/register_button.dart';
 import 'package:trkar/core/components/register_field.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
+import 'package:trkar/core/router/router.gr.dart';
 import 'package:trkar/core/themes/themes.dart';
 import '../../core/extensions/string.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatefulWidget implements AutoRouteWrapper {
   const LoginScreen({Key? key}) : super(key: key);
   static const routeName = '/login-screen';
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider(
+      create: (_) => LoginCubit(),
+      child: this,
+    );
+  }
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -39,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
           visible: Navigator.canPop(context),
           child: IconButton(
             onPressed: () {
-              NavigationService.goBack();
+              context.router.pop();
             },
             color: Colors.black,
             icon: const Icon(
@@ -95,8 +104,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     InkWell(
                       onTap: () {
-                        NavigationService.push(
-                          page: ForgetPasswordScreen.routeName,
+                        context.router.push(
+                          const ForgetPasswordRouter(),
                         );
                       },
                       child: Text(
@@ -134,8 +143,11 @@ class _LoginScreenState extends State<LoginScreen> {
               RegisterButton(
                 title: 'create_new_acc',
                 onPressed: () {
-                  NavigationService.push(
-                    page: ChooseUserTypeScreen.routeName,
+                  // NavigationService.push(
+                  //   page: ChooseUserTypeScreen.routeName,
+                  // );
+                  context.router.push(
+                    const ChooseTypeRouter(),
                   );
                 },
                 color: Colors.deepOrange,

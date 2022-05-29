@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trkar/core/components/search_app_bar.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
-import 'package:trkar/core/components/sub_cat_card.dart';
+import 'package:trkar/core/components/sub_cat_item.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/home/view/widgets/home_product_item.dart';
 import 'package:trkar/home/view/widgets/my_drawer.dart';

@@ -8,6 +8,7 @@ import 'package:trkar/home/view/widgets/my_drawer.dart';
 import '../../../core/extensions/string.dart';
 import '../../../core/extensions/media_query.dart';
 import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
+import 'package:auto_route/auto_route.dart';
 
 class AllManufacturersScreen extends StatefulWidget {
   const AllManufacturersScreen({Key? key}) : super(key: key);
@@ -140,8 +141,7 @@ class _AllManufacturersScreenState extends State<AllManufacturersScreen> {
                                                 children: [
                                                   IconButton(
                                                     onPressed: () {
-                                                      NavigationService
-                                                          .goBack();
+                                                      context.router.pop();
                                                     },
                                                     icon: const Icon(
                                                       Icons.close,

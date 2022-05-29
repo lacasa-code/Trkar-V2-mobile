@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:trkar/auth/view/register_screen.dart';
 import 'package:trkar/core/components/or_widget.dart';
 import 'package:trkar/core/components/register_button.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
+import 'package:trkar/core/router/router.gr.dart';
 
 class ChooseUserTypeScreen extends StatefulWidget {
   const ChooseUserTypeScreen({Key? key}) : super(key: key);
@@ -37,9 +38,8 @@ class _ChooseUserTypeScreenState extends State<ChooseUserTypeScreen> {
                 RegisterButton(
                   title: 'register_as_customer',
                   onPressed: () {
-                    NavigationService.push(
-                      page: RegisterScreen.routeName,
-                      arguments: 0,
+                    context.router.push(
+                      RegisterRouter(userType: 0),
                     );
                   },
                   color: Colors.deepOrange,
@@ -49,14 +49,13 @@ class _ChooseUserTypeScreenState extends State<ChooseUserTypeScreen> {
                 RegisterButton(
                   title: 'register_as_vendor',
                   onPressed: () {
-                    Fluttertoast.showToast(
-                      msg: 'Coming Soon...',
-                      backgroundColor: Theme.of(context).primaryColor,
-                    );
-                    return;
-                    NavigationService.push(
-                      page: RegisterScreen.routeName,
-                      arguments: 1,
+                    // Fluttertoast.showToast(
+                    //   msg: 'Coming Soon...',
+                    //   backgroundColor: Theme.of(context).primaryColor,
+                    // );
+                    // return;
+                    context.router.push(
+                      RegisterRouter(userType: 1),
                     );
                   },
                   color: Colors.deepOrange,

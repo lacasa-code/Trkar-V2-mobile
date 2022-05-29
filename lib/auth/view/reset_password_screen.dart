@@ -3,7 +3,10 @@ import 'package:trkar/auth/view/widgets/header_widget.dart';
 import 'package:trkar/core/components/register_button.dart';
 import 'package:trkar/core/components/register_field.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
-import 'package:trkar/core/helper/navigator.dart';
+import 'package:trkar/core/helper/navigator.dart'
+;
+import 'package:auto_route/auto_route.dart';
+import 'package:trkar/core/router/router.gr.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({Key? key}) : super(key: key);
@@ -77,9 +80,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 title: 'save',
                 radius: 10,
                 onPressed: () {
-                  NavigationService.pushReplacementAll(
-                    page: '/',
-                  );
+               context.router.pushAndPopUntil(SplashRouter(), predicate: (_)=>false,);
                 },
               ),
             ],

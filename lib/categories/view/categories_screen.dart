@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+// import 'package:auto_route/auto_route.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trkar/carAccessories/view/car_accessories_screen.dart';
@@ -7,8 +9,10 @@ import 'package:trkar/categories/view/sub_categories_screen.dart';
 import 'package:trkar/categories/view/widgets/category_item.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
 import 'package:trkar/core/components/search_app_bar.dart';
+
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
+import 'package:trkar/core/router/router.gr.dart' as route;
 import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
 import 'package:trkar/home/view/widgets/my_drawer.dart';
 import 'package:trkar/tools/view/tools_screen.dart';
@@ -122,14 +126,23 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                         var subCat = context.read<SubCategoriesCubit>();
                         subCat.categoryName = cat.name;
                         subCat.parentId = cat.id;
-                        NavigationService.push(
-                          page: SubCategoriesScreen.routeName,
-                          arguments: {
-                            'category_name': cat.name,
-                            'parent_id': cat.id,
-                          },
-                        );
+                        // NavigationService.push(
+                        //   page: SubCategoriesScreen.routeName,
+                        //   arguments: {
+                        //     'category_name': cat.name,
+                        //     'parent_id': cat.id,
+                        //   },
+                        // );
+                        // context.router.push(
+                        //  catego,
+                        // );
                         // }
+                        context.router.push(
+                          route.SubCategoriesScreen(
+                            categoryName: cat.name,
+                            parentId: cat.id.toString(),
+                          ),
+                        );
                       },
                       categoryName: cat.name,
                       categoryImage: cat.image,
@@ -143,21 +156,39 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           cat != categoriesCubit.categoriesScreenSubCat.last,
                       onPressed: () {
                         if (cat.slug == 'tools-equipment') {
-                          NavigationService.push(page: ToolsScreen.routeName);
+                          // NavigationService.push(page: ToolsScreen.routeName);
+                          context.router.push(
+                            const route.ToolsScreen(),
+                          );
                         }
                         if (cat.slug == 'tyres') {
-                          NavigationService.push(
-                            page: TyresScreen.routeName,
-                            arguments: cat.id,
+                          context.router.push(
+                            route.TyresScreen(
+                              tabIndex: cat.id,
+                            ),
+                          );
+                        }
+                        if (cat.slug == 'filters') {
+                          context.router.push(
+                            route.FilterRouter(
+                              categoryName: cat.name,
+                              parentId: cat.id.toString(),
+                            ),
                           );
                         }
                         if (cat.slug == 'car-accessories') {
-                          NavigationService.push(
-                            page: CarAccessoriesScreen.routeName,
-                            arguments: {
-                              'category_name': cat.name,
-                              'parent_id': cat.id,
-                            },
+                          // NavigationService.push(
+                          //   page: CarAccessoriesScreen.routeName,
+                          //   arguments: {
+                          //     'category_name': cat.name,
+                          //     'parent_id': cat.id,
+                          //   },
+                          // );
+                          context.router.push(
+                            route.CarAccessoriesScreen(
+                              name: cat.name,
+                              parentId: cat.id.toString(),
+                            ),
                           );
                           return;
                         }
@@ -167,12 +198,18 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           var subCat = context.read<SubCategoriesCubit>();
                           subCat.categoryName = cat.name;
                           subCat.parentId = cat.id;
-                          NavigationService.push(
-                            page: SubCategoriesScreen.routeName,
-                            arguments: {
-                              'category_name': cat.name,
-                              'parent_id': cat.id,
-                            },
+                          // NavigationService.push(
+                          //   page: SubCategoriesScreen.routeName,
+                          //   arguments: {
+                          //     'category_name': cat.name,
+                          //     'parent_id': cat.id,
+                          //   },
+                          // );
+                          context.router.push(
+                            route.SubCategoriesScreen(
+                              categoryName: cat.name,
+                              parentId: cat.parentId,
+                            ),
                           );
                         }
                       },

@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,7 +11,7 @@ import '../viewModel/lang/lang_cubit.dart';
 import 'widgets/change_language_widget.dart';
 import 'widgets/language_item.dart';
 
-class ChangeLanguageScreen extends StatelessWidget {
+class ChangeLanguageScreen extends StatelessWidget implements AutoRouteWrapper {
   const ChangeLanguageScreen({Key? key}) : super(key: key);
   static const routeName = '/change-lang';
   @override
@@ -70,6 +71,14 @@ class ChangeLanguageScreen extends StatelessWidget {
           const ChooseLangWidget(),
         ],
       ),
+    );
+  }
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider(
+      create: (_) => LangCubit(),
+      child: this,
     );
   }
 }

@@ -2,12 +2,14 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:trkar/auth/view/email_verfication_screen.dart';
 import 'package:trkar/core/components/custom_new_dialog.dart';
 import 'package:trkar/core/helper/navigator.dart';
+import 'package:trkar/core/router/router.gr.dart';
 import '../../repo/user_register_repo.dart';
 import '../../repo/vendor_register_repo.dart';
 import '../../../core/extensions/string.dart';
@@ -22,7 +24,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   /// 0 => user , 1=>vendor ...
   final dynamic userType;
 
-  Future<void> _registerUser(context) async {
+  Future<void> _registerUser(BuildContext context) async {
     emit(RegisterLoading());
 
     var registerData = await UserRegisterRepo.registerUser(
@@ -57,8 +59,8 @@ class RegisterCubit extends Cubit<RegisterState> {
     if (registerData.status == true) {
       emit(RegisterDone());
       Fluttertoast.showToast(msg: registerData.message ?? '');
-      NavigationService.pushReplacement(
-        page: EmailVerficationScreen.routeName,
+      context.router.push(
+        EmailVerficationRouter(),
       );
     } else {
       String errorMessage = '';
@@ -81,8 +83,15 @@ class RegisterCubit extends Cubit<RegisterState> {
     }
   }
 
-  Future<void> _registerVendor(context) async {
+  Future<void> _registerVendor(BuildContext context) async {
     emit(RegisterLoading());
+    context.router.push(
+      EmailVerficationRouter(
+        stateOfVerfication: 1,
+        phoneNumber: phoneController.text,
+      ),
+    );
+    return;
 
     var registerData = await VendorRegisterRepo.registerVendor(
       context,
@@ -105,8 +114,8 @@ class RegisterCubit extends Cubit<RegisterState> {
     if (registerData.statusCode == 200) {
       emit(RegisterDone());
       Fluttertoast.showToast(msg: registerData.message ?? '');
-      NavigationService.pushReplacement(
-        page: EmailVerficationScreen.routeName,
+      context.router.push(
+        EmailVerficationRouter(),
       );
     } else {
       String errorMessage = '';
@@ -133,7 +142,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   Future<void> register(context) async {
     FocusManager.instance.primaryFocus?.unfocus();
     var validate = formKey.currentState!.validate();
-    if (!validate) {
+    if (!validate && !kDebugMode) {
       return;
     }
     // if (pickedImage == null) {
@@ -143,11 +152,11 @@ class RegisterCubit extends Cubit<RegisterState> {
     //   );
     // return;
     // }
-    // if (userType == 1) {
-    //   _registerVendor(context);
-    // } else {
-    _registerUser(context);
-    // }
+    if (userType == 1) {
+      _registerVendor(context);
+    } else {
+      _registerUser(context);
+    }
   }
 
   final formKey = GlobalKey<FormState>();

@@ -4,7 +4,8 @@ import 'package:trkar/auth/view/widgets/header_widget.dart';
 import 'package:trkar/core/components/register_button.dart';
 import 'package:trkar/core/components/register_field.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
-import 'package:trkar/core/helper/navigator.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:trkar/core/router/router.gr.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({Key? key}) : super(key: key);
@@ -51,9 +52,9 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
             RegisterButton(
               title: 'send_message',
               onPressed: () {
-                NavigationService.pushReplacement(
-                  page: EmailVerficationScreen.routeName,
-                  arguments: 1,
+                context.router.pushAndPopUntil(
+                  EmailVerficationRouter(stateOfVerfication: 2),
+                  predicate: (_) => false,
                 );
               },
             ),

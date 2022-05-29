@@ -1,14 +1,12 @@
 import 'dart:convert';
-
+import 'package:auto_route/auto_route.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:trkar/core/components/custom_new_dialog.dart';
 import 'package:trkar/core/helper/helper.dart';
-import 'package:trkar/core/helper/navigator.dart';
-import 'package:trkar/home/view/home_screen.dart';
-import 'package:trkar/tab/view/tab_screen.dart';
+import '../../../core/router/router.gr.dart';
 import '../../../core/extensions/string.dart';
 import '../../repo/login_repo.dart';
 
@@ -17,7 +15,7 @@ part 'login_state.dart';
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit() : super(LoginInitial());
 
-  Future<void> login(context) async {
+  Future<void> login(BuildContext context) async {
     FocusManager.instance.primaryFocus?.unfocus();
 
     var dialog = CustomDialog();
@@ -49,8 +47,9 @@ class LoginCubit extends Cubit<LoginState> {
         msg: loginData.message ?? '',
       );
       await Helper.storeNewUserData(loginData);
-      NavigationService.push(
-        page: TabScreen.routeName,
+      context.router.pushAndPopUntil(
+        const TabRoute(),
+        predicate: (_) => false,
       );
       emit(LoginDone());
     } else {

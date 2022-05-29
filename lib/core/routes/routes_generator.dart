@@ -126,10 +126,7 @@ class RoutesGenerator {
                 create: (_) => AddressDataCubit(),
               ),
             ],
-            child: BlocProvider(
-              create: (_) => RegisterCubit(userType: settings.arguments as int),
-              child: const RegisterScreen(),
-            ),
+            child: const RegisterScreen(),
           ),
         );
       case EmailVerficationScreen.routeName:

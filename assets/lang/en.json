@@ -15,7 +15,7 @@
     "ok": "Ok",
     "username": "User Name",
     "password_confirmation": "Password Confirmation",
-    "invalid_password": "Must Contain Uppercase and Lowercase Letters, Symbols and Numbers",
+    "invalid_password": "You must use a combination of letters, numbers and symbols",
     "username_required": "Username is Required",
     "invalid_username": "Username is Too Short",
     "password_mismatch": "Password does not match",
@@ -27,6 +27,8 @@
     "send_message": "Send Message",
     "save": "Save",
     "phone": "Phone Number",
+    "phone_verfication_header": "Enter the code sent to your mobile phone",
+    "phone_verfication_body": "the code has been sent to a mobile number",
     "cancel": "Cancel",
     "phone_required": "Phone Number is Required",
     "invalid_phone": "Invalid Phone Number",
@@ -186,6 +188,8 @@
     "search_car_helper": "SELECT YOUR CAR TO SEARCH FOR PARTS",
     "select": "Select",
     "search_by_car": "search by vehicle",
-     "search_by_viscosity_grade": "search by viscosity grade"
+    "search_by_viscosity_grade": "search by viscosity grade",
+    "filters": "Filters",
+    "please_choose_filters_category": "Please choose the desired car parts Filters category",
+    "top_sellers_filters": "TOP 10 OF BEST SELLERS FROM THE FILTERS SECTION"
 }
-

@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,12 +15,20 @@ import 'package:trkar/home/view/widgets/home_product_item.dart';
 import 'package:trkar/home/view/widgets/my_drawer.dart';
 import '../../core/extensions/string.dart';
 
-class EngineOilScreen extends StatefulWidget {
+class EngineOilScreen extends StatefulWidget implements AutoRouteWrapper {
   const EngineOilScreen({Key? key}) : super(key: key);
   static const routeName = '/engine-oil-screen';
 
   @override
   State<EngineOilScreen> createState() => _EngineOilScreenState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider<EngineOilCubit>(
+      create: (_) => EngineOilCubit(),
+      child: this,
+    );
+  }
 }
 
 class _EngineOilScreenState extends State<EngineOilScreen> {

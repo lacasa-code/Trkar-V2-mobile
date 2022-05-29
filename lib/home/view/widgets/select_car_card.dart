@@ -17,9 +17,9 @@ class SelectCarWidget extends StatelessWidget {
       children: [
         InkWell(
           onTap: () {
-            NavigationService.push(
-              page: MyCarsScreen.routeName,
-            );
+            // NavigationService.push(
+            //   page: MyCarsScreen.routeName,
+            // );
           },
           child: Container(
             margin: const EdgeInsets.symmetric(

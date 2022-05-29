@@ -1,8 +1,10 @@
 import 'dart:developer';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trkar/addressesData/viewModel/countries/countries_cubit.dart';
 import 'package:trkar/auth/view/choose_user_type_screen.dart';
 import 'package:trkar/auth/viewModel/register/register_cubit.dart';
@@ -16,13 +18,33 @@ import 'package:trkar/core/components/searchable_dropdown_widget.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/extensions/string.dart';
 import 'package:trkar/core/helper/navigator.dart';
+import 'package:trkar/core/router/router.gr.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+class RegisterScreen extends StatefulWidget implements AutoRouteWrapper {
+  const RegisterScreen({
+    Key? key,
+    this.userType,
+  }) : super(key: key);
+  final int? userType;
   static const routeName = '/register-screen';
 
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => RegisterCubit(userType: userType),
+        ),
+        BlocProvider(
+          create: (_) => AddressDataCubit(),
+        ),
+      ],
+      child: this,
+    );
+  }
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
@@ -61,6 +83,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const BoxHelper(
                   height: 30,
                 ),
+                Text(
+                  registerCubit.userType == 0
+                      ? 'register_as_customer'.translate
+                      : 'register_as_vendor'.translate,
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(16),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const BoxHelper(
+                  height: 30,
+                ),
                 // ProfilePictureWidget(
                 //   onPicked: (f) {
                 //     if (f == null) {
@@ -79,6 +113,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   controller: registerCubit.emailController,
                   validator: registerCubit.emailValidator,
                   keyboardType: TextInputType.emailAddress,
+                ),
+                Visibility(
+                  visible: registerCubit.userType == 1,
+                  child: RegisterField(
+                    hintText: 'phone',
+                    controller: registerCubit.phoneController,
+                    validator: registerCubit.phoneValidator,
+                    keyboardType: TextInputType.phone,
+                  ),
                 ),
                 // RegisterField(
                 //   hintText: 'phone',
@@ -256,8 +299,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 RegisterButton(
                   title: 'login',
                   onPressed: () {
-                    NavigationService.pushReplacementAll(
-                      page: ChooseUserTypeScreen.routeName,
+                    context.router.pushAndPopUntil(
+                      LoginRouter(),
+                      predicate: (_) => false,
                     );
                   },
                   color: Colors.deepOrange,

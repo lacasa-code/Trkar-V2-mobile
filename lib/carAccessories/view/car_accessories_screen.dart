@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,15 +8,32 @@ import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/home/view/widgets/home_product_item.dart';
 import 'package:trkar/home/view/widgets/my_drawer.dart';
-import 'package:trkar/home/view/widgets/sub_cat_card.dart';
+import 'package:trkar/core/components/sub_cat_item.dart';
 import '../../core/extensions/string.dart';
 
-class CarAccessoriesScreen extends StatefulWidget {
-  const CarAccessoriesScreen({Key? key}) : super(key: key);
+class CarAccessoriesScreen extends StatefulWidget implements AutoRouteWrapper {
+  const CarAccessoriesScreen({
+    Key? key,
+    this.name,
+    this.parentId,
+  }) : super(key: key);
+  final String? name;
+  final String? parentId;
   static const routeName = '/car-accessories';
 
   @override
   State<CarAccessoriesScreen> createState() => _CarAccessoriesScreenState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider(
+      create: (_) => SubCategoriesCubit(
+        parentId: parentId,
+        categoryName: name,
+      ),
+      child: this,
+    );
+  }
 }
 
 class _CarAccessoriesScreenState extends State<CarAccessoriesScreen>
@@ -180,7 +198,7 @@ class CarAccessoriesSubCategoriesView extends StatelessWidget {
         Wrap(
           children: List.generate(
             10,
-            (index) => const SubCatCard(),
+            (index) => const SubCategoryItem(),
           ),
         ),
       ],

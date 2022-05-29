@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:auto_route/auto_route.dart';
+import '../../../core/router/router.gr.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../Addresses/model/my_addresses_model.dart';
 import '../../../Addresses/viewModel/addNewAddress/add_new_address_cubit.dart';
-import '../../../core/components/custom_new_dialog.dart';
-import '../../../core/extensions/string.dart';
 import '../../../core/helper/helper.dart';
 
 import '../../../../core/themes/screen_utility.dart';
 import '../../../../core/themes/themes.dart';
-import '../../../../core/helper/navigator.dart';
 import '../../../core/components//sized_box_helper.dart';
-import '../add_new_address_screen.dart';
 import '../../../core/components/option_item.dart';
 
 class AddressWidget extends StatelessWidget {
@@ -103,27 +101,15 @@ class AddressWidget extends StatelessWidget {
                                     context: context,
                                     builder: (_) => AddressModalBottomSheet(
                                           onDelete: () {
-                                            NavigationService.goBack();
+                                            context.router.pop();
                                           },
                                           onEdit: () {
-                                            NavigationService.goBack();
-                                            NavigationService.push(
-                                              page: MultiBlocProvider(
-                                                providers: [
-                                                  BlocProvider<
-                                                      AddNewAddressCubit>(
-                                                    create: (_) =>
-                                                        AddNewAddressCubit(
-                                                      context: context,
-                                                      address: address,
-                                                    ),
+                                            context.router.pop();
+
+                                            context.router.push(
+                                              const AddNewAddressScreen(
+                                                  // isEdit: true,
                                                   ),
-                                                ],
-                                                child:
-                                                    const AddNewAddressScreen(
-                                                        // isEdit: true,
-                                                        ),
-                                              ),
                                             );
                                           },
                                         ));
@@ -209,7 +195,7 @@ class AddressModalBottomSheet extends StatelessWidget {
                   title: 'make_default',
                   icons: Icons.check_circle_outline,
                   onPressed: () {
-                    NavigationService.goBack();
+                    context.router.pop();
                   },
                 ),
                 OptionItem(

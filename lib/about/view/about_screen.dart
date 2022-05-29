@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trkar/core/components/search_app_bar.dart';
 import 'package:trkar/core/helper/navigator.dart';
-import 'package:trkar/delivery/view/delivery_screen.dart';
-import 'package:trkar/legalNotice/view/legal_notice_screen.dart';
-import 'package:trkar/payment/view/payment_screen.dart';
-import 'package:trkar/privacy/view/privacy_screen.dart';
-import 'package:trkar/returns/view/returns_refunds_screen.dart';
-import 'package:trkar/rightOfWithDrawal/view/rights_of_withdrawal.dart';
-import 'package:trkar/terms/view/terms_screen.dart';
+import 'package:auto_route/auto_route.dart';
+import '../../core/router/router.gr.dart';
+// import 'package:trkar/delivery/view/delivery_screen.dart';
+// import 'package:trkar/legalNotice/view/legal_notice_screen.dart';
+// import 'package:trkar/payment/view/payment_screen.dart';
+// import 'package:trkar/privacy/view/privacy_screen.dart';
+// import 'package:trkar/returns/view/returns_refunds_screen.dart';
+// import 'package:trkar/terms/view/terms_screen.dart';
 import '../../core/extensions/string.dart';
 import './widgets/about_trkar_card_item.dart';
 
@@ -40,57 +41,43 @@ class _AboutScreenState extends State<AboutScreen> {
             AboutTrkarCardItem(
               title: 'replacement',
               onPressed: () {
-                NavigationService.push(
-                  page: ReturnsAndRefundsScreen.routeName,
-                );
+                context.router.push(const ReturnsAndRefundsScreen());
               },
             ),
             AboutTrkarCardItem(
               title: 'payment',
               onPressed: () {
-                NavigationService.push(
-                  page: PaymentScreen.routeName,
-                );
+                context.router.push(const PaymentScreen());
               },
             ),
             AboutTrkarCardItem(
               title: 'legal_notice',
               onPressed: () {
-                NavigationService.push(
-                  page: LegalNoticeScreen.routeName,
-                );
+                context.router.push(const LegalNoticeScreen());
               },
             ),
             AboutTrkarCardItem(
               title: 'right_of_withdrawal',
               onPressed: () {
-                NavigationService.push(
-                  page: RightsOfWithdrawalScreen.routeName,
-                );
+                context.router.push(const RightsOfWithdrawalScreen());
               },
             ),
             AboutTrkarCardItem(
               title: 'terms',
               onPressed: () {
-                NavigationService.push(
-                  page: TermsAndConitionsScreen.routeName,
-                );
+                context.router.push(const TermsAndConitionsScreen());
               },
             ),
             AboutTrkarCardItem(
               title: 'privacy_policy',
               onPressed: () {
-                NavigationService.push(
-                  page: PrivacyScreen.routeName,
-                );
+                context.router.push(const PrivacyScreen());
               },
             ),
             AboutTrkarCardItem(
               title: 'delivery',
               onPressed: () {
-                NavigationService.push(
-                  page: DeliveryScreen.routeName,
-                );
+                context.router.push(const DeliveryScreen());
               },
             ),
           ],

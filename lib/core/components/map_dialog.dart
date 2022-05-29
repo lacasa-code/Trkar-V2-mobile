@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:trkar/core/components/register_button.dart';
@@ -84,7 +85,7 @@ class _MapDialogState extends State<MapDialog> {
                 addressController.text,
               );
             }
-            NavigationService.goBack();
+            context.router.pop();
           },
         ),
         const BoxHelper(

@@ -1,13 +1,15 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:meta/meta.dart';
 import 'package:trkar/auth/view/login_screen.dart';
 import 'package:trkar/core/components/custom_new_dialog.dart';
 import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/core/extensions/string.dart';
+import 'package:trkar/core/router/router.gr.dart';
 import 'package:trkar/tab/view/tab_screen.dart';
 import '../../repo/validate_token_repo.dart';
 import '../../repo/refresh_token_repo.dart';
@@ -16,7 +18,7 @@ part 'validate_token_state.dart';
 
 class ValidateTokenCubit extends Cubit<ValidateTokenState> {
   ValidateTokenCubit() : super(ValidateTokenInitial());
-  Future<void> validateToken(context) async {
+  Future<void> validateToken(BuildContext context) async {
     log('message top');
     var validateTokenData = await ValidateTokenRepo.validateToken(context);
     log('message after');
@@ -30,9 +32,13 @@ class ValidateTokenCubit extends Cubit<ValidateTokenState> {
     if (Helper.isLoggedIn && validateTokenData.status == false) {
       await Helper.clearUserData();
     }
-    NavigationService.pushReplacementAll(
-      page: TabScreen.routeName,
+    context.router.pushAndPopUntil(
+      const TabRoute(),
+      predicate: (_) => false,
     );
+    // NavigationService.pushReplacementAll(
+    //   page: TabScreen.routeName,
+    // );
   }
 
   Future<void> refreshToken(context) async {

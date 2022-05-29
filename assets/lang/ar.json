@@ -15,7 +15,7 @@
     "ok": "موافق",
     "username": "اسم المستخدم",
     "password_confirmation": "تأكيد كلمة المرور",
-    "invalid_password": "يجب ان تحتوي على احرف كبيرة وصغيرة و رموز وارقام",
+    "invalid_password": "يجب استخدام مزيج من الأحرف والأرقام والرموز",
     "username_required": "اسم المستخدم مطلوب",
     "invalid_username": "اسم المستخدم قصير جدا",
     "password_mismatch": "كلمة السر غير متطابقة",
@@ -35,6 +35,8 @@
     "addresses": "العناوين",
     "phone": "رقم الهاتف",
     "phone_required": "رقم الهاتف مطلوب",
+    "phone_verfication_header": "أدخل الرمز المرسل إلى جوالك",
+    "phone_verfication_body": "تم إرسال الرمز إلى جوال رقم",
     "invalid_phone": "رقم هاتف غير صالح",
     "address": "العنوان",
     "address_required": "العنوان مطلوب",
@@ -186,5 +188,8 @@
     "search_car_helper": "اختر سيارتك للبحث عن قطع الغيار",
     "select": "اختر",
     "search_by_car": "البحث بواسطة المركبة",
-    "search_by_viscosity_grade": "البحث بواسطة درجة اللزوجة"
+    "search_by_viscosity_grade": "البحث بواسطة درجة اللزوجة",
+    "filters": "الفلاتر",
+    "please_choose_filters_category": "الرجاء اختيار فئة مرشحات أجزاء السيارة المطلوبة",
+    "top_sellers_filters": "أفضل 10 مبيعًا من قسم الفلاتر"
 }

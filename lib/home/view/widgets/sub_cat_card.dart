@@ -1,12 +1,11 @@
 import 'dart:developer';
-
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
-import 'package:trkar/core/helper/navigator.dart';
-import 'package:trkar/tyres/view/tyres_screen.dart';
+import 'package:trkar/core/router/router.gr.dart';
 
 class SubCatCard extends StatefulWidget {
   const SubCatCard({
@@ -48,10 +47,16 @@ class _SubCatCardState extends State<SubCatCard> {
                   ListTile(
                     onTap: () {
                       if (widget.catID == 519 || widget.catID == 844) {
-                        NavigationService.goBack(maybePop: false);
-                        NavigationService.push(
-                          page: TyresScreen.routeName,
-                          arguments: widget.catID,
+                        context.router.pop();
+                        context.navigateTo(
+                          CategoriesRouter(
+                            children: [
+                              const CategoriesScreen(),
+                              TyresScreen(
+                                tabIndex: widget.catID,
+                              ),
+                            ],
+                          ),
                         );
                       }
                     },
@@ -104,6 +109,9 @@ class _SubCatCardState extends State<SubCatCard> {
                           .where((element) =>
                               element.parentId == widget.catID.toString())
                           .toList();
+                      if (subCategory.isNotEmpty) {
+                        return;
+                      }
                       for (var r in list) {
                         subCategory.add(
                           SubCatCard(

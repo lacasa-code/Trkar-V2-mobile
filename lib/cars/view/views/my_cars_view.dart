@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:trkar/cars/view/widgets/car_widget.dart';
 import 'package:trkar/core/helper/navigator.dart';
-
+import 'package:auto_route/auto_route.dart';
 class MyCarsView extends StatefulWidget {
   const MyCarsView({
     Key? key,
@@ -45,7 +45,7 @@ class _MyCarsViewState extends State<MyCarsView> {
               setState(() {
                 groupValue = v;
               });
-              NavigationService.goBack();
+              context.router.pop();
             },
           ),
         ],
@@ -53,4 +53,3 @@ class _MyCarsViewState extends State<MyCarsView> {
     );
   }
 }
-

@@ -1,13 +1,12 @@
 import 'dart:developer';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:trkar/carAccessories/view/car_accessories_screen.dart';
-import 'package:trkar/categories/carMades/view/all_car_mades_screen.dart';
-import 'package:trkar/categories/manufacturers/view/all_manufacturers_screen.dart';
 import 'package:trkar/categories/view/widgets/category_item.dart';
 import 'package:trkar/categories/view/widgets/manufacturers_details_item.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
@@ -20,7 +19,7 @@ import 'package:trkar/core/components/search_view.dart';
 import 'package:trkar/core/components/searchable_dropdown_widget.dart';
 import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
-import 'package:trkar/engineOil/view/engine_oil_screen.dart';
+import 'package:trkar/core/router/router.gr.dart' as route;
 import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
 import 'package:trkar/home/view/widgets/my_drawer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -30,12 +29,39 @@ import 'package:trkar/tab/viewModel/cubit/tab_cubit.dart';
 import '../../core/extensions/media_query.dart';
 import '../../search/viewModel/search/search_cubit.dart';
 
-class SubCategoriesScreen extends StatefulWidget {
-  const SubCategoriesScreen({Key? key}) : super(key: key);
+class SubCategoriesScreen extends StatefulWidget implements AutoRouteWrapper {
+  const SubCategoriesScreen({
+    Key? key,
+    this.categoryName,
+    @PathParam('categoryId') this.parentId,
+  }) : super(key: key);
+  final String? categoryName, parentId;
   static const routeName = '/sub-categories-screen';
 
   @override
   _SubCategoriesScreenState createState() => _SubCategoriesScreenState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<SearchCubit>(
+          create: (_) => SearchCubit(),
+        ),
+        // BlocProvider<CategoriesCubit>.value(
+        //   value: (settings.arguments
+        //       as Map<String, dynamic>?)?['categories_cubit'],
+        // ),
+        BlocProvider<SubCategoriesCubit>(
+          create: (_) => SubCategoriesCubit(
+            categoryName: categoryName,
+            parentId: parentId,
+          ),
+        ),
+      ],
+      child: this,
+    );
+  }
 }
 
 class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
@@ -80,7 +106,7 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
       //     ),
       //     color: Colors.black,
       //     onPressed: () {
-      //       NavigationService.goBack();
+      //       context.router.pop();
       //     },
       //   ),
       // ),
@@ -153,29 +179,40 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
                           onPressed: () async {
                             log('catId =>${cat.id}');
                             if (cat.slug == 'car-accessories') {
-                              NavigationService.push(
-                                page: CarAccessoriesScreen.routeName,
+                              context.router.push(
+                                route.CarAccessoriesScreen(),
                               );
                               return;
                             }
                             if (cat.slug == 'engine-oil') {
-                              NavigationService.push(
-                                page: EngineOilScreen.routeName,
+                              // NavigationService.push(
+                              //   page: EngineOilScreen.routeName,
+                              // );
+                              context.router.push(
+                                const route.EngineOilScreen(),
                               );
                               return;
                             }
                             var hasSubCat = await subcategoriesCubit
                                 .hasSubCategories(cat.id ?? 0, context);
                             if (hasSubCat) {
-                              NavigationService.push(
-                                  page: SubCategoriesScreen.routeName,
-                                  arguments: {
-                                    'category_name':
-                                        Helper.currentLanguage == 'ar'
-                                            ? cat.nameAr
-                                            : cat.nameEn,
-                                    'parent_id': cat.id,
-                                  });
+                              // NavigationService.push(
+                              //     page: SubCategoriesScreen.routeName,
+                              //     arguments: {
+                              //       'category_name':
+                              //           Helper.currentLanguage == 'ar'
+                              //               ? cat.nameAr
+                              //               : cat.nameEn,
+                              //       'parent_id': cat.id,
+                              //     });
+                              context.router.push(
+                                route.SubCategoriesScreen(
+                                  categoryName: Helper.currentLanguage == 'ar'
+                                      ? cat.nameAr
+                                      : cat.nameEn,
+                                  parentId: cat.id.toString(),
+                                ),
+                              );
                             }
                           },
                           categoryName: Helper.currentLanguage == 'ar'
@@ -302,7 +339,7 @@ class ManufacturersView extends StatelessWidget {
                                               children: [
                                                 IconButton(
                                                   onPressed: () {
-                                                    NavigationService.goBack();
+                                                    context.router.pop();
                                                   },
                                                   icon: const Icon(
                                                     Icons.close,
@@ -355,8 +392,11 @@ class ManufacturersView extends StatelessWidget {
             alignment: Alignment.center,
             child: InkWell(
               onTap: () {
-                NavigationService.push(
-                  page: AllManufacturersScreen.routeName,
+                // NavigationService.push(
+                //   page: AllManufacturersScreen.routeName,
+                // );
+                context.router.push(
+                  const route.AllManufacturersScreen(),
                 );
               },
               child: Text(
@@ -430,9 +470,12 @@ class BrandsView extends StatelessWidget {
             alignment: Alignment.center,
             child: InkWell(
               onTap: () {
-                NavigationService.push(
-                  page: AllCarMadesScreen.routeName,
+                context.router.push(
+                  const route.AllCarMadesScreen(),
                 );
+                // NavigationService.push(
+                //   page: AllCarMadesScreen.routeName,
+                // );
               },
               child: Text(
                 'more'.translate,

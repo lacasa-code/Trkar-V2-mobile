@@ -57,7 +57,7 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
     if (seasonsData.status == true) {
       _seasons = seasonsData.data;
       getWidthBySeasonId(
-        NavigationService.context,
+        null,
         seasonIndex: _seasons?[_selectedSeasonIndex].id,
       );
       emit(Done());
@@ -186,7 +186,7 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
     _selectedSeasonIndex =
         _seasons?.indexWhere((element) => element.name == value) ?? 0;
     getWidthBySeasonId(
-      NavigationService.context,
+      null,
       seasonIndex: _selectedSeasonIndex,
     );
   }
@@ -206,7 +206,7 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
       return;
     }
     getHeightBySeasonId(
-      NavigationService.context,
+      null,
       widthId: _width?[index].id,
     );
   }
@@ -223,7 +223,8 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
       return;
     }
     getDiameterByHeightId(
-      NavigationService.context,
+      null,
+      // NavigationService.context,
       heightId: _height?[index].id,
     );
   }
