@@ -45,11 +45,11 @@ class _ToolsScreenState extends State<ToolsScreen> {
       // ),
       body: SingleChildScrollView(
         child: Column(
-          children: [
-            const ToolsOnlineStoresView(),
-            const PopularToolsView(),
-            const BestPriceView(),
-            const ToolsTopBrandsView(),
+          children: const [
+            ToolsOnlineStoresView(),
+            PopularToolsView(),
+            BestPriceView(),
+            ToolsTopBrandsView(),
           ],
         ),
       ),

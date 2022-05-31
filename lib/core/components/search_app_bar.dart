@@ -22,7 +22,7 @@ class SearchAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _SearchAppBarState extends State<SearchAppBar> {
-  var isTitle = true;
+  var isTitle = false;
   @override
   Widget build(BuildContext context) {
     // log('can go back:=>${context.router.canNavigateBack} canpop:=>${context.router.canPopSelfOrChildren}');
@@ -89,16 +89,16 @@ class _SearchAppBarState extends State<SearchAppBar> {
                 ),
               ),
             ),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  isTitle = !isTitle;
-                });
-              },
-              icon: Icon(
-                isTitle ? Icons.search : Icons.close,
-              ),
-            ),
+            // IconButton(
+            //   onPressed: () {
+            //     setState(() {
+            //       isTitle = !isTitle;
+            //     });
+            //   },
+            //   icon: Icon(
+            //     isTitle ? Icons.search : Icons.close,
+            //   ),
+            // ),
           ],
         ),
       ),

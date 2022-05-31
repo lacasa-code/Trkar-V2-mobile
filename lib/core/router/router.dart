@@ -8,6 +8,7 @@ import 'package:trkar/auth/view/forget_password_screen.dart';
 import 'package:trkar/auth/view/login_screen.dart';
 import 'package:trkar/auth/view/register_screen.dart';
 import 'package:trkar/auth/view/reset_password_screen.dart';
+import 'package:trkar/brakes/view/brakes_screen.dart';
 import 'package:trkar/carAccessories/view/car_accessories_screen.dart';
 import 'package:trkar/cart/view/cart_screen.dart';
 import 'package:trkar/categories/carMades/view/all_car_mades_screen.dart';
@@ -33,6 +34,7 @@ import 'package:trkar/support/view/support_screen.dart';
 import 'package:trkar/terms/view/terms_screen.dart';
 import 'package:trkar/tools/view/tools_screen.dart';
 import 'package:trkar/tyres/view/tyres_screen.dart';
+import 'package:trkar/vendor/resumeData/view/resume_data_screen.dart';
 
 @MaterialAutoRouter(
   replaceInRouteName: 'Page,Route',
@@ -41,6 +43,11 @@ import 'package:trkar/tyres/view/tyres_screen.dart';
       path: '/',
       name: 'SplashRouter',
       page: SplashScreen,
+    ),
+    AutoRoute(
+      path: 'resume-data',
+      name: 'ResumeDataRouter',
+      page: ResumeDataScreen,
     ),
     AutoRoute(
       path: 'tabs',
@@ -92,6 +99,11 @@ import 'package:trkar/tyres/view/tyres_screen.dart';
               AutoRoute(
                 path: 'tools',
                 page: ToolsScreen,
+              ),
+              AutoRoute(
+                name: 'BrakesRouter',
+                path: 'brakes',
+                page: BrakesScreen,
               ),
             ]),
         AutoRoute(

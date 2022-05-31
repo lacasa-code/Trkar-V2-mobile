@@ -93,10 +93,13 @@ class _EmailVerficationScreenState extends State<EmailVerficationScreen> {
                   // TODO : check if there argument in auto_route
                   // var arg = ModalRoute.of(context)?.settings.arguments;
                   context.router.pushAndPopUntil(
-                      widget.stateOfVerfication == 1
-                          ? const ResetPasswordRouter()
-                          : const SplashRouter(),
-                      predicate: (_) => false);
+                    widget.stateOfVerfication == 2
+                        ? const ResetPasswordRouter()
+                        : widget.stateOfVerfication == 1
+                            ? const ResumeDataRouter()
+                            : const SplashRouter(),
+                    predicate: (_) => false,
+                  );
                   // NavigationService.pushReplacementAll(
                   //   page: arg == 1 ? ResetPasswordScreen.routeName : '/',
                   // );

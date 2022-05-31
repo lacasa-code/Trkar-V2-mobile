@@ -15,9 +15,12 @@ class MapDialog extends StatefulWidget {
   const MapDialog({
     Key? key,
     required this.onPickedLocation,
+    this.thinBorder = false,
+    this.showOKButton = true,
   }) : super(key: key);
   final void Function(LatLng, String) onPickedLocation;
-
+  final bool thinBorder;
+  final bool showOKButton;
   @override
   _MapDialogState createState() => _MapDialogState();
 }
@@ -71,22 +74,26 @@ class _MapDialogState extends State<MapDialog> {
         RegisterField(
           controller: addressController,
           maxLines: null,
+          thinBorder: widget.thinBorder,
           hintText: 'address',
         ),
         const BoxHelper(
           height: 20,
         ),
-        RegisterButton(
-          title: 'ok',
-          onPressed: () {
-            if (marker != null && addressController.text.isNotEmpty) {
-              widget.onPickedLocation(
-                marker!.position,
-                addressController.text,
-              );
-            }
-            context.router.pop();
-          },
+        Visibility(
+          visible: widget.showOKButton,
+          child: RegisterButton(
+            title: 'ok',
+            onPressed: () {
+              if (marker != null && addressController.text.isNotEmpty) {
+                widget.onPickedLocation(
+                  marker!.position,
+                  addressController.text,
+                );
+              }
+              context.router.pop();
+            },
+          ),
         ),
         const BoxHelper(
           height: 20,

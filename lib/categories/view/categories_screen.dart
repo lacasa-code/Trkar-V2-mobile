@@ -155,6 +155,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       showDivider:
                           cat != categoriesCubit.categoriesScreenSubCat.last,
                       onPressed: () {
+                        log('catId => ${cat.id}');
                         if (cat.slug == 'tools-equipment') {
                           // NavigationService.push(page: ToolsScreen.routeName);
                           context.router.push(
@@ -174,6 +175,11 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                               categoryName: cat.name,
                               parentId: cat.id.toString(),
                             ),
+                          );
+                        }
+                        if (cat.slug == 'brakes') {
+                          context.router.push(
+                            route.BrakesRouter(),
                           );
                         }
                         if (cat.slug == 'car-accessories') {

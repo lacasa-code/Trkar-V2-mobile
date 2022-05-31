@@ -2,14 +2,10 @@ import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trkar/addressesData/viewModel/countries/countries_cubit.dart';
-import 'package:trkar/auth/view/choose_user_type_screen.dart';
 import 'package:trkar/auth/viewModel/register/register_cubit.dart';
-import 'package:trkar/core/components/dropdown_widget.dart';
-import 'package:trkar/core/components/map_dialog.dart';
 import 'package:trkar/core/components/or_widget.dart';
 import 'package:trkar/core/components/profile_picture_widget.dart';
 import 'package:trkar/core/components/register_button.dart';
