@@ -116,6 +116,55 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
     }
   }
 
+  Future<void> getManufacturersByWidthId(
+    context, {
+    widthId,
+  }) async {
+    emit(TyresManufacturersLoading());
+    var manufacturers = await AttributesRepo.getAttributeByParentId(
+      context,
+      path: 'manufactuere/$widthId',
+    );
+
+    if (manufacturers == null) {
+      emit(Error());
+      return;
+    }
+
+    if (manufacturers.status == true) {
+      _manufacturersByWidth = manufacturers.data;
+      emit(Done());
+    } else {
+      emit(Error());
+    }
+  }
+
+  Future<void> getSpeedRatingByWidthId(
+    context, {
+    widthId,
+  }) async {
+    emit(
+      SpeedRatingLoading(),
+    );
+    log('id is $widthId');
+    var speedRating = await AttributesRepo.getAttributeByParentId(
+      context,
+      path: 'speed/rate/$widthId',
+    );
+
+    if (speedRating == null) {
+      emit(Error());
+      return;
+    }
+
+    if (speedRating.status == true) {
+      _speedRating = speedRating.data;
+      emit(Done());
+    } else {
+      emit(Error());
+    }
+  }
+
   Future<void> getDiameterByHeightId(
     context, {
     heightId,
@@ -167,7 +216,11 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
     if (_tabIndex == index) {
       return;
     }
+
     _tabIndex = index;
+    _speedRating?.clear();
+    _manufacturersByWidth?.clear();
+    _speedRating?.clear();
     await getSeasons(
       context,
       tabId: _types?[index].id,
@@ -206,6 +259,14 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
       return;
     }
     getHeightBySeasonId(
+      null,
+      widthId: _width?[index].id,
+    );
+    getManufacturersByWidthId(
+      null,
+      widthId: _width?[index].id,
+    );
+    getSpeedRatingByWidthId(
       null,
       widthId: _width?[index].id,
     );
@@ -266,6 +327,9 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
     _selectedDiameterValueIndex++;
     _height?.clear();
     _diameter?.clear();
+    _manufacturersByWidth?.clear();
+    _speedRating?.clear();
+
     emit(Cleared());
   }
 
@@ -285,6 +349,8 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
   List<Attribute>? _width = [];
   List<Attribute>? _height = [];
   List<Attribute>? _diameter = [];
+  List<Attribute>? _speedRating = [];
+  List<Attribute>? _manufacturersByWidth = [];
   List<Manufacturer>? _manufacturer = [];
   List<Type>? _types = [];
   int _tabIndex = 0;
@@ -330,7 +396,13 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
             'select'.translate,
           )
       ];
-  List<Manufacturer> get manufacturer => [...?_manufacturer];
+  List<String> get speedRating =>
+      [...?_speedRating?.map((e) => e.value ?? '').toList()];
+  List<String> get manufacturer => [
+        ...?(_manufacturersByWidth!.isEmpty
+            ? _manufacturer?.map((e) => e.name ?? '').toList()
+            : _manufacturersByWidth?.map((e) => e.value ?? '').toList()),
+      ];
   List<Type> get types => [...?_types];
   int get tabIndex => _tabIndex;
   int get selectedSeasonIndex => _selectedSeasonIndex;

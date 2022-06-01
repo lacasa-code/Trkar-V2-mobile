@@ -11,7 +11,7 @@ import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/engineOil/view/widgets/select_vehicle_view.dart';
 import 'package:trkar/engineOil/viewModel/engineOil/engine_oil_cubit.dart';
-import 'package:trkar/home/view/widgets/home_product_item.dart';
+import 'package:trkar/core/components/home_product_item.dart';
 import 'package:trkar/home/view/widgets/my_drawer.dart';
 import '../../core/extensions/string.dart';
 
@@ -156,7 +156,7 @@ class TopOilDealsView extends StatelessWidget {
           child: Row(
             children: List.generate(
               6,
-              (index) => const HomeProductItem(),
+              (index) => const ProductItem(),
             ),
           ),
         ),

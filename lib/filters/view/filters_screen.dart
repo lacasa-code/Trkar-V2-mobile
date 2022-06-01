@@ -6,7 +6,7 @@ import 'package:trkar/core/components/search_app_bar.dart';
 import 'package:trkar/core/components/search_view.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/components/sub_cat_item.dart';
-import 'package:trkar/home/view/widgets/home_product_item.dart';
+import 'package:trkar/core/components/home_product_item.dart';
 import 'package:trkar/search/viewModel/search/search_cubit.dart';
 import '../../core/extensions/string.dart';
 
@@ -126,7 +126,7 @@ class TopFiltersSellers extends StatelessWidget {
             child: Row(
               children: List.generate(
                 8,
-                (index) => const HomeProductItem(),
+                (index) => const ProductItem(),
               ),
             ),
           ),

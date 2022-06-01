@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trkar/core/helper/helper.dart';
-import 'package:trkar/home/view/widgets/home_product_item.dart';
+import 'package:trkar/core/components/home_product_item.dart';
 import '../../../core/extensions/string.dart';
-
 
 class RecentlyViewedProductsView extends StatelessWidget {
   const RecentlyViewedProductsView({
@@ -36,7 +35,7 @@ class RecentlyViewedProductsView extends StatelessWidget {
             child: Row(
               children: List.generate(
                 3,
-                (index) => HomeProductItem(
+                (index) => ProductItem(
                   imagePath: 'assets/images/oil${index + 1}.jpg',
                 ),
               ),

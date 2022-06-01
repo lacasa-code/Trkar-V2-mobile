@@ -224,5 +224,8 @@
     "online_payment": "online payment",
     "complete_regestration": "complete registration",
     "next": "Next",
-    "skip": "Skip"
+    "skip": "Skip",
+    "recently_added": "latest added products",
+    "top_sellers": "Best Selling Products",
+    "most_viewed": "most viewed products"
 }

@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 
-class HomeProductItem extends StatelessWidget {
-  const HomeProductItem({
+class ProductItem extends StatelessWidget {
+  const ProductItem({
     Key? key,
     this.imagePath,
+    this.canAddToCart = true,
   }) : super(key: key);
   final String? imagePath;
-
+  final bool canAddToCart;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -85,16 +86,20 @@ class HomeProductItem extends StatelessWidget {
               const BoxHelper(
                 height: 10,
               ),
-              SizedBox(
-                width: ScreenUtil().setWidth(135),
-                child: const Card(
-                  elevation: 5,
-                  color: Colors.blue,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                    child: Icon(
-                      Icons.add_shopping_cart,
-                      color: Colors.white,
+              Visibility(
+                visible: canAddToCart,
+                child: SizedBox(
+                  width: ScreenUtil().setWidth(135),
+                  child: const Card(
+                    elevation: 5,
+                    color: Colors.blue,
+                    child: Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                      child: Icon(
+                        Icons.add_shopping_cart,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),

@@ -12,10 +12,11 @@ class WidthLoading extends TyresFilterState {}
 class HeightLoading extends TyresFilterState {}
 
 class TyresManufacturersLoading extends TyresFilterState {}
-
 class Cleared extends TyresFilterState {}
 
 class DiameterLoading extends TyresFilterState {}
+
+class SpeedRatingLoading extends TyresFilterState {}
 
 class TypesLoaing extends TyresFilterState {}
 

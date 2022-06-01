@@ -156,7 +156,7 @@ class _ResumeDataScreenState extends State<ResumeDataScreen> {
                       onPressed: () {
                         if (isLast) {
                           context.router.pushAndPopUntil(
-                            const TabRoute(),
+                            const VendorHomeRouter(),
                             predicate: (_) => false,
                           );
                           return;

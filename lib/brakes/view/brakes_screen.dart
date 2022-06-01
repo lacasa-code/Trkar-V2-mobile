@@ -8,7 +8,7 @@ import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.da
 import 'package:trkar/core/components/search_app_bar.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/components/sub_cat_item.dart';
-import 'package:trkar/home/view/widgets/home_product_item.dart';
+import 'package:trkar/core/components/home_product_item.dart';
 
 class BrakesScreen extends StatefulWidget implements AutoRouteWrapper {
   const BrakesScreen({
@@ -67,7 +67,6 @@ class _BrakesScreenState extends State<BrakesScreen> {
             const CarBrakesSubCategoriesView(),
             const BrakesSystemSpareView(),
             const TopBrakesSellers(),
-            
           ],
         ),
       ),
@@ -130,7 +129,7 @@ class TopBrakesSellers extends StatelessWidget {
             child: Row(
               children: List.generate(
                 8,
-                (index) => const HomeProductItem(),
+                (index) => const ProductItem(),
               ),
             ),
           ),

@@ -34,6 +34,7 @@ import 'package:trkar/support/view/support_screen.dart';
 import 'package:trkar/terms/view/terms_screen.dart';
 import 'package:trkar/tools/view/tools_screen.dart';
 import 'package:trkar/tyres/view/tyres_screen.dart';
+import 'package:trkar/vendor/home/view/vendor_home_screen.dart';
 import 'package:trkar/vendor/resumeData/view/resume_data_screen.dart';
 
 @MaterialAutoRouter(
@@ -48,6 +49,11 @@ import 'package:trkar/vendor/resumeData/view/resume_data_screen.dart';
       path: 'resume-data',
       name: 'ResumeDataRouter',
       page: ResumeDataScreen,
+    ),
+    AutoRoute(
+      path: 'vendor-home',
+      page: VendorHomeScreen,
+      name: 'VendorHomeRouter',
     ),
     AutoRoute(
       path: 'tabs',

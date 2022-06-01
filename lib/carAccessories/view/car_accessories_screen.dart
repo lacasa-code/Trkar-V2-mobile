@@ -6,7 +6,7 @@ import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.da
 import 'package:trkar/core/components/search_app_bar.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
-import 'package:trkar/home/view/widgets/home_product_item.dart';
+import 'package:trkar/core/components/home_product_item.dart';
 import 'package:trkar/home/view/widgets/my_drawer.dart';
 import 'package:trkar/core/components/sub_cat_item.dart';
 import '../../core/extensions/string.dart';
@@ -126,7 +126,7 @@ class TopAccessoriesView extends StatelessWidget {
             child: Row(
               children: List.generate(
                 6,
-                (index) => const HomeProductItem(),
+                (index) => const ProductItem(),
               ),
             ),
           ),

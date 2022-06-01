@@ -13,7 +13,7 @@ import 'package:trkar/core/components/search_modal_bottom_sheet.dart';
 import 'package:trkar/core/components/searchable_dropdown_widget.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
-import 'package:trkar/home/view/widgets/home_product_item.dart';
+import 'package:trkar/core/components/home_product_item.dart';
 import 'package:trkar/home/view/widgets/my_drawer.dart';
 import 'package:trkar/tyres/viewModel/tyresFilter/tyres_filter_cubit.dart';
 import '../../core/extensions/string.dart';
@@ -275,7 +275,7 @@ class _TyresScreenState extends State<TyresScreen>
                                               var manufacturer =
                                                   tyresFilterCubit
                                                       .manufacturer[index];
-                                              return manufacturer.name ?? '';
+                                              return manufacturer;
                                             },
                                           ),
                                         ),
@@ -284,14 +284,19 @@ class _TyresScreenState extends State<TyresScreen>
                                   ),
                                   Visibility(
                                     visible: tyresFilterCubit.tabIndex <= 1,
-                                    child: TyresMultiselectDropDownView(
-                                      title: 'speed_rating',
-                                      values: const [
-                                        '31',
-                                        '34',
-                                        '12',
-                                      ],
-                                    ),
+                                    child: state is SpeedRatingLoading
+                                        ? const LoaderWidget()
+                                        : TyresMultiselectDropDownView(
+                                            enabled: tyresFilterCubit
+                                                .speedRating.isNotEmpty,
+                                            title: 'speed_rating',
+                                            values: List.generate(
+                                              tyresFilterCubit
+                                                  .speedRating.length,
+                                              (index) => tyresFilterCubit
+                                                  .speedRating[index],
+                                            ),
+                                          ),
                                   ),
                                   Visibility(
                                     visible: tyresFilterCubit.tabIndex == 2,
@@ -315,14 +320,18 @@ class _TyresScreenState extends State<TyresScreen>
                                   horizontal: 15, vertical: 10),
                               child: Column(
                                 children: [
-                                  TyresMultiselectDropDownView(
-                                    title: 'speed_rating',
-                                    values: const [
-                                      '31',
-                                      '34',
-                                      '12',
-                                    ],
-                                  ),
+                                  state is SpeedRatingLoading
+                                      ? const LoaderWidget()
+                                      : TyresMultiselectDropDownView(
+                                          title: 'speed_rating',
+                                          enabled: tyresFilterCubit
+                                              .speedRating.isNotEmpty,
+                                          values: List.generate(
+                                            tyresFilterCubit.speedRating.length,
+                                            (index) => tyresFilterCubit
+                                                .speedRating[index],
+                                          ),
+                                        ),
                                   const BoxHelper(
                                     height: 5,
                                   ),
@@ -341,6 +350,8 @@ class _TyresScreenState extends State<TyresScreen>
                                       ? const LoaderWidget()
                                       : TyresMultiselectDropDownView(
                                           title: 'manufacturer',
+                                          enabled: tyresFilterCubit
+                                              .speedRating.isNotEmpty,
                                           values: List.generate(
                                             tyresFilterCubit
                                                 .manufacturer.length,
@@ -348,7 +359,7 @@ class _TyresScreenState extends State<TyresScreen>
                                               var manufacturer =
                                                   tyresFilterCubit
                                                       .manufacturer[index];
-                                              return manufacturer.name ?? '';
+                                              return manufacturer;
                                             },
                                           ),
                                         ),
@@ -460,7 +471,7 @@ class BestSellersView extends StatelessWidget {
             child: Row(
               children: List.generate(
                 8,
-                (index) => const HomeProductItem(),
+                (index) => const ProductItem(),
               ),
             ),
           ),
@@ -578,10 +589,12 @@ class TyresMultiselectDropDownView extends StatelessWidget {
     required this.title,
     required this.values,
     this.selectedValue,
+    this.enabled = true,
   }) : super(key: key);
   final String title;
   final List<String> values;
   final int? selectedValue;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -601,6 +614,7 @@ class TyresMultiselectDropDownView extends StatelessWidget {
         ),
         MultiselectDropdownWidget(
           removePadding: true,
+          enabled: enabled,
           selectedValueIndex: selectedValue,
           thinBorder: true,
           values: values,
