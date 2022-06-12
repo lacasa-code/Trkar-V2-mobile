@@ -34,7 +34,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   @override
   void initState() {
     categoriesCubit = BlocProvider.of<CategoriesCubit>(context)
-      ..getCategories(context);
+      ..getCategories(context)..getAllCategories(context);
     super.initState();
   }
 

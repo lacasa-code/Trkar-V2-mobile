@@ -33,7 +33,8 @@ class MainTheme {
     fontSize: ScreenUtil().setSp(20),
   );
   static final headerStyle3 = TextStyle(
-    color: MainStyle.mainColor,
+    // color: MainStyle.mainColor,
+    color: Colors.black,
     fontWeight: FontWeight.bold,
     fontSize: ScreenUtil().setSp(14),
   );

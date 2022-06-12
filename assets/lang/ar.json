@@ -227,5 +227,8 @@
     "skip": "تخطي",
     "recently_added": "احدث المنتجات المضافه",
     "top_sellers": "اكثر المنتجات مبيعا",
-    "most_viewed": "اكثر المنتجات مشاهده"
+    "most_viewed": "اكثر المنتجات مشاهده",
+    "my_products": "منتجاتي",
+    "add_new_product": "إضافة منتج جديد",
+    "edit_product": "تعديل المنتج"
 }

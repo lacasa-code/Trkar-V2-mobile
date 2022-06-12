@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trkar/core/components/home_product_item.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
+import 'package:trkar/core/components/vendor_drawer.dart';
 import '../../../core/extensions/string.dart';
+import 'package:auto_route/auto_route.dart';
 
 class VendorHomeScreen extends StatefulWidget {
   const VendorHomeScreen({Key? key}) : super(key: key);
@@ -12,9 +14,26 @@ class VendorHomeScreen extends StatefulWidget {
 }
 
 class _VendorHomeScreenState extends State<VendorHomeScreen> {
+  var scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
+      extendBodyBehindAppBar: true,
+      drawer: VendorDrawer(),
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          onPressed: () {
+            scaffoldKey.currentState?.openDrawer();
+          },
+          color: Colors.white,
+          icon: const Icon(
+            Icons.menu,
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: const [

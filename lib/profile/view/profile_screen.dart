@@ -100,7 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       //   page: AboutScreen.routeName,
                       // );
                       context.router.push(
-                        const AboutRouter(),
+                        const AboutUsRouter(),
                       );
                     },
                     title: 'about_trkar',
@@ -217,7 +217,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       //   page: AboutScreen.routeName,
                       // );
                       context.router.push(
-                        const AboutScreen(),
+                        const AboutUsRouter(),
                       );
                     },
                     title: 'about_trkar',

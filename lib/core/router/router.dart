@@ -34,7 +34,9 @@ import 'package:trkar/support/view/support_screen.dart';
 import 'package:trkar/terms/view/terms_screen.dart';
 import 'package:trkar/tools/view/tools_screen.dart';
 import 'package:trkar/tyres/view/tyres_screen.dart';
+import 'package:trkar/vendor/dashboard/view/seller_dashboard.dart';
 import 'package:trkar/vendor/home/view/vendor_home_screen.dart';
+import 'package:trkar/vendor/products/view/my_products_screen.dart';
 import 'package:trkar/vendor/resumeData/view/resume_data_screen.dart';
 
 @MaterialAutoRouter(
@@ -54,6 +56,16 @@ import 'package:trkar/vendor/resumeData/view/resume_data_screen.dart';
       path: 'vendor-home',
       page: VendorHomeScreen,
       name: 'VendorHomeRouter',
+    ),
+    AutoRoute(
+      path: 'seller-dashboard',
+      page: SellerDashboard,
+      name: 'SellerDashboardRouter',
+    ),
+    AutoRoute(
+      path: 'my-products',
+      page: MyProductScreen,
+      name: 'MyProductsRouter',
     ),
     AutoRoute(
       path: 'tabs',
@@ -148,43 +160,37 @@ import 'package:trkar/vendor/resumeData/view/resume_data_screen.dart';
               page: EditProfileScreen,
             ),
             AutoRoute(
-              path: 'about',
-              name: 'AboutRouter',
-              page: EmptyRouterPage,
-              children: [
-                AutoRoute(
-                  path: '',
-                  page: AboutScreen,
-                ),
-                AutoRoute(
-                  path: 'replacement',
-                  page: ReturnsAndRefundsScreen,
-                ),
-                AutoRoute(
-                  path: 'payment',
-                  page: PaymentScreen,
-                ),
-                AutoRoute(
-                  path: 'legal-notice',
-                  page: LegalNoticeScreen,
-                ),
-                AutoRoute(
-                  path: 'right-of-withdrawal',
-                  page: RightsOfWithdrawalScreen,
-                ),
-                AutoRoute(
-                  path: 'privacy-policy',
-                  page: PrivacyScreen,
-                ),
-                AutoRoute(
-                  path: 'terms',
-                  page: TermsAndConitionsScreen,
-                ),
-                AutoRoute(
-                  path: 'delivery',
-                  page: DeliveryScreen,
-                ),
-              ],
+              name: 'AboutUsRouter',
+              path: 'about-us',
+              page: AboutScreen,
+            ),
+            AutoRoute(
+              path: 'replacement',
+              page: ReturnsAndRefundsScreen,
+            ),
+            AutoRoute(
+              path: 'payment',
+              page: PaymentScreen,
+            ),
+            AutoRoute(
+              path: 'legal-notice',
+              page: LegalNoticeScreen,
+            ),
+            AutoRoute(
+              path: 'right-of-withdrawal',
+              page: RightsOfWithdrawalScreen,
+            ),
+            AutoRoute(
+              path: 'privacy-policy',
+              page: PrivacyScreen,
+            ),
+            AutoRoute(
+              path: 'terms',
+              page: TermsAndConitionsScreen,
+            ),
+            AutoRoute(
+              path: 'delivery',
+              page: DeliveryScreen,
             ),
             AutoRoute(
               path: 'support',

@@ -36,6 +36,9 @@ class CategoriesCubit extends Cubit<CategoriesState> {
 
   Future<void> getAllCategories(context) async {
     log('message');
+    if (_allcategory!.isNotEmpty) {
+      return;
+    }
     emit(AllCategoriesLoading());
     try {
       var categoriesData = await CategoriesRepo.getCategories(
@@ -127,12 +130,11 @@ class CategoriesCubit extends Cubit<CategoriesState> {
   }) {
     log('hi From NewMessage');
     if (maincategory.isNotEmpty) {
-
-    context.read<SearchCubit>().getCarMades(
-          context,
-          categoryId: maincategory[index].id,
-        );
-    emit(TabBarChanged());
+      context.read<SearchCubit>().getCarMades(
+            context,
+            categoryId: maincategory[index].id,
+          );
+      emit(TabBarChanged());
     }
   }
 

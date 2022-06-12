@@ -7,11 +7,14 @@ class TyresFilterInitial extends TyresFilterState {}
 
 class SeasonsLoading extends TyresFilterState {}
 
+class ValueChanged extends TyresFilterState {}
+
 class WidthLoading extends TyresFilterState {}
 
 class HeightLoading extends TyresFilterState {}
 
 class TyresManufacturersLoading extends TyresFilterState {}
+
 class Cleared extends TyresFilterState {}
 
 class DiameterLoading extends TyresFilterState {}

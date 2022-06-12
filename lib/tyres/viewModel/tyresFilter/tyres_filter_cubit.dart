@@ -275,10 +275,13 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
   void onHeightDropdownChanged(
     String? value,
   ) {
+    log('value $value');
     if (value == null) {
       return;
     }
     _diameter?.clear();
+    _selectedDiameterValueIndex++;
+    emit(ValueChanged());
     var index = _height?.indexWhere((element) => element.value == value) ?? 0;
     if (index < 0) {
       return;

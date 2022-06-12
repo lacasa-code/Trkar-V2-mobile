@@ -227,5 +227,8 @@
     "skip": "Skip",
     "recently_added": "latest added products",
     "top_sellers": "Best Selling Products",
-    "most_viewed": "most viewed products"
+    "most_viewed": "most viewed products",
+    "my_products": "My Products",
+    "add_new_product": "Add New Product",
+    "edit_product": "Edit Product"
 }
