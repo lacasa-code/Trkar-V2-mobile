@@ -1,7 +1,11 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trkar/core/components/search_modal_bottom_sheet.dart';
 import 'package:trkar/core/components/search_view.dart';
+import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/search/viewModel/search/search_cubit.dart';
 import '../../core/extensions/string.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
@@ -43,9 +47,12 @@ class BrakesScreen extends StatefulWidget implements AutoRouteWrapper {
 class _BrakesScreenState extends State<BrakesScreen> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   late SearchCubit searchCubit;
+  late SubCategoriesCubit subCategoriesCubit;
 
   @override
   void initState() {
+    subCategoriesCubit = context.read<SubCategoriesCubit>()
+      ..getSubCategories(context);
     searchCubit = context.read<SearchCubit>()..getCarMades(context);
 
     super.initState();
@@ -81,21 +88,38 @@ class CarBrakesSubCategoriesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          'please_choose_brakes_category'.translate,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Wrap(
-          children: List.generate(
-            10,
-            (index) => const SubCategoryItem(),
-          ),
-        ),
-      ],
+    SubCategoriesCubit subCategoriesCubit = context.read<SubCategoriesCubit>();
+    log('subCategory=>');
+    return BlocBuilder<SubCategoriesCubit, SubCategoriesState>(
+      builder: (context, state) {
+        if (state is SubCategoriesLoading) {
+          return const LoaderWidget();
+        }
+        return Column(
+          children: [
+            Text(
+              'please_choose_brakes_category'.translate,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Wrap(
+              children: List.generate(
+                subCategoriesCubit.subCategories.length,
+                (index) {
+                  var subCat = subCategoriesCubit.subCategories[index];
+                  return SubCategoryItem(
+                    imagePath: subCat.image,
+                    title: Helper.currentLanguage == 'ar'
+                        ? subCat.nameAr
+                        : subCat.nameEn,
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

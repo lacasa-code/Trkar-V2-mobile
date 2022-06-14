@@ -188,9 +188,13 @@ class AppRouter extends _i14.RootStackRouter {
           routeData: routeData, child: const _i22.AllManufacturersScreen());
     },
     EngineOilScreen.name: (routeData) {
+      final args = routeData.argsAs<EngineOilScreenArgs>(
+          orElse: () => const EngineOilScreenArgs());
       return _i14.MaterialPageX<dynamic>(
           routeData: routeData,
-          child: _i14.WrappedRoute(child: const _i23.EngineOilScreen()));
+          child: _i14.WrappedRoute(
+              child: _i23.EngineOilScreen(
+                  key: args.key, categoryId: args.categoryId)));
     },
     TyresScreen.name: (routeData) {
       final args = routeData.argsAs<TyresScreenArgs>(
@@ -654,10 +658,26 @@ class AllManufacturersScreen extends _i14.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i23.EngineOilScreen]
-class EngineOilScreen extends _i14.PageRouteInfo<void> {
-  const EngineOilScreen() : super(EngineOilScreen.name, path: 'engine-oil');
+class EngineOilScreen extends _i14.PageRouteInfo<EngineOilScreenArgs> {
+  EngineOilScreen({_i41.Key? key, String? categoryId})
+      : super(EngineOilScreen.name,
+            path: 'engine-oil',
+            args: EngineOilScreenArgs(key: key, categoryId: categoryId));
 
   static const String name = 'EngineOilScreen';
+}
+
+class EngineOilScreenArgs {
+  const EngineOilScreenArgs({this.key, this.categoryId});
+
+  final _i41.Key? key;
+
+  final String? categoryId;
+
+  @override
+  String toString() {
+    return 'EngineOilScreenArgs{key: $key, categoryId: $categoryId}';
+  }
 }
 
 /// generated route for

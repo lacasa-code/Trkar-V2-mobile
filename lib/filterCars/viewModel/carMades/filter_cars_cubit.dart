@@ -1,4 +1,6 @@
-import 'dart:math';
+// import 'dart:math';
+
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
@@ -104,6 +106,7 @@ class FilterCarsCubit extends Cubit<FilterCarsState> {
         } else {
           _manufacturers = manufacturersData.data;
         }
+        log('length => ${_categoriesManufacturers?.length} ${_manufacturers?.length}');
         emit(FilterCarsDone());
       } else {
         _manufacturers?.clear();

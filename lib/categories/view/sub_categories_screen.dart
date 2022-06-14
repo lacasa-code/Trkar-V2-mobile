@@ -189,7 +189,7 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
                               //   page: EngineOilScreen.routeName,
                               // );
                               context.router.push(
-                                const route.EngineOilScreen(),
+                                 route.EngineOilScreen(categoryId: cat.id.toString()),
                               );
                               return;
                             }

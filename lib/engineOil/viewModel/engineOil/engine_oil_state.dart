@@ -5,25 +5,25 @@ abstract class EngineOilState {}
 
 class EngineOilInitial extends EngineOilState {}
 
-class CarMadesLoading extends EngineOilState {}
+class EngineOilCarMadesLoading extends EngineOilState {}
 
-class CarEngineError extends EngineOilState {
-  CarEngineError({this.message});
+class OilCarEngineError extends EngineOilState {
+  OilCarEngineError({this.message});
   final String? message;
 }
 
-class CarEngineDone extends EngineOilState {}
+class OilCarEngineDone extends EngineOilState {}
 
-class CarModelsLoading extends EngineOilState {}
+class OilCarModelsLoading extends EngineOilState {}
 
-class CarModelsError extends EngineOilState {
-  CarModelsError({this.message});
+class OilCarModelsError extends EngineOilState {
+  OilCarModelsError({this.message});
   final String? message;
 }
 
-class CarModelsDone extends EngineOilState {}
+class OilCarModelsDone extends EngineOilState {}
 
-class CarEngineLoading extends EngineOilState {}
+class OilCarEngineLoading extends EngineOilState {}
 
 class CarMadesError extends EngineOilState {
   CarMadesError({this.message});

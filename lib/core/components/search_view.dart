@@ -53,7 +53,7 @@ class SearchView extends StatelessWidget {
                 state is SearchCarMadesLoading
                     ? const LoaderWidget()
                     : SearchableDropDownWidget(
-                        key: ValueKey(searchCubit.carMadesEnglish.length),
+                        // key: ValueKey(searchCubit.carMadesEnglish.length),
                         enabled: searchCubit.carMadesEnglish.isNotEmpty,
                         initialValue: searchCubit.selectedCarMadesItem == null
                             ? null

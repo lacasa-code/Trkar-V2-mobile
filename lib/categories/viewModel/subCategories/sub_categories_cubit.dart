@@ -49,6 +49,7 @@ class SubCategoriesCubit extends Cubit<SubCategoriesState> {
       context,
       parentId: id ?? parentId,
     );
+    
     if (name != null) {
       categoryName = name;
     }

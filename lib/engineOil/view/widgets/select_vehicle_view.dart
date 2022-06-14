@@ -42,7 +42,7 @@ class SelectVehicleView extends StatelessWidget {
                 ),
               ),
             ),
-            state is CarMadesLoading
+            state is EngineOilCarMadesLoading
                 ? const LoaderWidget()
                 : SearchableDropDownWidget(
                     enabled: engineOilCubit.carMadesEnglish.isNotEmpty,
@@ -68,7 +68,7 @@ class SelectVehicleView extends StatelessWidget {
                           engineOilCubit.carMadesEnglish[index].name ?? '',
                     ),
                   ),
-            state is CarModelsLoading
+            state is OilCarModelsLoading
                 ? const LoaderWidget()
                 : SearchableDropDownWidget(
                     enabled: engineOilCubit.carModels.isNotEmpty,
@@ -94,7 +94,7 @@ class SelectVehicleView extends StatelessWidget {
                       (index) => engineOilCubit.carModels[index].name ?? '',
                     ),
                   ),
-            state is CarEngineLoading
+            state is OilCarEngineLoading
                 ? const LoaderWidget()
                 : SearchableDropDownWidget(
                     enabled: engineOilCubit.carEngines.isNotEmpty,

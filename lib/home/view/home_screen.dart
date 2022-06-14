@@ -277,6 +277,7 @@ class _HomeScreenState extends State<HomeScreen>
                                           context.read<SubCategoriesCubit>();
                                       subCat.categoryName = cat.name;
                                       subCat.parentId = cat.id;
+
                                       // NavigationService.push(
                                       //   page: SubCategoriesScreen
                                       //       .routeName,
@@ -292,10 +293,12 @@ class _HomeScreenState extends State<HomeScreen>
                                         // );
                                         log('m');
                                         context.navigateTo(
-                                          const route.CategoriesRouter(
+                                          route.CategoriesRouter(
                                             children: [
-                                              route.CategoriesScreen(),
-                                              route.EngineOilScreen(),
+                                              const route.CategoriesScreen(),
+                                              route.EngineOilScreen(
+                                                  categoryId:
+                                                      cat.id.toString()),
                                             ],
                                           ),
                                         );
@@ -315,6 +318,32 @@ class _HomeScreenState extends State<HomeScreen>
                                           ),
                                         );
                                         return;
+                                      }
+                                      if (cat.slug == 'filters') {
+                                        context.navigateTo(
+                                          route.CategoriesRouter(
+                                            children: [
+                                              const route.CategoriesScreen(),
+                                              route.FilterRouter(
+                                                categoryName: cat.name,
+                                                parentId: cat.id.toString(),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }
+                                      if (cat.slug == 'brakes') {
+                                        context.navigateTo(
+                                          route.CategoriesRouter(
+                                            children: [
+                                              const route.CategoriesScreen(),
+                                              route.BrakesRouter(
+                                                parentId: cat.id.toString(),
+                                                categoryName: cat.name,
+                                              ),
+                                            ],
+                                          ),
+                                        );
                                       }
                                       if (cat.slug == 'tyres') {
                                         context.navigateTo(

@@ -7,6 +7,8 @@ import 'package:trkar/core/components/search_view.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/components/sub_cat_item.dart';
 import 'package:trkar/core/components/home_product_item.dart';
+import 'package:trkar/filters/view/widgets/car_filters_category_view.dart';
+import 'package:trkar/filters/view/widgets/top_filters_sellers.dart';
 import 'package:trkar/search/viewModel/search/search_cubit.dart';
 import '../../core/extensions/string.dart';
 
@@ -46,6 +48,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
   @override
   void initState() {
     searchCubit = context.read<SearchCubit>();
+    context.read<SubCategoriesCubit>().getSubCategories(context);
     super.initState();
   }
 
@@ -66,71 +69,6 @@ class _FiltersScreenState extends State<FiltersScreen> {
             const TopFiltersSellers(),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class CarFiltersSubCategoriesView extends StatelessWidget {
-  const CarFiltersSubCategoriesView({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          'please_choose_filters_category'.translate,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Wrap(
-          children: List.generate(
-            10,
-            (index) => const SubCategoryItem(),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class TopFiltersSellers extends StatelessWidget {
-  const TopFiltersSellers({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const BoxHelper(
-            height: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            child: Text(
-              'top_sellers_filters'.translate,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: List.generate(
-                8,
-                (index) => const ProductItem(),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

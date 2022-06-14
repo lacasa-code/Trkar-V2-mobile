@@ -19,7 +19,7 @@ class EngineOilCubit extends Cubit<EngineOilState> {
     categoryId,
     String? carMadeName,
   }) async {
-    emit(CarMadesLoading());
+    emit(EngineOilCarMadesLoading());
     try {
       _carModels?.clear();
 
@@ -52,7 +52,7 @@ class EngineOilCubit extends Cubit<EngineOilState> {
     context, {
     carMadeId,
   }) async {
-    emit(CarModelsLoading());
+    emit(OilCarModelsLoading());
     try {
       _carEngines?.clear();
       var carYearsData = await CarModelsRepo.getCarModels(
@@ -60,7 +60,7 @@ class EngineOilCubit extends Cubit<EngineOilState> {
         carMadeId: carMadeId,
       );
       if (carYearsData == null) {
-        emit(CarEngineError(
+        emit(OilCarEngineError(
           message: 'network'.translate,
         ));
         return;
@@ -68,12 +68,12 @@ class EngineOilCubit extends Cubit<EngineOilState> {
       if (carYearsData.status == true) {
         _carModels = carYearsData.data;
 
-        emit(CarEngineDone());
+        emit(OilCarEngineDone());
       } else {
-        emit(CarEngineError(message: 'something_wrong'.translate));
+        emit(OilCarEngineError(message: 'something_wrong'.translate));
       }
     } on LaravelException catch (error) {
-      emit(CarEngineError(
+      emit(OilCarEngineError(
         message: error.exception,
       ));
     }
@@ -83,14 +83,14 @@ class EngineOilCubit extends Cubit<EngineOilState> {
     context, {
     carModelId,
   }) async {
-    emit(CarEngineLoading());
+    emit(OilCarEngineLoading());
     try {
       var carMadesData = await CarEnginesRepo.getCarEngine(
         context,
         carModelId: carModelId,
       );
       if (carMadesData == null) {
-        emit(CarEngineError(
+        emit(OilCarEngineError(
           message: 'network'.translate,
         ));
         return;
@@ -98,12 +98,12 @@ class EngineOilCubit extends Cubit<EngineOilState> {
       if (carMadesData.status == true) {
         _carEngines = carMadesData.data;
 
-        emit(CarEngineDone());
+        emit(OilCarEngineDone());
       } else {
-        emit(CarEngineError(message: 'something_wrong'.translate));
+        emit(OilCarEngineError(message: 'something_wrong'.translate));
       }
     } on LaravelException catch (error) {
-      emit(CarEngineError(
+      emit(OilCarEngineError(
         message: error.exception,
       ));
     }

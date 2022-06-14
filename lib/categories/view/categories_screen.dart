@@ -34,7 +34,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   @override
   void initState() {
     categoriesCubit = BlocProvider.of<CategoriesCubit>(context)
-      ..getCategories(context)..getAllCategories(context);
+      ..getCategories(context)
+      ..getAllCategories(context);
     super.initState();
   }
 
@@ -179,7 +180,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                         }
                         if (cat.slug == 'brakes') {
                           context.router.push(
-                            route.BrakesRouter(),
+                            route.BrakesRouter(
+                              parentId: cat.id.toString(),
+                              categoryName: cat.name,
+                            ),
                           );
                         }
                         if (cat.slug == 'car-accessories') {
