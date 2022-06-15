@@ -20,7 +20,9 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
     return Scaffold(
       key: scaffoldKey,
       extendBodyBehindAppBar: true,
-      drawer: VendorDrawer(),
+      drawer: VendorDrawer(
+        context: context,
+      ),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,

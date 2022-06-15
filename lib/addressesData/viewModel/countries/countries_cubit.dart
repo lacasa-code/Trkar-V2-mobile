@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import '../../model/country_model.dart';
@@ -73,7 +75,9 @@ class AddressDataCubit extends Cubit<AddressDataState> {
   }
 
   Country? getCountryById(int countryId) {
-    return countries.firstWhere((element) => element.id == countryId);
+    log('countryId => $countryId');
+    return countries.firstWhere((element) => element.id == countryId,
+        orElse: () => Country());
   }
 
   City? getCityById(int cityId) {

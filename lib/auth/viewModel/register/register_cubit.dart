@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
@@ -85,21 +86,21 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   Future<void> _registerVendor(BuildContext context) async {
     emit(RegisterLoading());
-    context.router.push(
-      EmailVerficationRouter(
-        stateOfVerfication: 1,
-        phoneNumber: phoneController.text,
-      ),
-    );
-    return;
+    // context.router.push(
+    //   EmailVerficationRouter(
+    //     stateOfVerfication: 1,
+    //     phoneNumber: phoneController.text,
+    //   ),
+    // );
+    // return;
 
     var registerData = await VendorRegisterRepo.registerVendor(
       context,
       body: {
-        'name': usernameController.text,
+        'username': usernameController.text,
         'email': emailController.text,
         'password': passwordController.text,
-        'password_confirmation': passwordConfirmationController.text,
+        'phone': phoneController.text,
       },
     );
     if (registerData == null) {
@@ -111,25 +112,35 @@ class RegisterCubit extends Cubit<RegisterState> {
       emit(RegisterNetworkError());
       return;
     }
-    if (registerData.statusCode == 200) {
+    if (registerData.status == true) {
       emit(RegisterDone());
       Fluttertoast.showToast(msg: registerData.message ?? '');
-      context.router.push(
-        EmailVerficationRouter(),
+      // context.router.push(
+      //   EmailVerficationRouter(),
+      // );
+      context.router.pushAndPopUntil(
+        const LoginRouter(),
+        predicate: (r) => false,
       );
     } else {
       String errorMessage = '';
-      if (registerData.errors?.name != null) {
-        errorMessage += registerData.errors!.name!.first;
+
+      if (registerData.errorMessages?.username != null) {
+        errorMessage += registerData.errorMessages!.username!.first;
       }
-      if (registerData.errors?.email != null) {
+      if (registerData.errorMessages?.email != null) {
         errorMessage +=
-            '${errorMessage.isNotEmpty ? '\n ' : ''}${registerData.errors!.email!.first}';
+            '${errorMessage.isNotEmpty ? '\n ' : ''}${registerData.errorMessages!.email!.first}';
       }
-      if (registerData.errors?.password != null) {
+      if (registerData.errorMessages?.password != null) {
         errorMessage +=
-            '${errorMessage.isNotEmpty ? '\n ' : ''}${registerData.errors!.password!.first}';
+            '${errorMessage.isNotEmpty ? '\n ' : ''}${registerData.errorMessages!.password!.first}';
       }
+      if (registerData.errorMessages?.phone != null) {
+        errorMessage +=
+            '${errorMessage.isNotEmpty ? '\n ' : ''}${registerData.errorMessages!.phone!.first}';
+      }
+
       emit(RegisterError());
       _dialog.showWarningDialog(
         context: context,

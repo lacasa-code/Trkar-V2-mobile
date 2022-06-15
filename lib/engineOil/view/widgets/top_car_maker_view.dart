@@ -34,6 +34,7 @@ class TopCarMakerView extends StatelessWidget {
               child: Wrap(
                 runSpacing: ScreenUtil().setHeight(20),
                 spacing: ScreenUtil().setWidth(30),
+                alignment: WrapAlignment.center,
                 children: List.generate(
                   filterCubit.categoriesManufacturers.length,
                   (index) {

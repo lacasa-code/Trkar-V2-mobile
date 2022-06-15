@@ -310,10 +310,12 @@ class _HomeScreenState extends State<HomeScreen>
                                       if (cat.slug == 'tools-equipment') {
                                         // NavigationService.push(page: ToolsScreen.routeName);
                                         context.navigateTo(
-                                          const route.CategoriesRouter(
+                                          route.CategoriesRouter(
                                             children: [
-                                              route.CategoriesScreen(),
-                                              route.ToolsScreen(),
+                                              const route.CategoriesScreen(),
+                                              route.ToolsScreen(
+                                                categoryId: cat.id.toString(),
+                                              ),
                                             ],
                                           ),
                                         );

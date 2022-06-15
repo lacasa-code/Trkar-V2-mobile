@@ -53,7 +53,7 @@ class SearchView extends StatelessWidget {
                 state is SearchCarMadesLoading
                     ? const LoaderWidget()
                     : SearchableDropDownWidget(
-                        // key: ValueKey(searchCubit.carMadesEnglish.length),
+                        key: ValueKey(searchCubit.carMadesEnglish.length + 1),
                         enabled: searchCubit.carMadesEnglish.isNotEmpty,
                         initialValue: searchCubit.selectedCarMadesItem == null
                             ? null
@@ -92,7 +92,7 @@ class SearchView extends StatelessWidget {
                           bottom: MediaQuery.of(context).viewInsets.bottom,
                         ),
                         child: SearchableDropDownWidget(
-                          key: ValueKey(searchCubit.carModels.length),
+                          key: ValueKey(searchCubit.carModels.length + 3),
                           enabled: searchCubit.carModels.isNotEmpty,
                           onChanged: (v) {
                             if (v == null) {
@@ -120,7 +120,7 @@ class SearchView extends StatelessWidget {
                 state is SearchCarEngineLoading
                     ? const LoaderWidget()
                     : SearchableDropDownWidget(
-                        key: ValueKey(searchCubit.carEngines.length),
+                        key: ValueKey(searchCubit.carEngines.length + 2),
                         enabled: searchCubit.carEngines.isNotEmpty,
                         onChanged: (v) {},
                         labelText: 'car_engine',

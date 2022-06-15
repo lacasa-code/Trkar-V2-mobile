@@ -3,10 +3,13 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:trkar/auth/view/login_screen.dart';
 import 'package:trkar/auth/viewModel/validateToken/validate_token_cubit.dart';
 import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
+import 'package:trkar/core/router/router.gr.dart';
 import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
 import 'package:trkar/tab/view/tab_screen.dart';
 
@@ -20,12 +23,15 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 3), () async{
-   
-       await context.read<ValidateTokenCubit>().validateToken(context);
-       
-      
-    
+    Future.delayed(const Duration(seconds: 3), () async {
+      if (GetStorage().hasData('vendor')) {
+        context.router.pushAndPopUntil(
+          const VendorHomeRouter(),
+          predicate: (predicate) => false,
+        );
+      } else {
+        await context.read<ValidateTokenCubit>().validateToken(context);
+      }
     });
     super.initState();
   }

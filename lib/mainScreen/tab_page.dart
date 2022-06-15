@@ -81,6 +81,8 @@ class _TabPageState extends State<TabPage> {
             return;
           }
           tabRouter.setActiveIndex(index);
+          tabRouter.current.router.popTop();
+          // log();
         },
         selectedItemColor: Theme.of(context).primaryColor,
         unselectedItemColor: Colors.grey,

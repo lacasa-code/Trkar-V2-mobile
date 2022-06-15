@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/core/router/router.gr.dart';
 import './vendor_drawer_item.dart';
 
 class VendorDrawer extends StatelessWidget {
   const VendorDrawer({
     Key? key,
+    required this.context,
   }) : super(key: key);
+  final BuildContext context;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +69,14 @@ class VendorDrawer extends StatelessWidget {
             ),
             VendorDrawerItem(
               title: 'logout',
-              onPressed: () {},
+              onPressed: () async {
+                context.router.pop();
+                await Helper.clearVendorData();
+                this.context.router.pushAndPopUntil(
+                  const TabRoute(),
+                  predicate: (r) => false,
+                );
+              },
               icons: Icons.exit_to_app,
             ),
           ],

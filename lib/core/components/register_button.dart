@@ -36,10 +36,19 @@ class RegisterButton extends StatelessWidget {
           label: FittedBox(
             child: Text(
               title.translate,
-              style: MainTheme.buttonStyle,
+              style: color == Colors.white
+                  ? MainTheme.buttonStyle.copyWith(
+                      color: Theme.of(context).primaryColor,
+                    )
+                  : MainTheme.buttonStyle,
             ),
           ),
           style: ButtonStyle(
+            side: MaterialStateProperty.all(
+              BorderSide(
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
             backgroundColor: MaterialStateProperty.all<Color>(
                 color ?? Theme.of(context).primaryColor),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(

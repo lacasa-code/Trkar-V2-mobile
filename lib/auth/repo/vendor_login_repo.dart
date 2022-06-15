@@ -1,19 +1,17 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 
-import '../model/vendor_register_model.dart';
 import '../../core/helper/network_utils.dart';
+import '../model/vendor_register_model.dart';
 
-class VendorRegisterRepo {
-  static Future<VendorAuthModel?> registerVendor(
+class VendorLoginRepo {
+  static Future<VendorAuthModel?> loginVendor(
     context, {
     required Map<String, dynamic> body,
   }) async {
     final _util = NetworkUtil();
 
     var response = await _util.post(
-      'vendor/register',
+      'vendor/login',
       context: context,
       withHeader: true,
       body: FormData.fromMap(body),
@@ -21,10 +19,8 @@ class VendorRegisterRepo {
     if (response == null) {
       return null;
     }
-    dynamic data = response.data.runtimeType == String
-        ? jsonDecode(response.data)
-        : response.data;
-    var model = VendorAuthModel.fromJson(data);
+    var model = VendorAuthModel.fromJson(response.data);
+
     return model;
   }
 }

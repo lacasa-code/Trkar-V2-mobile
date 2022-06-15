@@ -100,6 +100,8 @@ class _MyAppState extends State<MyApp> {
           // Notice that the counter didn't reset back to zero; the application
           // is not restarted.
           primaryColor: Colors.orangeAccent,
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
         ),
         locale: localization.locale,
         supportedLocales: localization.supportedLocales(),

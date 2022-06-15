@@ -69,9 +69,9 @@ class CategoriesCubit extends Cubit<CategoriesState> {
     // motorcycle parts ..
     519,
     33,
-    536,
-    36,
-    32,
+    7,
+    2230,
+    2182,
     513,
     // e-mobility .. .. ..
   ];

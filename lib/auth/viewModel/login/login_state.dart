@@ -11,4 +11,6 @@ class LoginError extends LoginState {}
 
 class LoginDone extends LoginState {}
 
+class VisibilityChanged extends LoginState {}
+
 class LoginNetworkError extends LoginState {}

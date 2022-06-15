@@ -64,7 +64,7 @@ class _EngineOilScreenState extends State<EngineOilScreen> {
     engineOilCubit = context.read<EngineOilCubit>()
       ..getCarMades(
         context,
-        categoryId: widget.categoryId,
+        // categoryId: widget.categoryId,
       );
     filterCarsCubit = context.read<FilterCarsCubit>()
       ..getManufacturer(

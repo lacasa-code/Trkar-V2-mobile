@@ -160,8 +160,21 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                         if (cat.slug == 'tools-equipment') {
                           // NavigationService.push(page: ToolsScreen.routeName);
                           context.router.push(
-                            const route.ToolsScreen(),
+                            route.ToolsScreen(
+                              categoryId: cat.id.toString(),
+                            ),
                           );
+                          return;
+                        }
+                        if (cat.slug == 'engine-oil') {
+                          // NavigationService.push(
+                          //   page: EngineOilScreen.routeName,
+                          // );
+                          context.router.push(
+                            route.EngineOilScreen(
+                                categoryId: cat.id.toString()),
+                          );
+                          return;
                         }
                         if (cat.slug == 'tyres') {
                           context.router.push(
@@ -169,6 +182,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                               tabIndex: cat.id,
                             ),
                           );
+                          return;
                         }
                         if (cat.slug == 'filters') {
                           context.router.push(
@@ -177,6 +191,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                               parentId: cat.id.toString(),
                             ),
                           );
+                          return;
                         }
                         if (cat.slug == 'brakes') {
                           context.router.push(
@@ -185,6 +200,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                               categoryName: cat.name,
                             ),
                           );
+                          return;
                         }
                         if (cat.slug == 'car-accessories') {
                           // NavigationService.push(

@@ -4,26 +4,37 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:trkar/auth/view/widgets/auth_choose_type_dialog.dart';
 import 'package:trkar/core/components/custom_new_dialog.dart';
 import 'package:trkar/core/helper/helper.dart';
 import '../../../core/router/router.gr.dart';
 import '../../../core/extensions/string.dart';
 import '../../repo/login_repo.dart';
+import '../../repo/vendor_login_repo.dart';
 
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit() : super(LoginInitial());
 
-  Future<void> login(BuildContext context) async {
+  Future<void> login(
+    BuildContext context,
+    GlobalKey<FormState> formKey, {
+    required bool isUserRegistered,
+  }) async {
     FocusManager.instance.primaryFocus?.unfocus();
 
-    var dialog = CustomDialog();
     var validate = formKey.currentState!.validate();
 
     if (!validate) {
       return;
     }
+    isUserRegistered ? _loginUser(context) : _loginVendor(context);
+  }
+
+  Future<void> _loginUser(BuildContext context) async {
+    var dialog = CustomDialog();
+
     emit(LoginLoading());
 
     var loginData = await LoginRepo.loginUser(
@@ -74,9 +85,68 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
-  final formKey = GlobalKey<FormState>();
+  Future<void> _loginVendor(BuildContext context) async {
+    var dialog = CustomDialog();
+
+    emit(LoginLoading());
+
+    var loginData = await VendorLoginRepo.loginVendor(
+      context,
+      body: {
+        'email': emailController.text,
+        'password': passwordController.text,
+      },
+    );
+    if (loginData == null) {
+      dialog.showWarningDialog(
+        context: context,
+        btnOnPress: () {},
+        msg: 'network'.translate,
+      );
+      emit(LoginNetworkError());
+      return;
+    }
+    if (loginData.status == true) {
+      Fluttertoast.showToast(
+        msg: loginData.message ?? '',
+      );
+      await Helper.storeNewVendorData(loginData);
+      context.router.pushAndPopUntil(
+        const VendorHomeRouter(),
+        predicate: (_) => false,
+      );
+      emit(LoginDone());
+    } else {
+      var errorMessage = '';
+      if (loginData.errorMessages != null) {
+        if (loginData.errorMessages?.username != null) {
+          errorMessage += loginData.errorMessages!.username!.first;
+        }
+        if (loginData.errorMessages?.email != null) {
+          errorMessage +=
+              '${errorMessage.isNotEmpty ? '\n ' : ''}${loginData.errorMessages!.email!.first}';
+        }
+        if (loginData.errorMessages?.password != null) {
+          errorMessage +=
+              '${errorMessage.isNotEmpty ? '\n ' : ''}${loginData.errorMessages!.password!.first}';
+        }
+      } else {
+        errorMessage = loginData.message ?? '';
+      }
+      dialog.showWarningDialog(
+        context: context,
+        msg: errorMessage,
+        btnOnPress: () {},
+      );
+      emit(LoginError());
+    }
+  }
+
+  bool _securePassword = true;
+
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
+  bool get securePassword => _securePassword;
 
   String? emailValidator(String? v) {
     if (v!.isEmpty) {
@@ -100,5 +170,10 @@ class LoginCubit extends Cubit<LoginState> {
     emailController.dispose();
     passwordController.dispose();
     return super.close();
+  }
+
+  void changeVisibility() {
+    _securePassword = !_securePassword;
+    emit(VisibilityChanged());
   }
 }

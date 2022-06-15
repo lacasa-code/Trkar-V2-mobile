@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:get_storage/get_storage.dart';
 import 'package:trkar/auth/model/register_model.dart';
+import 'package:trkar/auth/model/vendor_register_model.dart';
 
 import './app_localization.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,34 @@ class Helper {
     );
   }
 
+  static Future<void> storeNewVendorData(
+    VendorAuthModel authModel,
+  ) async {
+    await GetStorage().write(
+      'vendor',
+      jsonEncode(
+        authModel.toJson(),
+      ),
+    );
+    // var tokenExpiresDate = DateTime.now().add(
+    //   Duration(milliseconds: authModel.data. ?? 0),
+    // );
+    // await GetStorage().write(
+    //   'expires_in',
+    //   tokenExpiresDate.toIso8601String(),
+    // );
+  }
+
+  static Future<void> clearVendorData() async {
+    var getStorage = GetStorage();
+    await getStorage.remove(
+      'vendor',
+    );
+
+    // await getStorage.remove(
+    //   'expires_in',
+    // );
+  }
   static Future<void> clearUserData() async {
     var getStorage = GetStorage();
     await getStorage.remove(
@@ -52,4 +81,3 @@ class Helper {
     );
   }
 }
-

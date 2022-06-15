@@ -205,8 +205,13 @@ class AppRouter extends _i14.RootStackRouter {
               child: _i24.TyresScreen(key: args.key, tabIndex: args.tabIndex)));
     },
     ToolsScreen.name: (routeData) {
+      final args = routeData.argsAs<ToolsScreenArgs>(
+          orElse: () => const ToolsScreenArgs());
       return _i14.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i25.ToolsScreen());
+          routeData: routeData,
+          child: _i14.WrappedRoute(
+              child: _i25.ToolsScreen(
+                  key: args.key, categoryId: args.categoryId)));
     },
     BrakesRouter.name: (routeData) {
       final args = routeData.argsAs<BrakesRouterArgs>(
@@ -705,10 +710,26 @@ class TyresScreenArgs {
 
 /// generated route for
 /// [_i25.ToolsScreen]
-class ToolsScreen extends _i14.PageRouteInfo<void> {
-  const ToolsScreen() : super(ToolsScreen.name, path: 'tools');
+class ToolsScreen extends _i14.PageRouteInfo<ToolsScreenArgs> {
+  ToolsScreen({_i41.Key? key, String? categoryId})
+      : super(ToolsScreen.name,
+            path: 'tools',
+            args: ToolsScreenArgs(key: key, categoryId: categoryId));
 
   static const String name = 'ToolsScreen';
+}
+
+class ToolsScreenArgs {
+  const ToolsScreenArgs({this.key, this.categoryId});
+
+  final _i41.Key? key;
+
+  final String? categoryId;
+
+  @override
+  String toString() {
+    return 'ToolsScreenArgs{key: $key, categoryId: $categoryId}';
+  }
 }
 
 /// generated route for

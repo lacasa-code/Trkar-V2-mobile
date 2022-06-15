@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:trkar/carAccessories/view/widgets/car_accessories_subcategories_view.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
 import 'package:trkar/core/components/search_app_bar.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
@@ -176,32 +177,6 @@ class AccessoriesBrandView extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class CarAccessoriesSubCategoriesView extends StatelessWidget {
-  const CarAccessoriesSubCategoriesView({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          'car_accessories_categories'.translate,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Wrap(
-          children: List.generate(
-            10,
-            (index) => const SubCategoryItem(),
-          ),
-        ),
-      ],
     );
   }
 }

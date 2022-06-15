@@ -1,25 +1,48 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
 import 'package:trkar/core/components/search_app_bar.dart';
-import 'package:trkar/core/components/sized_box_helper.dart';
-import 'package:trkar/core/components/sub_cat_item.dart';
-import 'package:trkar/core/helper/navigator.dart';
-import 'package:trkar/core/components/home_product_item.dart';
 import 'package:trkar/home/view/widgets/my_drawer.dart';
 import 'package:trkar/tools/view/widgets/best_price_view.dart';
 import 'package:trkar/tools/view/widgets/popular_tools_view.dart';
 import 'package:trkar/tools/view/widgets/tools_online_stores_view.dart';
 import 'package:trkar/tools/view/widgets/tools_top_brands_view.dart';
-import '.././../core/extensions/string.dart';
 
-class ToolsScreen extends StatefulWidget {
-  const ToolsScreen({Key? key}) : super(key: key);
+class ToolsScreen extends StatefulWidget implements AutoRouteWrapper {
+  const ToolsScreen({
+    Key? key,
+    this.categoryId,
+  }) : super(key: key);
+  final String? categoryId;
   static const routeName = '/tools-screen';
 
   @override
   State<ToolsScreen> createState() => _ToolsScreenState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    // TODO: implement wrappedRoute
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => SubCategoriesCubit(
+            parentId: categoryId,
+          ),
+        ),
+      ],
+      child: this,
+    );
+  }
 }
 
 class _ToolsScreenState extends State<ToolsScreen> {
+  @override
+  void initState() {
+    context.read<SubCategoriesCubit>().getSubCategories(context);
+    super.initState();
+  }
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -60,4 +83,3 @@ class _ToolsScreenState extends State<ToolsScreen> {
     );
   }
 }
-

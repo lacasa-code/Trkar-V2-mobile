@@ -1,39 +1,57 @@
 // To parse this JSON data, do
 //
-//     final vendorRegisterModel = vendorRegisterModelFromJson(jsonString);
+//     final vendorAuthModel = vendorAuthModelFromJson(jsonString);
 
 import 'dart:convert';
 
-VendorRegisterModel vendorRegisterModelFromJson(String str) =>
-    VendorRegisterModel.fromJson(json.decode(str));
+VendorAuthModel vendorAuthModelFromJson(String str) =>
+    VendorAuthModel.fromJson(json.decode(str));
 
-String vendorRegisterModelToJson(VendorRegisterModel data) =>
+String vendorAuthModelToJson(VendorAuthModel data) =>
     json.encode(data.toJson());
 
-class VendorRegisterModel {
-  VendorRegisterModel({
-    this.statusCode,
+class VendorAuthModel {
+  VendorAuthModel({
+    this.status,
     this.message,
+    this.code,
+    this.accessToken,
+    this.tokenType,
     this.data,
-    this.errors,
+    this.errorMessages,
   });
 
-  int? statusCode;
+  bool? status;
   String? message;
+  Message? errorMessages;
+  int? code;
+  String? accessToken;
+  String? tokenType;
   Data? data;
-  Errors? errors;
 
-  factory VendorRegisterModel.fromJson(Map<String, dynamic> json) =>
-      VendorRegisterModel(
-        statusCode: json["status_code"],
-        message: json["message"],
-        data: Data.fromJson(json["data"] ?? {}),
-        errors: Errors.fromJson(json["errors"] ?? {}),
+  factory VendorAuthModel.fromJson(Map<String, dynamic> json) =>
+      VendorAuthModel(
+        status: json["status"],
+        message:
+            json["message"].runtimeType != String || json["message"] == null
+                ? null
+                : json["message"],
+        code: json["code"],
+        accessToken: json["access_token"],
+        tokenType: json["token_type"],
+        errorMessages:
+            json["message"].runtimeType == String || json["message"] == null
+                ? null
+                : Message.fromJson(json["message"]),
+        data: json["data"] == null ? null : Data.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "status_code": statusCode,
+        "status": status,
         "message": message,
+        "code": code,
+        "access_token": accessToken,
+        "token_type": tokenType,
         "data": data?.toJson(),
       };
 }
@@ -41,206 +59,155 @@ class VendorRegisterModel {
 class Data {
   Data({
     this.id,
-    this.name,
+    this.uuid,
+    this.username,
     this.email,
     this.emailVerifiedAt,
-    this.lastName,
-    this.phoneNo,
-    this.birthdate,
-    this.gender,
-    this.token,
+    this.phone,
+    this.phoneVerifiedAt,
+    this.countryId,
+    this.cityId,
+    this.areaId,
+    this.address,
+    this.longitude,
+    this.latitude,
+    this.bankAccount,
+    this.commercialNumber,
+    this.taxCardNumber,
+    this.notes,
+    this.approved,
+    this.lastLogin,
+    this.inBlock,
+    this.deletedAt,
     this.createdAt,
-    this.roles,
-    this.vendorDetails,
+    this.updatedAt,
+    this.otp,
   });
 
   int? id;
-  String? name;
+  dynamic uuid;
+  String? username;
   String? email;
   dynamic emailVerifiedAt;
-  dynamic lastName;
-  dynamic phoneNo;
-  dynamic birthdate;
-  dynamic gender;
-  String? token;
+  String? phone;
+  dynamic phoneVerifiedAt;
+  dynamic countryId;
+  dynamic cityId;
+  dynamic areaId;
+  dynamic address;
+  dynamic longitude;
+  dynamic latitude;
+  dynamic bankAccount;
+  dynamic commercialNumber;
+  dynamic taxCardNumber;
+  dynamic notes;
+  String? approved;
+  DateTime? lastLogin;
+  dynamic inBlock;
+  dynamic deletedAt;
   DateTime? createdAt;
-  List<Role>? roles;
-  VendorDetails? vendorDetails;
+  DateTime? updatedAt;
+  dynamic otp;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         id: json["id"],
-        name: json["name"],
+        uuid: json["uuid"],
+        username: json["username"],
         email: json["email"],
         emailVerifiedAt: json["email_verified_at"],
-        lastName: json["last_name"],
-        phoneNo: json["phone_no"],
-        birthdate: json["birthdate"],
-        gender: json["gender"],
-        token: json["token"],
-        createdAt: DateTime.parse(json["created_at"] ?? ''),
-        roles: json["roles"] == null
-            ? []
-            : List<Role>.from(json["roles"].map((x) => Role.fromJson(x))),
-        vendorDetails: VendorDetails.fromJson(json["vendor_details"] ?? {}),
+        phone: json["phone"],
+        phoneVerifiedAt: json["phone_verified_at"],
+        countryId: json["country_id"],
+        cityId: json["city_id"],
+        areaId: json["area_id"],
+        address: json["address"],
+        longitude: json["longitude"],
+        latitude: json["latitude"],
+        bankAccount: json["bank_account"],
+        commercialNumber: json["commercial_number"],
+        taxCardNumber: json["tax_card_number"],
+        notes: json["notes"],
+        approved: json["approved"],
+        lastLogin: json["last_login"] == null
+            ? null
+            : DateTime.parse(json["last_login"]),
+        inBlock: json["in_block"],
+        deletedAt: json["deleted_at"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
+        otp: json["otp"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "name": name,
+        "uuid": uuid,
+        "username": username,
         "email": email,
         "email_verified_at": emailVerifiedAt,
-        "last_name": lastName,
-        "phone_no": phoneNo,
-        "birthdate": birthdate,
-        "gender": gender,
-        "token": token,
-        "created_at": createdAt?.toIso8601String(),
-        "roles": roles == null
-            ? []
-            : List<dynamic>.from(roles!.map((x) => x.toJson())),
-        "vendor_details": vendorDetails?.toJson(),
-      };
-}
-
-class Role {
-  Role({
-    this.id,
-    this.title,
-    this.createdAt,
-  });
-
-  int? id;
-  String? title;
-  DateTime? createdAt;
-
-  factory Role.fromJson(Map<String, dynamic> json) => Role(
-        id: json["id"],
-        title: json["title"],
-        createdAt: DateTime.parse(json["created_at"] ?? ''),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "title": title,
-        "created_at": createdAt?.toIso8601String(),
-      };
-}
-
-class VendorDetails {
-  VendorDetails({
-    this.email,
-    this.lang,
-    this.commercialNo,
-    this.taxCardNo,
-    this.commercialDoc,
-    this.taxCardDoc,
-    this.bankAccount,
-    this.vendorName,
-    this.useridId,
-    this.type,
-    this.updatedAt,
-    this.createdAt,
-    this.id,
-    this.images,
-    this.commercialDocs,
-    this.taxCardDocs,
-    this.wholesaleDocs,
-    this.bankDocs,
-    this.vendorStatus,
-    this.media,
-  });
-
-  String? email;
-  String? lang;
-  dynamic commercialNo;
-  dynamic taxCardNo;
-  dynamic commercialDoc;
-  dynamic taxCardDoc;
-  dynamic bankAccount;
-  String? vendorName;
-  int? useridId;
-  int? type;
-  DateTime? updatedAt;
-  DateTime? createdAt;
-  int? id;
-  dynamic images;
-  dynamic commercialDocs;
-  dynamic taxCardDocs;
-  dynamic wholesaleDocs;
-  dynamic bankDocs;
-  String? vendorStatus;
-  List<dynamic>? media;
-
-  factory VendorDetails.fromJson(Map<String, dynamic> json) => VendorDetails(
-        email: json["email"],
-        lang: json["lang"],
-        commercialNo: json["commercial_no"],
-        taxCardNo: json["tax_card_no"],
-        commercialDoc: json["commercial_doc"],
-        taxCardDoc: json["tax_card_doc"],
-        bankAccount: json["bank_account"],
-        vendorName: json["vendor_name"],
-        useridId: json["userid_id"],
-        type: json["type"],
-        updatedAt: DateTime.parse(json["updated_at"] ?? ''),
-        createdAt: DateTime.parse(json["created_at"] ?? ''),
-        id: json["id"],
-        images: json["images"],
-        commercialDocs: json["commercialDocs"],
-        taxCardDocs: json["taxCardDocs"],
-        wholesaleDocs: json["wholesaleDocs"],
-        bankDocs: json["bankDocs"],
-        vendorStatus: json["vendorStatus"],
-        media: json["media"] == null
-            ? []
-            : List<dynamic>.from(json["media"].map((x) => x)),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "email": email,
-        "lang": lang,
-        "commercial_no": commercialNo,
-        "tax_card_no": taxCardNo,
-        "commercial_doc": commercialDoc,
-        "tax_card_doc": taxCardDoc,
+        "phone": phone,
+        "phone_verified_at": phoneVerifiedAt,
+        "country_id": countryId,
+        "city_id": cityId,
+        "area_id": areaId,
+        "address": address,
+        "longitude": longitude,
+        "latitude": latitude,
         "bank_account": bankAccount,
-        "vendor_name": vendorName,
-        "userid_id": useridId,
-        "type": type,
-        "updated_at": updatedAt?.toIso8601String(),
+        "commercial_number": commercialNumber,
+        "tax_card_number": taxCardNumber,
+        "notes": notes,
+        "approved": approved,
+        "last_login": lastLogin?.toIso8601String(),
+        "in_block": inBlock,
+        "deleted_at": deletedAt,
         "created_at": createdAt?.toIso8601String(),
-        "id": id,
-        "images": images,
-        "commercialDocs": commercialDocs,
-        "taxCardDocs": taxCardDocs,
-        "wholesaleDocs": wholesaleDocs,
-        "bankDocs": bankDocs,
-        "vendorStatus": vendorStatus,
-        "media": media == null ? [] : List<dynamic>.from(media!.map((x) => x)),
+        "updated_at": updatedAt?.toIso8601String(),
+        "otp": otp,
       };
 }
 
-class Errors {
-  Errors({
-    this.name,
+class Message {
+  Message({
+    this.username,
     this.email,
     this.password,
+    this.phone,
   });
 
-  List<String>? name;
+  List<String>? username;
   List<String>? email;
   List<String>? password;
+  List<String>? phone;
 
-  factory Errors.fromJson(Map<String, dynamic> json) => Errors(
-        name: List<String>.from(json["name"].map((x) => x)),
-        email: List<String>.from(json["email"].map((x) => x)),
-        password: List<String>.from(json["password"].map((x) => x)),
+  factory Message.fromJson(Map<String, dynamic> json) => Message(
+        username: json["username"] == null
+            ? null
+            : List<String>.from(json["username"].map((x) => x)),
+        email: json["email"] == null
+            ? null
+            : List<String>.from(json["email"].map((x) => x)),
+        password: json["password"] == null
+            ? null
+            : List<String>.from(json["password"].map((x) => x)),
+        phone: json["phone"] == null
+            ? null
+            : List<String>.from(json["phone"].map((x) => x)),
       );
 
   Map<String, dynamic> toJson() => {
-        "name": name == null ? [] : List<dynamic>.from(name!.map((x) => x)),
-        "email": email == null ? [] : List<dynamic>.from(email!.map((x) => x)),
-        "password":
-            password == null ? [] : List<dynamic>.from(password!.map((x) => x)),
+        "username": username == null
+            ? null
+            : List<dynamic>.from(username!.map((x) => x)),
+        "email":
+            email == null ? null : List<dynamic>.from(email!.map((x) => x)),
+        "password": password == null
+            ? null
+            : List<dynamic>.from(password!.map((x) => x)),
+        "phone":
+            phone == null ? null : List<dynamic>.from(phone!.map((x) => x)),
       };
 }
