@@ -44,6 +44,7 @@ dependencies:
     sdk: flutter
   flutter_phoenix: ^1.0.0
   flutter_screenutil: ^5.4.0
+  flutter_svg: ^0.22.0
   fluttericon: ^2.0.0
   fluttertoast: ^8.0.9
   geocoding: ^2.0.4
@@ -79,6 +80,7 @@ flutter:
     - assets/images/
     - assets/images/manufactorsLogo/
     - assets/icons/
+    - assets/icons/svg/
     - assets/icons/oliBrands/
     - assets/icons/lang/
     - assets/lang/

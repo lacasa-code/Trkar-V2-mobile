@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:trkar/auth/view/widgets/header_widget.dart';
 import 'package:trkar/core/components/register_button.dart';
 import 'package:trkar/core/components/register_field.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
-import 'package:trkar/core/helper/navigator.dart'
-;
+import 'package:trkar/core/extensions/string.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:trkar/core/router/router.gr.dart';
 
@@ -30,8 +30,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               const BoxHelper(
                 height: 80,
               ),
-              Image.asset(
-                'assets/icons/trkarLogoWhite.png',
+              SvgPicture.asset(
+                'assets/icons/svg/login-logo.svg',
                 // alignment: Al,
               ),
               const BoxHelper(
@@ -40,10 +40,28 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               const HeaderWidget(
                 title: 'forget_password',
               ),
+              // RichText(
+              //   text: TextSpan(
+              //     children: [
+              //       TextSpan(
+              //         text: 'dont_worry'.translate,
+              //         style: Theme.of(context).textTheme.bodyText2,
+              //       ),
+              //       TextSpan(),
+              //     ],
+              //   ),
+              // ),
+
               const BoxHelper(
                 height: 20,
               ),
               RegisterField(
+                prefixWithDivider: true,
+                prefixIcon: Icon(
+                  Icons.lock_outline,
+                  color: Theme.of(context).iconTheme.color,
+                ),
+                thinBorder: true,
                 hintText: 'password',
                 obsecureText: securePassword,
                 suffixIcon: IconButton(
@@ -58,6 +76,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 ),
               ),
               RegisterField(
+                prefixWithDivider: true,
+                prefixIcon: Icon(
+                  Icons.lock_outline,
+                  color: Theme.of(context).iconTheme.color,
+                ),
+                thinBorder: true,
                 hintText: 'password_confirmation',
                 obsecureText: securePasswordConfirmation,
                 suffixIcon: IconButton(
@@ -80,7 +104,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 title: 'save',
                 radius: 10,
                 onPressed: () {
-               context.router.pushAndPopUntil(SplashRouter(), predicate: (_)=>false,);
+                  context.router.pushAndPopUntil(
+                    SplashRouter(),
+                    predicate: (_) => false,
+                  );
                 },
               ),
             ],

@@ -86,13 +86,13 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   Future<void> _registerVendor(BuildContext context) async {
     emit(RegisterLoading());
-    // context.router.push(
-    //   EmailVerficationRouter(
-    //     stateOfVerfication: 1,
-    //     phoneNumber: phoneController.text,
-    //   ),
-    // );
-    // return;
+    context.router.push(
+      EmailVerficationRouter(
+        stateOfVerfication: 1,
+        phoneNumber: phoneController.text,
+      ),
+    );
+    return;
 
     var registerData = await VendorRegisterRepo.registerVendor(
       context,

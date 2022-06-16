@@ -1,19 +1,10 @@
-import 'dart:developer';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trkar/auth/view/widgets/auth_choose_type_dialog.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trkar/auth/view/widgets/login_view.dart';
 import 'package:trkar/auth/viewModel/login/login_cubit.dart';
-import 'package:trkar/core/components/or_widget.dart';
-import 'package:trkar/core/components/register_button.dart';
-import 'package:trkar/core/components/register_field.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
-import 'package:trkar/core/helper/navigator.dart';
-import 'package:trkar/core/router/router.gr.dart';
-import 'package:trkar/core/themes/themes.dart';
 import '../../core/extensions/string.dart';
 
 class LoginScreen extends StatefulWidget implements AutoRouteWrapper {
@@ -52,7 +43,6 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   void _onTabChanged() {
-    
     context.read<LoginCubit>()
       ..emailController.clear()
       ..passwordController.clear();
@@ -71,9 +61,9 @@ class _LoginScreenState extends State<LoginScreen>
             onPressed: () {
               context.router.pop();
             },
-            color: Colors.black,
+            color: Theme.of(context).iconTheme.color,
             icon: const Icon(
-              Icons.arrow_back,
+              Icons.arrow_back_ios,
             ),
           ),
         ),
@@ -83,8 +73,8 @@ class _LoginScreenState extends State<LoginScreen>
           const BoxHelper(
             height: 80,
           ),
-          Image.asset(
-            'assets/icons/trkarLogoWhite.png',
+          SvgPicture.asset(
+            'assets/icons/svg/login-logo.svg',
             // alignment: Al,
           ),
           const BoxHelper(
@@ -97,8 +87,7 @@ class _LoginScreenState extends State<LoginScreen>
             child: TabBarView(
               controller: controller,
               children: const [
-                LoginView(
-                ),
+                LoginView(),
                 LoginView(
                   isCustomerRegister: false,
                 ),

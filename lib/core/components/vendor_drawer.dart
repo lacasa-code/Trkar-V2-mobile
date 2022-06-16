@@ -42,8 +42,7 @@ class VendorDrawer extends StatelessWidget {
                   child: Text(
                     'Vendor Name',
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+                        fontWeight: FontWeight.bold, color: Colors.black),
                   ),
                 ),
               ],
@@ -73,9 +72,9 @@ class VendorDrawer extends StatelessWidget {
                 context.router.pop();
                 await Helper.clearVendorData();
                 this.context.router.pushAndPopUntil(
-                  const TabRoute(),
-                  predicate: (r) => false,
-                );
+                      const TabRoute(),
+                      predicate: (r) => false,
+                    );
               },
               icons: Icons.exit_to_app,
             ),

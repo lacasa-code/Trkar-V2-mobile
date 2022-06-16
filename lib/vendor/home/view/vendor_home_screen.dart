@@ -103,6 +103,7 @@ class VendorHomeHeaderItem extends StatelessWidget {
                   child: Text(
                     'Vendor Name',
                     style: const TextStyle(
+                      color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

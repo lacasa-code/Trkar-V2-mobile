@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trkar/core/themes/screen_utility.dart';
 import 'package:trkar/core/extensions/string.dart';
 
@@ -19,14 +20,18 @@ class RegisterField extends StatelessWidget {
     this.maxLength,
     this.onChanged,
     this.formatters,
+    this.prefixIcon,
     this.hideBorder = false,
     this.removePadding = false,
     this.textInputAction,
+    this.prefixWithDivider = false,
     this.enabled = true,
   }) : super(key: key);
   final String? labelText;
   final String? hintText;
   final Widget? suffixIcon;
+  final Widget? prefixIcon;
+  final bool prefixWithDivider;
   final TextInputType? keyboardType;
   final bool obsecureText;
   final bool thinBorder;
@@ -109,6 +114,25 @@ class RegisterField extends StatelessWidget {
                     ),
                   ),
             suffixIcon: suffixIcon,
+            prefixIcon: prefixIcon != null && prefixWithDivider
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: prefixIcon,
+                        ),
+                        Container(
+                          width: ScreenUtil().setWidth(1),
+                          height: ScreenUtil().setHeight(30),
+                          color: Theme.of(context).textTheme.headline2?.color,
+                        ),
+                      ],
+                    ),
+                  )
+                : prefixIcon,
             enabled: enabled),
       ),
     );

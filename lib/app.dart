@@ -99,10 +99,36 @@ class _MyAppState extends State<MyApp> {
           // or simply save your changes to "hot reload" in a Flutter IDE).
           // Notice that the counter didn't reset back to zero; the application
           // is not restarted.
-          primaryColor: Colors.orangeAccent,
+          primaryColor: const Color(0xffF49F04),
+          scaffoldBackgroundColor: Colors.white,
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
+          textTheme: const TextTheme(
+            headline4: TextStyle(
+              color: Colors.orangeAccent,
+            ),
+            headline5: TextStyle(
+              color: Color(0xffB8B8B8),
+            ),
+            headline1: TextStyle(
+              color: Colors.black,
+            ),
+            headline2: TextStyle(
+              color: Color(0xff9E9E9E),
+            ),
+            headline3: TextStyle(
+              color: Colors.red,
+            ),
+          ),
+
+          primaryIconTheme: const IconThemeData(
+            color: Colors.black,
+          ),
+          iconTheme: const IconThemeData(
+            color: Colors.orangeAccent,
+          ),
         ),
+
         locale: localization.locale,
         supportedLocales: localization.supportedLocales(),
         builder: (ctx, widget) => ScreenUtilInit(
