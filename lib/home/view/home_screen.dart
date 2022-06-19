@@ -1,5 +1,7 @@
 import 'dart:developer';
 import 'package:auto_route/auto_route.dart';
+import 'package:trkar/core/components/sized_box_helper.dart';
+import 'package:trkar/home/view/widgets/home_carousel_card.dart';
 import '../../core/router/router.gr.dart' as route;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -406,7 +408,10 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
                 const RecentlyViewedProductsView(),
                 const SendOffersEmailView(),
-                const BestDealsView(),
+
+                // const BoxHelper(
+                //   height: 80,
+                // ),
                 /*
                 Expanded(
                   child: TabBarView(
@@ -487,48 +492,6 @@ class _HomeScreenState extends State<HomeScreen>
           ),
         );
       },
-    );
-  }
-}
-
-class BestDealsView extends StatelessWidget {
-  const BestDealsView({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [],
-    );
-  }
-}
-
-class HomeCarouselCard extends StatelessWidget {
-  const HomeCarouselCard({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: CarouselSlider(
-        items: List.generate(
-            3,
-            (index) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Image.asset(
-                    'assets/images/car-offers${index + 1}.jpg',
-                    fit: BoxFit.cover,
-                  ),
-                )),
-        options: CarouselOptions(
-          height: ScreenUtil().setHeight(180),
-          enableInfiniteScroll: false,
-          initialPage: 1,
-        ),
-      ),
     );
   }
 }

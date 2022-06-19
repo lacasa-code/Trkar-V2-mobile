@@ -39,91 +39,179 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     super.initState();
   }
 
-  Future<bool> _onBackButtonPressed(BuildContext context) async {
-    var tab = context.read<TabCubit>();
-    tab.changeTabIndex(0);
-    return false;
-  }
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => _onBackButtonPressed(context),
-      child: Scaffold(
-        key: scaffoldKey,
-        drawer: const MyDrawer(),
-        // appBar: AppBar(
-        //   bottom:
-        //   backgroundColor: Colors.transparent,
-        //   elevation: 0,
-        //   title: Text(
-        //     'categories'.translate,
-        //     style: const TextStyle(
-        //       color: Colors.black,
-        //     ),
-        //   ),
-        //   leading: IconButton(
-        //     icon: const Icon(
-        //       Icons.arrow_back,
-        //     ),
-        //     color: Colors.black,
-        //     onPressed: () {
-        //       _onBackButtonPressed(context);
-        //     },
-        //   ),
-        // ),
-        appBar: SearchAppBar(
-          scaffoldKey: scaffoldKey,
-        ),
-        body: BlocBuilder<CategoriesCubit, CategoriesState>(
-          builder: (context, state) {
-            if (state is CategoriesLoading) {
-              return Center(
-                child: CircularProgressIndicator(
-                  color: Theme.of(context).primaryColor,
-                ),
-              );
-            }
-            if (state is CategoriesError || state is CategoriesNetworkError) {
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    state is CategoriesError
-                        ? (state.msg ?? 'something_wrong'.translate)
-                        : state is CategoriesNetworkError
-                            ? (state.msg ?? 'something_wrong'.translate)
-                            : '',
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    ),
+    return Scaffold(
+      key: scaffoldKey,
+      drawer: const MyDrawer(),
+      // appBar: AppBar(
+      //   bottom:
+      //   backgroundColor: Colors.transparent,
+      //   elevation: 0,
+      //   title: Text(
+      //     'categories'.translate,
+      //     style: const TextStyle(
+      //       color: Colors.black,
+      //     ),
+      //   ),
+      //   leading: IconButton(
+      //     icon: const Icon(
+      //       Icons.arrow_back,
+      //     ),
+      //     color: Colors.black,
+      //     onPressed: () {
+      //       _onBackButtonPressed(context);
+      //     },
+      //   ),
+      // ),
+      appBar: SearchAppBar(
+        scaffoldKey: scaffoldKey,
+      ),
+      body: BlocBuilder<CategoriesCubit, CategoriesState>(
+        builder: (context, state) {
+          if (state is CategoriesLoading) {
+            return Center(
+              child: CircularProgressIndicator(
+                color: Theme.of(context).primaryColor,
+              ),
+            );
+          }
+          if (state is CategoriesError || state is CategoriesNetworkError) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  state is CategoriesError
+                      ? (state.msg ?? 'something_wrong'.translate)
+                      : state is CategoriesNetworkError
+                          ? (state.msg ?? 'something_wrong'.translate)
+                          : '',
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              );
-            }
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  ...List.generate(categoriesCubit.category.length, (index) {
-                    var cat = categoriesCubit.category[index];
-                    return CategoryItem(
-                      showDivider: true, //cat != categoriesCubit.category.last,
-                      onPressed: () {
-                        context.read<FilterCarsCubit>()
-                          ..getManufacturer(
-                            context,
-                            categoryId: cat.id,
-                          )
-                          ..getCarMades(
-                            context,
-                            categoryId: cat.id,
-                          );
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                ...List.generate(categoriesCubit.category.length, (index) {
+                  var cat = categoriesCubit.category[index];
+                  return CategoryItem(
+                    showDivider: true, //cat != categoriesCubit.category.last,
+                    onPressed: () {
+                      context.read<FilterCarsCubit>()
+                        ..getManufacturer(
+                          context,
+                          categoryId: cat.id,
+                        )
+                        ..getCarMades(
+                          context,
+                          categoryId: cat.id,
+                        );
 
-                        var hasSubCat = categoriesCubit.hasSubCategory(cat.id);
-                        // if (hasSubCat) {
+                      var hasSubCat = categoriesCubit.hasSubCategory(cat.id);
+                      // if (hasSubCat) {
+                      var subCat = context.read<SubCategoriesCubit>();
+                      subCat.categoryName = cat.name;
+                      subCat.parentId = cat.id;
+                      // NavigationService.push(
+                      //   page: SubCategoriesScreen.routeName,
+                      //   arguments: {
+                      //     'category_name': cat.name,
+                      //     'parent_id': cat.id,
+                      //   },
+                      // );
+                      // context.router.push(
+                      //  catego,
+                      // );
+                      // }
+                      context.router.push(
+                        route.SubCategoriesScreen(
+                          categoryName: cat.name,
+                          parentId: cat.id.toString(),
+                        ),
+                      );
+                    },
+                    categoryName: cat.name,
+                    categoryImage: cat.image,
+                  );
+                }),
+                ...List.generate(categoriesCubit.categoriesScreenSubCat.length,
+                    (index) {
+                  var cat = categoriesCubit.categoriesScreenSubCat[index];
+                  return CategoryItem(
+                    showDivider:
+                        cat != categoriesCubit.categoriesScreenSubCat.last,
+                    onPressed: () {
+                      log('catId => ${cat.id}');
+                      if (cat.slug == 'tools-equipment') {
+                        // NavigationService.push(page: ToolsScreen.routeName);
+                        context.router.push(
+                          route.ToolsScreen(
+                            categoryId: cat.id.toString(),
+                          ),
+                        );
+                        return;
+                      }
+                      if (cat.slug == 'engine-oil') {
+                        // NavigationService.push(
+                        //   page: EngineOilScreen.routeName,
+                        // );
+                        context.router.push(
+                          route.EngineOilScreen(categoryId: cat.id.toString()),
+                        );
+                        return;
+                      }
+                      if (cat.slug == 'tyres') {
+                        context.router.push(
+                          route.TyresScreen(
+                            tabIndex: cat.id,
+                          ),
+                        );
+                        return;
+                      }
+                      if (cat.slug == 'filters') {
+                        context.router.push(
+                          route.FilterRouter(
+                            categoryName: cat.name,
+                            parentId: cat.id.toString(),
+                          ),
+                        );
+                        return;
+                      }
+                      if (cat.slug == 'brakes') {
+                        context.router.push(
+                          route.BrakesRouter(
+                            parentId: cat.id.toString(),
+                            categoryName: cat.name,
+                          ),
+                        );
+                        return;
+                      }
+                      if (cat.slug == 'car-accessories') {
+                        // NavigationService.push(
+                        //   page: CarAccessoriesScreen.routeName,
+                        //   arguments: {
+                        //     'category_name': cat.name,
+                        //     'parent_id': cat.id,
+                        //   },
+                        // );
+                        context.router.push(
+                          route.CarAccessoriesScreen(
+                            name: cat.name,
+                            parentId: cat.id.toString(),
+                          ),
+                        );
+                        return;
+                      }
+                      var hasSubCat = categoriesCubit.hasSubCategory(cat.id);
+                      log('message $hasSubCat ${cat.id}');
+                      if (hasSubCat) {
                         var subCat = context.read<SubCategoriesCubit>();
                         subCat.categoryName = cat.name;
                         subCat.parentId = cat.id;
@@ -134,120 +222,25 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                         //     'parent_id': cat.id,
                         //   },
                         // );
-                        // context.router.push(
-                        //  catego,
-                        // );
-                        // }
                         context.router.push(
                           route.SubCategoriesScreen(
                             categoryName: cat.name,
-                            parentId: cat.id.toString(),
+                            parentId: cat.parentId,
                           ),
                         );
-                      },
-                      categoryName: cat.name,
-                      categoryImage: cat.image,
-                    );
-                  }),
-                  ...List.generate(
-                      categoriesCubit.categoriesScreenSubCat.length, (index) {
-                    var cat = categoriesCubit.categoriesScreenSubCat[index];
-                    return CategoryItem(
-                      showDivider:
-                          cat != categoriesCubit.categoriesScreenSubCat.last,
-                      onPressed: () {
-                        log('catId => ${cat.id}');
-                        if (cat.slug == 'tools-equipment') {
-                          // NavigationService.push(page: ToolsScreen.routeName);
-                          context.router.push(
-                            route.ToolsScreen(
-                              categoryId: cat.id.toString(),
-                            ),
-                          );
-                          return;
-                        }
-                        if (cat.slug == 'engine-oil') {
-                          // NavigationService.push(
-                          //   page: EngineOilScreen.routeName,
-                          // );
-                          context.router.push(
-                            route.EngineOilScreen(
-                                categoryId: cat.id.toString()),
-                          );
-                          return;
-                        }
-                        if (cat.slug == 'tyres') {
-                          context.router.push(
-                            route.TyresScreen(
-                              tabIndex: cat.id,
-                            ),
-                          );
-                          return;
-                        }
-                        if (cat.slug == 'filters') {
-                          context.router.push(
-                            route.FilterRouter(
-                              categoryName: cat.name,
-                              parentId: cat.id.toString(),
-                            ),
-                          );
-                          return;
-                        }
-                        if (cat.slug == 'brakes') {
-                          context.router.push(
-                            route.BrakesRouter(
-                              parentId: cat.id.toString(),
-                              categoryName: cat.name,
-                            ),
-                          );
-                          return;
-                        }
-                        if (cat.slug == 'car-accessories') {
-                          // NavigationService.push(
-                          //   page: CarAccessoriesScreen.routeName,
-                          //   arguments: {
-                          //     'category_name': cat.name,
-                          //     'parent_id': cat.id,
-                          //   },
-                          // );
-                          context.router.push(
-                            route.CarAccessoriesScreen(
-                              name: cat.name,
-                              parentId: cat.id.toString(),
-                            ),
-                          );
-                          return;
-                        }
-                        var hasSubCat = categoriesCubit.hasSubCategory(cat.id);
-                        log('message $hasSubCat ${cat.id}');
-                        if (hasSubCat) {
-                          var subCat = context.read<SubCategoriesCubit>();
-                          subCat.categoryName = cat.name;
-                          subCat.parentId = cat.id;
-                          // NavigationService.push(
-                          //   page: SubCategoriesScreen.routeName,
-                          //   arguments: {
-                          //     'category_name': cat.name,
-                          //     'parent_id': cat.id,
-                          //   },
-                          // );
-                          context.router.push(
-                            route.SubCategoriesScreen(
-                              categoryName: cat.name,
-                              parentId: cat.parentId,
-                            ),
-                          );
-                        }
-                      },
-                      categoryName: cat.name,
-                      categoryImage: cat.image,
-                    );
-                  }),
-                ],
-              ),
-            );
-          },
-        ),
+                      }
+                    },
+                    categoryName: cat.name,
+                    categoryImage: cat.image,
+                  );
+                }),
+                // const BoxHelper(
+                //   height: 80,
+                // ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

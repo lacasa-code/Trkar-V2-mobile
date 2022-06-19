@@ -1,21 +1,17 @@
 import 'dart:developer';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:trkar/auth/view/widgets/auth_choose_type_dialog.dart';
 import 'package:trkar/auth/view/widgets/auth_footer_widget.dart';
 import 'package:trkar/auth/viewModel/login/login_cubit.dart';
 import 'package:trkar/core/components/circle_widget.dart';
 import 'package:trkar/core/extensions/string.dart';
-import 'package:trkar/core/components/or_widget.dart';
 import 'package:trkar/core/components/register_button.dart';
 import 'package:trkar/core/components/register_field.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/router/router.gr.dart';
-import 'package:trkar/core/themes/themes.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({
