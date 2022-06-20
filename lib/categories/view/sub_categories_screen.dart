@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trkar/categories/view/widgets/category_item.dart';
 import 'package:trkar/categories/view/widgets/manufacturers_details_item.dart';
+import 'package:trkar/categories/view/widgets/sub_category_item.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
 import 'package:trkar/core/components/register_button.dart';
 import 'package:trkar/core/components/register_field.dart';
@@ -167,7 +168,7 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
                                 element.parentId ==
                                 subcategoriesCubit.parentId.toString())
                             .toList()[index];
-                        return CategoryItem(
+                        return SubCategoryCard(
                           showDivider: cat !=
                               subcategoriesCubit.subCategories
                                   .where((element) {

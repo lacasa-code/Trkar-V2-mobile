@@ -28,32 +28,40 @@ class TabPage extends StatefulWidget implements AutoRouteWrapper {
 }
 
 class _TabPageState extends State<TabPage> {
-  List<dynamic> pages = [
-    {
-      'icon': Icons.home_outlined,
-      'title': 'home'.translate,
-    },
-    {
-      'icon': Icons.category_outlined,
-      'title': 'categories'.translate,
-    },
-    {
-      'icon': Icons.star,
-      'title': '',
-    },
-    {
-      'icon': Icons.star,
-      'title': 'wishlist'.translate,
-    },
-    // {
-    //   'icon': Icons.shopping_cart,
-    //   'title': 'cart'.translate,
-    // },
-    {
-      'icon': Icons.person,
-      'title': 'my_account'.translate,
-    },
-  ];
+  var svgAssetsPath = 'assets/icons/svg/';
+  late List<dynamic> pages;
+
+  @override
+  void initState() {
+    pages = [
+      {
+        'icon': svgAssetsPath + 'home.svg',
+        'title': 'home'.translate,
+      },
+      {
+        'icon': svgAssetsPath + 'categories.svg',
+        'title': 'categories'.translate,
+      },
+      {
+        'icon': svgAssetsPath + 'star.svg',
+        'title': '',
+      },
+      {
+        'icon': svgAssetsPath + 'star.svg',
+        'title': 'wishlist'.translate,
+      },
+      // {
+      //   'icon': Icons.shopping_cart,
+      //   'title': 'cart'.translate,
+      // },
+      {
+        'icon': svgAssetsPath + 'account.svg',
+        'title': 'my_account'.translate,
+      },
+    ];
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AutoTabsScaffold(
@@ -73,7 +81,7 @@ class _TabPageState extends State<TabPage> {
         fit: BoxFit.cover,
       ),
       bottomNavigationBuilder: (_, tabRouter) => SizedBox(
-        height: ScreenUtil().setHeight(50),
+        height: ScreenUtil().setHeight(60),
         child: BottomAppBar(
           shape: const CircularNotchedRectangle(),
 
@@ -99,11 +107,13 @@ class _TabPageState extends State<TabPage> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(
+                              SvgPicture.asset(
                                 e['icon'],
                                 color: tabRouter.activeIndex == index
                                     ? Theme.of(context).primaryColor
                                     : Colors.grey,
+                                height: ScreenUtil().setHeight(35),
+                                width: ScreenUtil().setWidth(35),
                               ),
                               Text(
                                 e['title'],

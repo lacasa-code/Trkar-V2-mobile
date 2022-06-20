@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:trkar/auth/view/widgets/auth_choose_type_dialog.dart';
 import 'package:trkar/core/components/custom_new_dialog.dart';
+import 'package:trkar/core/components/result_dialog.dart';
 import 'package:trkar/core/helper/helper.dart';
 import '../../../core/router/router.gr.dart';
 import '../../../core/extensions/string.dart';
@@ -45,10 +46,12 @@ class LoginCubit extends Cubit<LoginState> {
       },
     );
     if (loginData == null) {
-      dialog.showWarningDialog(
+      showDialog(
         context: context,
-        btnOnPress: () {},
-        msg: 'network'.translate,
+        builder: (_) => ResultDialog(
+          resultType: ResultType.failed,
+          message: 'network'.translate,
+        ),
       );
       emit(LoginNetworkError());
       return;
@@ -76,18 +79,18 @@ class LoginCubit extends Cubit<LoginState> {
       } else {
         errorMessage = loginData.message ?? '';
       }
-      dialog.showWarningDialog(
+      showDialog(
         context: context,
-        msg: errorMessage,
-        btnOnPress: () {},
+        builder: (_) => ResultDialog(
+          resultType: ResultType.error,
+          message: errorMessage,
+        ),
       );
       emit(LoginError());
     }
   }
 
   Future<void> _loginVendor(BuildContext context) async {
-    var dialog = CustomDialog();
-
     emit(LoginLoading());
 
     var loginData = await VendorLoginRepo.loginVendor(
@@ -98,10 +101,12 @@ class LoginCubit extends Cubit<LoginState> {
       },
     );
     if (loginData == null) {
-      dialog.showWarningDialog(
+      showDialog(
         context: context,
-        btnOnPress: () {},
-        msg: 'network'.translate,
+        builder: (_) => ResultDialog(
+          resultType: ResultType.failed,
+          message: 'network'.translate,
+        ),
       );
       emit(LoginNetworkError());
       return;
@@ -133,10 +138,12 @@ class LoginCubit extends Cubit<LoginState> {
       } else {
         errorMessage = loginData.message ?? '';
       }
-      dialog.showWarningDialog(
+      showDialog(
         context: context,
-        msg: errorMessage,
-        btnOnPress: () {},
+        builder: (_) => ResultDialog(
+          resultType: ResultType.error,
+          message: errorMessage,
+        ),
       );
       emit(LoginError());
     }

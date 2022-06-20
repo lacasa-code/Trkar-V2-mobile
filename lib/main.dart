@@ -10,7 +10,9 @@ void main() async {
   await GetStorage.init();
 
   await localization.init();
-  runApp(Phoenix(
-    child: const MyApp(),
-  ));
+  runApp(
+    Phoenix(
+      child: const MyApp(),
+    ),
+  );
 }

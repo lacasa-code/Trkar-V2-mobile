@@ -7,14 +7,11 @@ import 'package:trkar/auth/viewModel/validateToken/validate_token_cubit.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
 import 'package:trkar/core/helper/app_localization.dart';
-import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/core/router/router.gr.dart';
 
-import 'package:trkar/core/routes/routes_generator.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
 import 'package:trkar/profile/viewModel/userProfile/user_profile_cubit.dart';
-import 'package:trkar/tools/view/tools_screen.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);

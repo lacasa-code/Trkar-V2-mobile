@@ -2,7 +2,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trkar/addressesData/viewModel/countries/countries_cubit.dart';
+import 'package:trkar/core/components/circle_widget.dart';
 import 'package:trkar/core/components/map_dialog.dart';
 import 'package:trkar/core/components/profile_picture_widget.dart';
 import 'package:trkar/core/components/register_button.dart';
@@ -92,325 +94,484 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             );
           }
 
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                Form(
-                  key: updateUserProfileCubit.profileFormKey,
+          return Stack(
+            children: [
+              Positioned(
+                top: ScreenUtil().setHeight(270),
+                right: -ScreenUtil().setWidth(445),
+                bottom: ScreenUtil().setHeight(145),
+                left: 0,
+                child: const CircleWidget(),
+              ),
+              Positioned(
+                top: ScreenUtil().setHeight(379),
+                left: -ScreenUtil().setWidth(430),
+                bottom: ScreenUtil().setHeight(50),
+                right: 0,
+                child: const CircleWidget(),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: SingleChildScrollView(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      ProfilePictureWidget(
-                        onPicked: (f) {
-                          if (f == null) {
-                            return;
-                          }
-                          updateUserProfileCubit.pickedImage = f;
-                        },
-                      ),
-                      RegisterField(
-                        hintText: 'username',
-                        controller: updateUserProfileCubit.nameController,
-                        validator: updateUserProfileCubit.userNameValidator,
-                      ),
-                      RegisterField(
-                        hintText: 'email',
-                        controller: updateUserProfileCubit.emailController,
-                        validator: updateUserProfileCubit.emailValidator,
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-                      RegisterField(
-                        hintText: 'phone',
-                        controller: updateUserProfileCubit.phoneController,
-                        maxLength: 10,
-                        formatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        validator: updateUserProfileCubit.phoneValidator,
-                        keyboardType: TextInputType.phone,
-                      ),
-                      BlocBuilder<AddressDataCubit, AddressDataState>(
-                        builder: (context, state) {
-                          // if (state is CountryLoading ||
-                          //     state is CityLoading ||
-                          //     state is AreaLoading) {
-                          //   return Center(
-                          //     child: Padding(
-                          //       padding: const EdgeInsets.all(8.0),
-                          //       child: CircularProgressIndicator(
-                          //         color: Theme.of(context).primaryColor,
-                          //       ),
-                          //     ),
-                          //   );
-                          // }
-
-                          return Column(
-                            children: [
-                              state is CountryLoading
-                                  ? Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: CircularProgressIndicator(
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                      ),
-                                    )
-                                  : addressDataCubit.countries.isEmpty
-                                      ? const SizedBox()
-                                      : SearchableDropDownWidget(
-                                          initialValue: updateUserProfileCubit
-                                                      .countryId ==
-                                                  null
-                                              ? null
-                                              : addressDataCubit
-                                                  .getCountryById(int.parse(
-                                                      updateUserProfileCubit
-                                                              .countryId ??
-                                                          '0'))
-                                                  ?.name,
-                                          values: addressDataCubit.countries
-                                              .map((e) => e.name ?? '')
-                                              .toList(),
-                                          labelText: 'country',
-                                          validator: updateUserProfileCubit
-                                              .countryValidator,
-                                          onChanged: (v) {
-                                            if (v == null) {
-                                              return;
-                                            }
-                                            var country = addressDataCubit
-                                                .countries
-                                                .firstWhere((element) =>
-                                                    element.name == v);
-                                            updateUserProfileCubit.countryId =
-                                                country.id.toString();
-                                            addressDataCubit.getCities(
-                                              context,
-                                              countryId: country.id,
-                                            );
-                                          },
-                                        ),
-                              Visibility(
-                                visible: addressDataCubit.cities.isNotEmpty ||
-                                    state is CityLoading,
-                                child: state is CityLoading
-                                    ? Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: CircularProgressIndicator(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                          ),
-                                        ),
-                                      )
-                                    : addressDataCubit.cities.isEmpty
-                                        ? const SizedBox()
-                                        : SearchableDropDownWidget(
-                                            values: addressDataCubit.cities
-                                                .map((e) => e.name ?? '')
-                                                .toList(),
-                                            labelText: 'city',
-                                            initialValue: updateUserProfileCubit
-                                                        .cityId ==
-                                                    null
-                                                ? null
-                                                : addressDataCubit
-                                                    .getCityById(int.parse(
-                                                        updateUserProfileCubit
-                                                                .cityId ??
-                                                            ''))
-                                                    ?.name,
-                                            validator: updateUserProfileCubit
-                                                .cityValidator,
-                                            onChanged: (v) {
-                                              if (v == null) {
-                                                return;
-                                              }
-                                              var city = addressDataCubit.cities
-                                                  .firstWhere((element) =>
-                                                      element.name == v);
-                                              updateUserProfileCubit.cityId =
-                                                  city.id.toString();
-
-                                              addressDataCubit.getArea(
-                                                context,
-                                                cityId: city.id,
-                                              );
-                                            },
-                                          ),
-                              ),
-                              Visibility(
-                                visible: addressDataCubit.areas.isNotEmpty ||
-                                    state is AreaLoading,
-                                child: state is AreaLoading
-                                    ? Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: CircularProgressIndicator(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                          ),
-                                        ),
-                                      )
-                                    : addressDataCubit.areas.isEmpty
-                                        ? const SizedBox()
-                                        : SearchableDropDownWidget(
-                                            values: addressDataCubit.areas
-                                                .map((e) => e.name ?? '')
-                                                .toList(),
-                                            labelText: 'area',
-                                            initialValue: updateUserProfileCubit
-                                                        .areaId ==
-                                                    null
-                                                ? null
-                                                : addressDataCubit
-                                                    .getAreaById(int.parse(
-                                                        updateUserProfileCubit
-                                                                .areaId ??
-                                                            '0'))
-                                                    ?.name,
-                                            validator: updateUserProfileCubit
-                                                .areaValidator,
-                                            onChanged: (v) {
-                                              if (v == null) {
-                                                return;
-                                              }
-                                              var area = addressDataCubit.areas
-                                                  .firstWhere((element) =>
-                                                      element.name == v);
-                                              updateUserProfileCubit.areaId =
-                                                  area.id.toString();
-                                            },
-                                          ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                      RegisterField(
-                        hintText: 'address',
-                        maxLines: null,
-                        controller: updateUserProfileCubit.addressController,
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (_) =>
-                                  BlocProvider<UpdateUserProfileCubit>.value(
-                                value: context.read<UpdateUserProfileCubit>(),
-                                child: BlocBuilder<UpdateUserProfileCubit,
-                                    UpdateUserProfileState>(
-                                  builder: (context, state) {
-                                    return Dialog(
-                                      child: MapDialog(
-                                        onPickedLocation:
-                                            updateUserProfileCubit.pickLocation,
-                                      ),
-                                    );
-                                  },
+                      Form(
+                        key: updateUserProfileCubit.profileFormKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ProfilePictureWidget(
+                              onPicked: (f) {
+                                if (f == null) {
+                                  return;
+                                }
+                                updateUserProfileCubit.pickedImage = f;
+                              },
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 10),
+                              child: Text(
+                                'personal_information'.translate,
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: ScreenUtil().setSp(16),
                                 ),
                               ),
-                            );
-                          },
-                          icon: const Icon(
-                            Icons.add_location_alt_rounded,
-                          ),
-                        ),
-                      ),
-                      BlocBuilder<UpdateUserProfileCubit,
-                          UpdateUserProfileState>(
-                        builder: (context, state) {
-                          if (state is UpdateUserProfileLoading) {
-                            return Center(
-                              child: CircularProgressIndicator(
-                                color: Theme.of(context).primaryColor,
+                            ),
+                            const FieldHeaderTitle(title: 'full_name'),
+                            RegisterField(
+                              thinBorder: true,
+                              hintText: 'full_name',
+                              controller: updateUserProfileCubit.nameController,
+                              validator:
+                                  updateUserProfileCubit.userNameValidator,
+                            ),
+                            const FieldHeaderTitle(title: 'email'),
+                            RegisterField(
+                              thinBorder: true,
+                              hintText: 'email',
+                              controller:
+                                  updateUserProfileCubit.emailController,
+                              validator: updateUserProfileCubit.emailValidator,
+                              keyboardType: TextInputType.emailAddress,
+                            ),
+                            const FieldHeaderTitle(title: 'phone'),
+                            RegisterField(
+                              thinBorder: true,
+                              hintText: 'phone',
+                              controller:
+                                  updateUserProfileCubit.phoneController,
+                              maxLength: 10,
+                              formatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+                              validator: updateUserProfileCubit.phoneValidator,
+                              keyboardType: TextInputType.phone,
+                            ),
+                            BlocBuilder<AddressDataCubit, AddressDataState>(
+                              builder: (context, state) {
+                                // if (state is CountryLoading ||
+                                //     state is CityLoading ||
+                                //     state is AreaLoading) {
+                                //   return Center(
+                                //     child: Padding(
+                                //       padding: const EdgeInsets.all(8.0),
+                                //       child: CircularProgressIndicator(
+                                //         color: Theme.of(context).primaryColor,
+                                //       ),
+                                //     ),
+                                //   );
+                                // }
+
+                                return Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    state is CountryLoading
+                                        ? Center(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: CircularProgressIndicator(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                            ),
+                                          )
+                                        : addressDataCubit.countries.isEmpty
+                                            ? const SizedBox()
+                                            : Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.stretch,
+                                                children: [
+                                                  const FieldHeaderTitle(
+                                                      title: 'country'),
+                                                  SearchableDropDownWidget(
+                                                    thinBorder: true,
+                                                    initialValue: updateUserProfileCubit
+                                                                .countryId ==
+                                                            null
+                                                        ? null
+                                                        : addressDataCubit
+                                                            .getCountryById(int.parse(
+                                                                updateUserProfileCubit
+                                                                        .countryId ??
+                                                                    '0'))
+                                                            ?.name,
+                                                    values: addressDataCubit
+                                                        .countries
+                                                        .map(
+                                                            (e) => e.name ?? '')
+                                                        .toList(),
+                                                    labelText: 'country',
+                                                    validator:
+                                                        updateUserProfileCubit
+                                                            .countryValidator,
+                                                    onChanged: (v) {
+                                                      if (v == null) {
+                                                        return;
+                                                      }
+                                                      var country =
+                                                          addressDataCubit
+                                                              .countries
+                                                              .firstWhere(
+                                                                  (element) =>
+                                                                      element
+                                                                          .name ==
+                                                                      v);
+                                                      updateUserProfileCubit
+                                                              .countryId =
+                                                          country.id.toString();
+                                                      addressDataCubit
+                                                          .getCities(
+                                                        context,
+                                                        countryId: country.id,
+                                                      );
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                    Visibility(
+                                      visible:
+                                          addressDataCubit.cities.isNotEmpty ||
+                                              state is CityLoading,
+                                      child: state is CityLoading
+                                          ? Center(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                ),
+                                              ),
+                                            )
+                                          : addressDataCubit.cities.isEmpty
+                                              ? const SizedBox()
+                                              : Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment
+                                                          .stretch,
+                                                  children: [
+                                                    const FieldHeaderTitle(
+                                                        title: 'city'),
+                                                    SearchableDropDownWidget(
+                                                      thinBorder: true,
+                                                      values: addressDataCubit
+                                                          .cities
+                                                          .map((e) =>
+                                                              e.name ?? '')
+                                                          .toList(),
+                                                      labelText: 'city',
+                                                      initialValue: updateUserProfileCubit
+                                                                  .cityId ==
+                                                              null
+                                                          ? null
+                                                          : addressDataCubit
+                                                              .getCityById(int.parse(
+                                                                  updateUserProfileCubit
+                                                                          .cityId ??
+                                                                      ''))
+                                                              ?.name,
+                                                      validator:
+                                                          updateUserProfileCubit
+                                                              .cityValidator,
+                                                      onChanged: (v) {
+                                                        if (v == null) {
+                                                          return;
+                                                        }
+                                                        var city = addressDataCubit
+                                                            .cities
+                                                            .firstWhere(
+                                                                (element) =>
+                                                                    element
+                                                                        .name ==
+                                                                    v);
+                                                        updateUserProfileCubit
+                                                                .cityId =
+                                                            city.id.toString();
+
+                                                        addressDataCubit
+                                                            .getArea(
+                                                          context,
+                                                          cityId: city.id,
+                                                        );
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                    ),
+                                    Visibility(
+                                      visible:
+                                          addressDataCubit.areas.isNotEmpty ||
+                                              state is AreaLoading,
+                                      child: state is AreaLoading
+                                          ? Center(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                ),
+                                              ),
+                                            )
+                                          : addressDataCubit.areas.isEmpty
+                                              ? const SizedBox()
+                                              : Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment
+                                                          .stretch,
+                                                  children: [
+                                                    const FieldHeaderTitle(
+                                                        title: 'area'),
+                                                    SearchableDropDownWidget(
+                                                      thinBorder: true,
+                                                      values: addressDataCubit
+                                                          .areas
+                                                          .map((e) =>
+                                                              e.name ?? '')
+                                                          .toList(),
+                                                      labelText: 'area',
+                                                      initialValue: updateUserProfileCubit
+                                                                  .areaId ==
+                                                              null
+                                                          ? null
+                                                          : addressDataCubit
+                                                              .getAreaById(int.parse(
+                                                                  updateUserProfileCubit
+                                                                          .areaId ??
+                                                                      '0'))
+                                                              ?.name,
+                                                      validator:
+                                                          updateUserProfileCubit
+                                                              .areaValidator,
+                                                      onChanged: (v) {
+                                                        if (v == null) {
+                                                          return;
+                                                        }
+                                                        var area = addressDataCubit
+                                                            .areas
+                                                            .firstWhere(
+                                                                (element) =>
+                                                                    element
+                                                                        .name ==
+                                                                    v);
+                                                        updateUserProfileCubit
+                                                                .areaId =
+                                                            area.id.toString();
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                            const FieldHeaderTitle(title: 'address'),
+                            RegisterField(
+                              thinBorder: true,
+                              hintText: 'address',
+                              maxLines: null,
+                              controller:
+                                  updateUserProfileCubit.addressController,
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => BlocProvider<
+                                        UpdateUserProfileCubit>.value(
+                                      value: context
+                                          .read<UpdateUserProfileCubit>(),
+                                      child: BlocBuilder<UpdateUserProfileCubit,
+                                          UpdateUserProfileState>(
+                                        builder: (context, state) {
+                                          return Dialog(
+                                            child: MapDialog(
+                                              onPickedLocation:
+                                                  updateUserProfileCubit
+                                                      .pickLocation,
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.add_location_alt_rounded,
+                                ),
                               ),
-                            );
-                          }
-                          return RegisterButton(
-                            radius: 10,
-                            title: 'update_data',
-                            onPressed: () => updateUserProfileCubit
-                                .updateUserProfile(context),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                const BoxHelper(
-                  height: 40,
-                ),
-                Form(
-                  key: updateUserProfileCubit.passwordFormKey,
-                  child: Column(
-                    children: [
-                      RegisterField(
-                        hintText: 'password',
-                        controller: updateUserProfileCubit.passwordController,
-                        validator: updateUserProfileCubit.passwordValidator,
-                        obsecureText: securePassword,
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            securePassword
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              securePassword = !securePassword;
-                            });
-                          },
-                        ),
-                      ),
-                      RegisterField(
-                        hintText: 'password_confirmation',
-                        controller: updateUserProfileCubit
-                            .passwordConfirmationController,
-                        validator: updateUserProfileCubit
-                            .passwordConfirmationValidator,
-                        obsecureText: securePasswordConfirmation,
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            securePasswordConfirmation
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              securePasswordConfirmation =
-                                  !securePasswordConfirmation;
-                            });
-                          },
+                            ),
+                            BlocBuilder<UpdateUserProfileCubit,
+                                UpdateUserProfileState>(
+                              builder: (context, state) {
+                                if (state is UpdateUserProfileLoading) {
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                  );
+                                }
+                                return RegisterButton(
+                                  radius: 10,
+                                  title: 'update_data',
+                                  onPressed: () => updateUserProfileCubit
+                                      .updateUserProfile(context),
+                                );
+                              },
+                            ),
+                          ],
                         ),
                       ),
                       const BoxHelper(
-                        height: 20,
+                        height: 40,
                       ),
-                      BlocBuilder<UpdateUserProfileCubit,
-                          UpdateUserProfileState>(
-                        builder: (context, state) {
-                          if (state is UpdateUserPasswordLoading) {
-                            return Center(
-                              child: CircularProgressIndicator(
-                                color: Theme.of(context).primaryColor,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 10),
+                        child: Text(
+                          'password'.translate,
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: ScreenUtil().setSp(16),
+                          ),
+                        ),
+                      ),
+                      Form(
+                        key: updateUserProfileCubit.passwordFormKey,
+                        child: Column(
+                          children: [
+                            RegisterField(
+                              thinBorder: true,
+                              hintText: 'password',
+                              controller:
+                                  updateUserProfileCubit.passwordController,
+                              validator:
+                                  updateUserProfileCubit.passwordValidator,
+                              obsecureText: securePassword,
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  securePassword
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    securePassword = !securePassword;
+                                  });
+                                },
                               ),
-                            );
-                          }
-                          return RegisterButton(
-                            radius: 10,
-                            title: 'update_password',
-                            onPressed: () => updateUserProfileCubit
-                                .updateUserPassword(context),
-                          );
-                        },
+                            ),
+                            RegisterField(
+                              thinBorder: true,
+                              hintText: 'password_confirmation',
+                              controller: updateUserProfileCubit
+                                  .passwordConfirmationController,
+                              validator: updateUserProfileCubit
+                                  .passwordConfirmationValidator,
+                              obsecureText: securePasswordConfirmation,
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  securePasswordConfirmation
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    securePasswordConfirmation =
+                                        !securePasswordConfirmation;
+                                  });
+                                },
+                              ),
+                            ),
+                            const BoxHelper(
+                              height: 20,
+                            ),
+                            BlocBuilder<UpdateUserProfileCubit,
+                                UpdateUserProfileState>(
+                              builder: (context, state) {
+                                if (state is UpdateUserPasswordLoading) {
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                  );
+                                }
+                                return RegisterButton(
+                                  radius: 10,
+                                  title: 'update_password',
+                                  onPressed: () => updateUserProfileCubit
+                                      .updateUserPassword(context),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      const BoxHelper(
+                        height: 160,
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           );
         },
+      ),
+    );
+  }
+}
+
+class FieldHeaderTitle extends StatelessWidget {
+  const FieldHeaderTitle({
+    Key? key,
+    required this.title,
+  }) : super(key: key);
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: Text(
+        title.translate.toTitleCase,
+        textAlign: TextAlign.start,
+        style: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+          fontSize: ScreenUtil().setSp(13),
+        ),
       ),
     );
   }

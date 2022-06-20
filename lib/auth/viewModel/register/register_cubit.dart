@@ -9,6 +9,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:trkar/core/components/custom_new_dialog.dart';
+import 'package:trkar/core/components/result_dialog.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/core/router/router.gr.dart';
 import '../../repo/user_register_repo.dart';
@@ -49,10 +50,12 @@ class RegisterCubit extends Cubit<RegisterState> {
       },
     );
     if (registerData == null) {
-      _dialog.showWarningDialog(
+       showDialog(
         context: context,
-        msg: 'network'.translate,
-        btnOnPress: () {},
+        builder: (_) => ResultDialog(
+          resultType: ResultType.failed,
+          message: 'network'.translate,
+        ),
       );
       emit(RegisterNetworkError());
       return;
@@ -86,13 +89,13 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   Future<void> _registerVendor(BuildContext context) async {
     emit(RegisterLoading());
-    context.router.push(
-      EmailVerficationRouter(
-        stateOfVerfication: 1,
-        phoneNumber: phoneController.text,
-      ),
-    );
-    return;
+    // context.router.push(
+    //   EmailVerficationRouter(
+    //     stateOfVerfication: 1,
+    //     phoneNumber: phoneController.text,
+    //   ),
+    // );
+    // return;
 
     var registerData = await VendorRegisterRepo.registerVendor(
       context,
@@ -104,10 +107,12 @@ class RegisterCubit extends Cubit<RegisterState> {
       },
     );
     if (registerData == null) {
-      _dialog.showWarningDialog(
+      showDialog(
         context: context,
-        msg: 'network'.translate,
-        btnOnPress: () {},
+        builder: (_) => ResultDialog(
+          resultType: ResultType.failed,
+          message: 'network'.translate,
+        ),
       );
       emit(RegisterNetworkError());
       return;

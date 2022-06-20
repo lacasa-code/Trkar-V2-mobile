@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trkar/auth/view/widgets/auth_footer_widget.dart';
 import 'package:trkar/auth/viewModel/login/login_cubit.dart';
 import 'package:trkar/core/components/circle_widget.dart';
+import 'package:trkar/core/components/result_dialog.dart';
 import 'package:trkar/core/extensions/string.dart';
 import 'package:trkar/core/components/register_button.dart';
 import 'package:trkar/core/components/register_field.dart';
@@ -138,6 +140,7 @@ class LoginView extends StatelessWidget {
                           formKey,
                           isUserRegistered: isCustomerRegister,
                         ),
+
                         // onPressed: () => loginCubit.login(context),
                         color: Colors.orangeAccent,
                         radius: 10,

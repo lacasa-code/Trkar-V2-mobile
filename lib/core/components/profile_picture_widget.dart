@@ -26,18 +26,17 @@ class _ProfilePictureWidgetState extends State<ProfilePictureWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Stack(
-        children: [
-          Card(
-            shape: const CircleBorder(),
-            elevation: 5,
-            child: CircleAvatar(
-              radius: ScreenUtil().radius(50),
-              backgroundColor: Colors.white,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 15),
+      child: Center(
+        child: Stack(
+          children: [
+            CircleAvatar(
+              radius: ScreenUtil().radius(45),
+              backgroundColor: Color(0xff9E9E9E),
               child: CircleAvatar(
                 backgroundColor: Colors.transparent,
-                radius: ScreenUtil().radius(49),
+                radius: ScreenUtil().radius(44),
                 backgroundImage: pickedImage == null
                     ? (Helper.currentUser?.data?.image == null
                         ? const AssetImage(
@@ -51,40 +50,40 @@ class _ProfilePictureWidgetState extends State<ProfilePictureWidget> {
                       ),
               ),
             ),
-          ),
-          Positioned(
-            right: 0,
-            bottom: 0,
-            child: InkWell(
-              onTap: () async {
-                ImagePickerDialog().show(
-                    context: context,
-                    onGet: (f) {
-                      if (f != null) {
-                        widget.onPicked(f);
-                        setState(() {
-                          pickedImage = f;
-                        });
-                      }
-                      // changeData.image = f;
-                    });
-              },
-              child: CircleAvatar(
-                radius: 15,
-                backgroundColor: Colors.white,
+            Positioned(
+              right: 0,
+              bottom: 0,
+              child: InkWell(
+                onTap: () async {
+                  ImagePickerDialog().show(
+                      context: context,
+                      onGet: (f) {
+                        if (f != null) {
+                          widget.onPicked(f);
+                          setState(() {
+                            pickedImage = f;
+                          });
+                        }
+                        // changeData.image = f;
+                      });
+                },
                 child: CircleAvatar(
-                  backgroundColor: Theme.of(context).primaryColor,
-                  radius: 13,
-                  child: const Icon(
-                    Icons.add,
-                    size: 20,
-                    color: Colors.white,
+                  radius: 15,
+                  backgroundColor: Colors.white,
+                  child: CircleAvatar(
+                    backgroundColor: Theme.of(context).primaryColor,
+                    radius: 13,
+                    child: const Icon(
+                      Icons.add,
+                      size: 20,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
