@@ -30,9 +30,15 @@ class RegisterField extends StatelessWidget {
     this.enabled = true,
     this.makeContentPadding = false,
     this.onTap,
+    this.noLocalHintText,
+    this.noLocalLabelText,
+    this.textAlign = TextAlign.start,
+    this.focusNode,
   }) : super(key: key);
   final String? labelText;
   final String? hintText;
+  final String? noLocalHintText;
+  final String? noLocalLabelText;
   final Widget? suffixIcon;
   final Widget? prefixIcon;
   final bool prefixWithDivider;
@@ -52,6 +58,8 @@ class RegisterField extends StatelessWidget {
   final TextInputAction? textInputAction;
   final bool makeContentPadding;
   final void Function()? onTap;
+  final TextAlign textAlign;
+  final FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +68,7 @@ class RegisterField extends StatelessWidget {
           ? EdgeInsets.zero
           : const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: TextFormField(
+        textAlign: textAlign,
         onTap: onTap,
         readOnly: !enabled,
         textInputAction: textInputAction,
@@ -79,8 +88,8 @@ class RegisterField extends StatelessWidget {
           counterText: '',
           filled: true,
           fillColor: Colors.white,
-          labelText: labelText?.translate,
-          hintText: hintText?.translate,
+          labelText: noLocalLabelText ?? labelText?.translate,
+          hintText: noLocalHintText ?? hintText?.translate,
           labelStyle: TextStyle(
             fontWeight: FontWeight.bold,
             color:

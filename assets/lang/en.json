@@ -279,5 +279,14 @@
     "submit": "Submit",
     "add_file": "Add File",
     "show": "Show",
-    "results": "Results"
+    "results": "Results",
+    "payment_method": "Payment Method",
+    "payment_methods": "Payment Methods",
+    "payment_method_body": "Add your payment options to make buying even faster",
+    "add_new_payment_method": "Add New Payment Method",
+    "enter_your_credit_card_information": "Enter your credit card information",
+    "name_on_card": "Name on Card",
+    "card_number": "Card Number",
+    "expiry_date": "Expiry Date",
+    "add_this_card": "Add This Card"
 }

@@ -25,6 +25,8 @@ import 'package:trkar/legalNotice/view/legal_notice_screen.dart';
 import 'package:trkar/localization/view/change_language_screen.dart';
 import 'package:trkar/mainScreen/tab_page.dart';
 import 'package:trkar/payment/view/payment_screen.dart';
+import 'package:trkar/paymentMethods/view/create_new_payment_method_screen.dart';
+import 'package:trkar/paymentMethods/view/payment_method_screen.dart';
 import 'package:trkar/privacy/view/privacy_screen.dart';
 import 'package:trkar/profile/view/edit_profile_screen.dart';
 import 'package:trkar/profile/view/profile_screen.dart';
@@ -207,6 +209,16 @@ import 'package:trkar/vendor/resumeData/view/resume_data_screen.dart';
               path: 'submit-request',
               name: 'SubmitRequestRouter',
               page: SubmitARequest,
+            ),
+            AutoRoute(
+              path: 'payment-method',
+              name: 'PaymentMethodRouter',
+              page: PaymentMethodScreen,
+            ),
+            AutoRoute(
+              path: 'create-new-payment-method',
+              name: 'CreateNewPaymentMethodRouter',
+              page: CreateNewPaymentMethodScreen,
             ),
           ],
         ),

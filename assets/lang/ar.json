@@ -275,5 +275,14 @@
     "submit": "إرسال",
     "add_file": "إرفاق ملف",
     "show": "عرض",
-    "results": "نتائج"
+    "results": "نتائج",
+    "payment_methods": "طرق الدفع",
+    "payment_method": "طريقة الدفع",
+    "payment_method_body": "أضف خيارات الدفع لتسريع عملية الشراء",
+    "add_new_payment_method": "إضافة طريقة دفع جديدة",
+    "enter_your_credit_card_information": "أدخل معلومات بطاقتك الائتمانية",
+    "name_on_card": "الاسم على البطاقة",
+    "card_number": "رقم البطاقة",
+    "expiry_date": "تاريخ انتهاء الصلاحية",
+    "add_this_card": "إضافة هذه البطاقة"
 }

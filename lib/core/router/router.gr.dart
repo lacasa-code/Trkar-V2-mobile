@@ -11,7 +11,7 @@
 // ignore_for_file: type=lint
 
 import 'package:auto_route/auto_route.dart' as _i14;
-import 'package:flutter/material.dart' as _i43;
+import 'package:flutter/material.dart' as _i45;
 
 import '../../about/view/about_screen.dart' as _i33;
 import '../../Addresses/view/add_new_address_screen.dart' as _i31;
@@ -32,7 +32,7 @@ import '../../categories/view/categories_screen.dart' as _i17;
 import '../../categories/view/sub_categories_screen.dart' as _i18;
 import '../../categories/view/sub_sub_category_screen.dart' as _i19;
 import '../../categories/viewModel/subCategories/sub_categories_cubit.dart'
-    as _i44;
+    as _i46;
 import '../../delivery/view/delivery_screen.dart' as _i40;
 import '../../engineOil/view/engine_oil_screen.dart' as _i24;
 import '../../favorites/view/favorites_screen.dart' as _i15;
@@ -42,6 +42,9 @@ import '../../legalNotice/view/legal_notice_screen.dart' as _i36;
 import '../../localization/view/change_language_screen.dart' as _i29;
 import '../../mainScreen/tab_page.dart' as _i6;
 import '../../payment/view/payment_screen.dart' as _i35;
+import '../../paymentMethods/view/create_new_payment_method_screen.dart'
+    as _i44;
+import '../../paymentMethods/view/payment_method_screen.dart' as _i43;
 import '../../privacy/view/privacy_screen.dart' as _i38;
 import '../../profile/view/edit_profile_screen.dart' as _i32;
 import '../../profile/view/profile_screen.dart' as _i28;
@@ -59,7 +62,7 @@ import '../../vendor/products/view/my_products_screen.dart' as _i5;
 import '../../vendor/resumeData/view/resume_data_screen.dart' as _i2;
 
 class AppRouter extends _i14.RootStackRouter {
-  AppRouter([_i43.GlobalKey<_i43.NavigatorState>? navigatorKey])
+  AppRouter([_i45.GlobalKey<_i45.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
@@ -300,6 +303,15 @@ class AppRouter extends _i14.RootStackRouter {
     SubmitRequestRouter.name: (routeData) {
       return _i14.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i42.SubmitARequest());
+    },
+    PaymentMethodRouter.name: (routeData) {
+      return _i14.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i43.PaymentMethodScreen());
+    },
+    CreateNewPaymentMethodRouter.name: (routeData) {
+      return _i14.MaterialPageX<dynamic>(
+          routeData: routeData,
+          child: const _i44.CreateNewPaymentMethodScreen());
     }
   };
 
@@ -377,7 +389,12 @@ class AppRouter extends _i14.RootStackRouter {
                 _i14.RouteConfig(SupportScreen.name,
                     path: 'support', parent: ProfileRouter.name),
                 _i14.RouteConfig(SubmitRequestRouter.name,
-                    path: 'submit-request', parent: ProfileRouter.name)
+                    path: 'submit-request', parent: ProfileRouter.name),
+                _i14.RouteConfig(PaymentMethodRouter.name,
+                    path: 'payment-method', parent: ProfileRouter.name),
+                _i14.RouteConfig(CreateNewPaymentMethodRouter.name,
+                    path: 'create-new-payment-method',
+                    parent: ProfileRouter.name)
               ])
         ]),
         _i14.RouteConfig(LoginRouter.name, path: 'login'),
@@ -461,7 +478,7 @@ class ChooseTypeRouter extends _i14.PageRouteInfo<void> {
 class EmailVerficationRouter
     extends _i14.PageRouteInfo<EmailVerficationRouterArgs> {
   EmailVerficationRouter(
-      {_i43.Key? key, int stateOfVerification = 0, String? phoneNumber})
+      {_i45.Key? key, int stateOfVerification = 0, String? phoneNumber})
       : super(EmailVerficationRouter.name,
             path: 'email_verfication',
             args: EmailVerficationRouterArgs(
@@ -476,7 +493,7 @@ class EmailVerficationRouterArgs {
   const EmailVerficationRouterArgs(
       {this.key, this.stateOfVerification = 0, this.phoneNumber});
 
-  final _i43.Key? key;
+  final _i45.Key? key;
 
   final int stateOfVerification;
 
@@ -509,7 +526,7 @@ class ResetPasswordRouter extends _i14.PageRouteInfo<void> {
 /// generated route for
 /// [_i12.RegisterScreen]
 class RegisterRouter extends _i14.PageRouteInfo<RegisterRouterArgs> {
-  RegisterRouter({_i43.Key? key, int? userType})
+  RegisterRouter({_i45.Key? key, int? userType})
       : super(RegisterRouter.name,
             path: 'register',
             args: RegisterRouterArgs(key: key, userType: userType));
@@ -520,7 +537,7 @@ class RegisterRouter extends _i14.PageRouteInfo<RegisterRouterArgs> {
 class RegisterRouterArgs {
   const RegisterRouterArgs({this.key, this.userType});
 
-  final _i43.Key? key;
+  final _i45.Key? key;
 
   final int? userType;
 
@@ -584,7 +601,7 @@ class CategoriesScreen extends _i14.PageRouteInfo<void> {
 /// generated route for
 /// [_i18.SubCategoriesScreen]
 class SubCategoriesScreen extends _i14.PageRouteInfo<SubCategoriesScreenArgs> {
-  SubCategoriesScreen({_i43.Key? key, String? categoryName, String? parentId})
+  SubCategoriesScreen({_i45.Key? key, String? categoryName, String? parentId})
       : super(SubCategoriesScreen.name,
             path: ':categoryId',
             args: SubCategoriesScreenArgs(
@@ -597,7 +614,7 @@ class SubCategoriesScreen extends _i14.PageRouteInfo<SubCategoriesScreenArgs> {
 class SubCategoriesScreenArgs {
   const SubCategoriesScreenArgs({this.key, this.categoryName, this.parentId});
 
-  final _i43.Key? key;
+  final _i45.Key? key;
 
   final String? categoryName;
 
@@ -614,7 +631,7 @@ class SubCategoriesScreenArgs {
 class SubSubCategoriesRouter
     extends _i14.PageRouteInfo<SubSubCategoriesRouterArgs> {
   SubSubCategoriesRouter(
-      {_i43.Key? key, required _i44.SubCategoriesCubit subCategoriesCubit})
+      {_i45.Key? key, required _i46.SubCategoriesCubit subCategoriesCubit})
       : super(SubSubCategoriesRouter.name,
             path: 'sub-sub-categories',
             args: SubSubCategoriesRouterArgs(
@@ -627,9 +644,9 @@ class SubSubCategoriesRouterArgs {
   const SubSubCategoriesRouterArgs(
       {this.key, required this.subCategoriesCubit});
 
-  final _i43.Key? key;
+  final _i45.Key? key;
 
-  final _i44.SubCategoriesCubit subCategoriesCubit;
+  final _i46.SubCategoriesCubit subCategoriesCubit;
 
   @override
   String toString() {
@@ -641,7 +658,7 @@ class SubSubCategoriesRouterArgs {
 /// [_i20.CarAccessoriesScreen]
 class CarAccessoriesScreen
     extends _i14.PageRouteInfo<CarAccessoriesScreenArgs> {
-  CarAccessoriesScreen({_i43.Key? key, String? name, String? parentId})
+  CarAccessoriesScreen({_i45.Key? key, String? name, String? parentId})
       : super(CarAccessoriesScreen.name,
             path: 'car-accessories',
             args: CarAccessoriesScreenArgs(
@@ -653,7 +670,7 @@ class CarAccessoriesScreen
 class CarAccessoriesScreenArgs {
   const CarAccessoriesScreenArgs({this.key, this.name, this.parentId});
 
-  final _i43.Key? key;
+  final _i45.Key? key;
 
   final String? name;
 
@@ -668,7 +685,7 @@ class CarAccessoriesScreenArgs {
 /// generated route for
 /// [_i21.FiltersScreen]
 class FilterRouter extends _i14.PageRouteInfo<FilterRouterArgs> {
-  FilterRouter({_i43.Key? key, String? categoryName, String? parentId})
+  FilterRouter({_i45.Key? key, String? categoryName, String? parentId})
       : super(FilterRouter.name,
             path: 'car-filters',
             args: FilterRouterArgs(
@@ -680,7 +697,7 @@ class FilterRouter extends _i14.PageRouteInfo<FilterRouterArgs> {
 class FilterRouterArgs {
   const FilterRouterArgs({this.key, this.categoryName, this.parentId});
 
-  final _i43.Key? key;
+  final _i45.Key? key;
 
   final String? categoryName;
 
@@ -713,7 +730,7 @@ class AllManufacturersScreen extends _i14.PageRouteInfo<void> {
 /// generated route for
 /// [_i24.EngineOilScreen]
 class EngineOilScreen extends _i14.PageRouteInfo<EngineOilScreenArgs> {
-  EngineOilScreen({_i43.Key? key, String? categoryId})
+  EngineOilScreen({_i45.Key? key, String? categoryId})
       : super(EngineOilScreen.name,
             path: 'engine-oil',
             args: EngineOilScreenArgs(key: key, categoryId: categoryId));
@@ -724,7 +741,7 @@ class EngineOilScreen extends _i14.PageRouteInfo<EngineOilScreenArgs> {
 class EngineOilScreenArgs {
   const EngineOilScreenArgs({this.key, this.categoryId});
 
-  final _i43.Key? key;
+  final _i45.Key? key;
 
   final String? categoryId;
 
@@ -737,7 +754,7 @@ class EngineOilScreenArgs {
 /// generated route for
 /// [_i25.TyresScreen]
 class TyresScreen extends _i14.PageRouteInfo<TyresScreenArgs> {
-  TyresScreen({_i43.Key? key, int? tabIndex})
+  TyresScreen({_i45.Key? key, int? tabIndex})
       : super(TyresScreen.name,
             path: 'tyres', args: TyresScreenArgs(key: key, tabIndex: tabIndex));
 
@@ -747,7 +764,7 @@ class TyresScreen extends _i14.PageRouteInfo<TyresScreenArgs> {
 class TyresScreenArgs {
   const TyresScreenArgs({this.key, this.tabIndex});
 
-  final _i43.Key? key;
+  final _i45.Key? key;
 
   final int? tabIndex;
 
@@ -760,7 +777,7 @@ class TyresScreenArgs {
 /// generated route for
 /// [_i26.ToolsScreen]
 class ToolsScreen extends _i14.PageRouteInfo<ToolsScreenArgs> {
-  ToolsScreen({_i43.Key? key, String? categoryId})
+  ToolsScreen({_i45.Key? key, String? categoryId})
       : super(ToolsScreen.name,
             path: 'tools',
             args: ToolsScreenArgs(key: key, categoryId: categoryId));
@@ -771,7 +788,7 @@ class ToolsScreen extends _i14.PageRouteInfo<ToolsScreenArgs> {
 class ToolsScreenArgs {
   const ToolsScreenArgs({this.key, this.categoryId});
 
-  final _i43.Key? key;
+  final _i45.Key? key;
 
   final String? categoryId;
 
@@ -784,7 +801,7 @@ class ToolsScreenArgs {
 /// generated route for
 /// [_i27.BrakesScreen]
 class BrakesRouter extends _i14.PageRouteInfo<BrakesRouterArgs> {
-  BrakesRouter({_i43.Key? key, String? categoryName, String? parentId})
+  BrakesRouter({_i45.Key? key, String? categoryName, String? parentId})
       : super(BrakesRouter.name,
             path: 'brakes',
             args: BrakesRouterArgs(
@@ -796,7 +813,7 @@ class BrakesRouter extends _i14.PageRouteInfo<BrakesRouterArgs> {
 class BrakesRouterArgs {
   const BrakesRouterArgs({this.key, this.categoryName, this.parentId});
 
-  final _i43.Key? key;
+  final _i45.Key? key;
 
   final String? categoryName;
 
@@ -934,4 +951,23 @@ class SubmitRequestRouter extends _i14.PageRouteInfo<void> {
       : super(SubmitRequestRouter.name, path: 'submit-request');
 
   static const String name = 'SubmitRequestRouter';
+}
+
+/// generated route for
+/// [_i43.PaymentMethodScreen]
+class PaymentMethodRouter extends _i14.PageRouteInfo<void> {
+  const PaymentMethodRouter()
+      : super(PaymentMethodRouter.name, path: 'payment-method');
+
+  static const String name = 'PaymentMethodRouter';
+}
+
+/// generated route for
+/// [_i44.CreateNewPaymentMethodScreen]
+class CreateNewPaymentMethodRouter extends _i14.PageRouteInfo<void> {
+  const CreateNewPaymentMethodRouter()
+      : super(CreateNewPaymentMethodRouter.name,
+            path: 'create-new-payment-method');
+
+  static const String name = 'CreateNewPaymentMethodRouter';
 }

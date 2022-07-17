@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:trkar/core/components/register_button.dart';
 import 'package:trkar/localization/view/widgets/change_language_dialog.dart';
 import 'package:trkar/localization/viewModel/lang/lang_cubit.dart';
@@ -99,7 +98,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           svgPictureName: 'my-coupons-icon',
                         ),
                         ProfileItem(
-                          onPressed: () {},
+                          onPressed: () {
+                            context.router.push(
+                              const PaymentMethodRouter(),
+                            );
+                          },
                           title: 'manage_payment',
                           svgPictureName: 'manage-payment-icon',
                         ),
