@@ -10,8 +10,10 @@ class AuthFooterText extends StatelessWidget {
   const AuthFooterText({
     Key? key,
     this.isLogin = true,
+    this.userType = 0,
   }) : super(key: key);
   final bool isLogin;
+  final int userType;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +38,12 @@ class AuthFooterText extends StatelessWidget {
                     context.router.pop();
                     return;
                   }
+                  context.router.push(
+                    RegisterRouter(
+                      userType: userType,
+                    ),
+                  );
+                  /*
                   showDialog(
                     context: context,
                     builder: (c) => AuthChooseTypeDialog(
@@ -54,7 +62,7 @@ class AuthFooterText extends StatelessWidget {
                         );
                       },
                     ),
-                  );
+                  );*/
                 },
               text: (!isLogin ? 'login' : 'create_acc').translate.toTitleCase,
               style: Theme.of(context).textTheme.bodyText1?.copyWith(

@@ -15,6 +15,7 @@ import 'package:trkar/categories/carMades/view/all_car_mades_screen.dart';
 import 'package:trkar/categories/manufacturers/view/all_manufacturers_screen.dart';
 import 'package:trkar/categories/view/categories_screen.dart';
 import 'package:trkar/categories/view/sub_categories_screen.dart';
+import 'package:trkar/categories/view/sub_sub_category_screen.dart';
 import 'package:trkar/delivery/view/delivery_screen.dart';
 import 'package:trkar/engineOil/view/engine_oil_screen.dart';
 import 'package:trkar/favorites/view/favorites_screen.dart';
@@ -30,6 +31,7 @@ import 'package:trkar/profile/view/profile_screen.dart';
 import 'package:trkar/returns/view/returns_refunds_screen.dart';
 import 'package:trkar/rightOfWithDrawal/view/rights_of_withdrawal.dart';
 import 'package:trkar/splash/view/splash_screen.dart';
+import 'package:trkar/support/view/submit_a_request.dart';
 import 'package:trkar/support/view/support_screen.dart';
 import 'package:trkar/terms/view/terms_screen.dart';
 import 'package:trkar/tools/view/tools_screen.dart';
@@ -88,6 +90,11 @@ import 'package:trkar/vendor/resumeData/view/resume_data_screen.dart';
               AutoRoute(
                 path: ':categoryId',
                 page: SubCategoriesScreen,
+              ),
+              AutoRoute(
+                page: SubSubCategoriesScreen,
+                name: 'SubSubCategoriesRouter',
+                path: 'sub-sub-categories',
               ),
               AutoRoute(
                 path: 'car-accessories',
@@ -186,7 +193,7 @@ import 'package:trkar/vendor/resumeData/view/resume_data_screen.dart';
             ),
             AutoRoute(
               path: 'terms',
-              page: TermsAndConitionsScreen,
+              page: TermsAndConditionsScreen,
             ),
             AutoRoute(
               path: 'delivery',
@@ -195,6 +202,11 @@ import 'package:trkar/vendor/resumeData/view/resume_data_screen.dart';
             AutoRoute(
               path: 'support',
               page: SupportScreen,
+            ),
+            AutoRoute(
+              path: 'submit-request',
+              name: 'SubmitRequestRouter',
+              page: SubmitARequest,
             ),
           ],
         ),
@@ -213,7 +225,7 @@ import 'package:trkar/vendor/resumeData/view/resume_data_screen.dart';
     AutoRoute(
       path: 'email_verfication',
       name: 'EmailVerficationRouter',
-      page: EmailVerficationScreen,
+      page: EmailVerificationScreen,
     ),
     AutoRoute(
       path: 'forget_password',

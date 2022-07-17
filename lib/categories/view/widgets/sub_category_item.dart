@@ -21,96 +21,120 @@ class SubCategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        InkWell(
-          onTap: onPressed,
-          child: ListTile(
-            leading: Image.network(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      child: InkWell(
+        onTap: onPressed,
+        child: Column(
+          children: [
+            Image.network(
               categoryImage ?? '',
               fit: BoxFit.cover,
               width: ScreenUtil().setWidth(55),
               errorBuilder: (_, __, ___) => Image.asset(
                 'assets/images/cars.jpeg',
+                width: ScreenUtil().setWidth(55),
               ),
             ),
-            title: Text(
+            Text(
               categoryName ?? '',
               overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            trailing: const Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.black,
-            ),
-          ),
+            // InkWell(
+            //   onTap: onPressed,
+            //   child: ListTile(
+            //     leading: Image.network(
+            //       categoryImage ?? '',
+            //       fit: BoxFit.cover,
+            //       width: ScreenUtil().setWidth(55),
+            //       errorBuilder: (_, __, ___) => Image.asset(
+            //         'assets/images/cars.jpeg',
+            //       ),
+            //     ),
+            //     title: Text(
+            //       categoryName ?? '',
+            //       overflow: TextOverflow.ellipsis,
+            //       style: const TextStyle(
+            //         color: Colors.black,
+            //         fontWeight: FontWeight.bold,
+            //       ),
+            //     ),
+            //     trailing: const Icon(
+            //       Icons.arrow_forward_ios,
+            //       color: Colors.black,
+            //     ),
+            //   ),
 
-          // child: Padding(
-          //   padding: const EdgeInsets.symmetric(
-          //     horizontal: 5,
-          //     vertical: 5,
-          //   ),
-          //   child: Card(
-          //     shape: RoundedRectangleBorder(
-          //       borderRadius: BorderRadius.circular(25),
-          //     ),
-          //     elevation: 8,
-          //     child: ClipRRect(
-          //       borderRadius: BorderRadius.circular(25),
-          //       child: Container(
-          //         height: context.height * 0.23,
-          //         width: context.width * 0.45,
-          //         decoration: BoxDecoration(
-          //           image: DecorationImage(
-          //             image: isImageAvailable
-          //                 ? NetworkImage(
-          //                     '$categoryImage',
-          //                   )
-          //                 : const AssetImage(
-          //                     'assets/images/cars.jpeg',
-          //                   ) as ImageProvider,
-          //             fit: BoxFit.cover,
-          //             onError: (obj, stack) {
-          //               setState(() {
-          //                 isImageAvailable = false;
-          //               });
-          //             },
-          //           ),
-          //         ),
-          //         child: Align(
-          //           alignment: Alignment.bottomCenter,
-          //           child: Container(
-          //             height: context.height * 0.05,
-          //             width: double.infinity,
-          //             color: Colors.black45,
-          //             padding:
-          //                 const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-          //             child: Text(
-          //               '$categoryName',
-          //               textAlign: TextAlign.start,
-          //               overflow: TextOverflow.ellipsis,
-          //               style: TextStyle(
-          //                   color: Colors.white,
-          //                   fontSize: ScreenUtil().setSp(13)),
-          //             ),
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
+            // child: Padding(
+            //   padding: const EdgeInsets.symmetric(
+            //     horizontal: 5,
+            //     vertical: 5,
+            //   ),
+            //   child: Card(
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(25),
+            //     ),
+            //     elevation: 8,
+            //     child: ClipRRect(
+            //       borderRadius: BorderRadius.circular(25),
+            //       child: Container(
+            //         height: context.height * 0.23,
+            //         width: context.width * 0.45,
+            //         decoration: BoxDecoration(
+            //           image: DecorationImage(
+            //             image: isImageAvailable
+            //                 ? NetworkImage(
+            //                     '$categoryImage',
+            //                   )
+            //                 : const AssetImage(
+            //                     'assets/images/cars.jpeg',
+            //                   ) as ImageProvider,
+            //             fit: BoxFit.cover,
+            //             onError: (obj, stack) {
+            //               setState(() {
+            //                 isImageAvailable = false;
+            //               });
+            //             },
+            //           ),
+            //         ),
+            //         child: Align(
+            //           alignment: Alignment.bottomCenter,
+            //           child: Container(
+            //             height: context.height * 0.05,
+            //             width: double.infinity,
+            //             color: Colors.black45,
+            //             padding:
+            //                 const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+            //             child: Text(
+            //               '$categoryName',
+            //               textAlign: TextAlign.start,
+            //               overflow: TextOverflow.ellipsis,
+            //               style: TextStyle(
+            //                   color: Colors.white,
+            //                   fontSize: ScreenUtil().setSp(13)),
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // ),
+            // Visibility(
+            //   visible: showDivider,
+            //   child: const Divider(
+            //     thickness: 1.1,
+            //     // color: Colors.black,
+            //   ),
+            // ),
+          ],
         ),
-        Visibility(
-          visible: showDivider,
-          child: const Divider(
-            thickness: 1.1,
-            // color: Colors.black,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

@@ -68,6 +68,7 @@ class SearchCubit extends Cubit<SearchState> {
   }) async {
     _carMadesEnglish?.clear();
     _carModels?.clear();
+    _carEngines?.clear();
 
     emit(SearchCarMadesLoading());
     try {

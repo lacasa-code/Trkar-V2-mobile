@@ -7,6 +7,7 @@ import 'package:trkar/core/components/sub_cat_item.dart';
 import 'package:trkar/core/helper/helper.dart';
 import '../../../core/extensions/string.dart';
 import '../../../core/components/sized_box_helper.dart';
+import 'package:trkar/core/components/loader_widget.dart';
 
 class ToolsOnlineStoresView extends StatelessWidget {
   const ToolsOnlineStoresView({

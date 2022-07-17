@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,6 +18,7 @@ class ChangeLanguageScreen extends StatelessWidget implements AutoRouteWrapper {
   static const routeName = '/change-lang';
   @override
   Widget build(BuildContext context) {
+    log(context.routeData.name);
     var langCubit = context.read<LangCubit>();
     return Scaffold(
       body: Column(
@@ -59,6 +62,7 @@ class ChangeLanguageScreen extends StatelessWidget implements AutoRouteWrapper {
                         imagePath: langItem.flag,
                         onPressed: () => langCubit.chooseLanguage(
                           langItem.code,
+                          context,
                         ),
                       );
                     },

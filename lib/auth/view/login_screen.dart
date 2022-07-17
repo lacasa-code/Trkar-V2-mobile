@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,6 +18,7 @@ class LoginScreen extends StatefulWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) {
+    log('wrap login');
     return BlocProvider(
       create: (_) => LoginCubit(),
       child: this,
@@ -50,6 +53,7 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
+    log('wrap build');
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(

@@ -9,11 +9,13 @@ import 'package:trkar/auth/view/widgets/auth_footer_widget.dart';
 import 'package:trkar/auth/viewModel/login/login_cubit.dart';
 import 'package:trkar/core/components/circle_widget.dart';
 import 'package:trkar/core/components/result_dialog.dart';
+import 'package:trkar/core/components/search_modal_bottom_sheet.dart';
 import 'package:trkar/core/extensions/string.dart';
 import 'package:trkar/core/components/register_button.dart';
 import 'package:trkar/core/components/register_field.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/router/router.gr.dart';
+import 'package:trkar/core/components/loader_widget.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({
@@ -125,11 +127,7 @@ class LoginView extends StatelessWidget {
                 BlocBuilder<LoginCubit, LoginState>(
                   builder: (context, state) {
                     if (state is LoginLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.orangeAccent,
-                        ),
-                      );
+                      return const LoaderWidget();
                     }
                     return SizedBox(
                       height: ScreenUtil().setHeight(55),
@@ -149,7 +147,9 @@ class LoginView extends StatelessWidget {
                   },
                 ),
 
-                const AuthFooterText(),
+                AuthFooterText(
+                  userType: isCustomerRegister ? 0 : 1,
+                ),
                 // const OrWidget(),
                 // RegisterButton(
                 //   title: 'create_new_acc',

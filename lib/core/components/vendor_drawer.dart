@@ -27,7 +27,6 @@ class VendorDrawer extends StatelessWidget {
                   height: ScreenUtil().setHeight(60),
                   width: ScreenUtil().setWidth(60),
                   decoration: BoxDecoration(
-                    // TODO :remove comment
                     border: Border.all(
                         width: 2, color: Theme.of(context).primaryColor),
                     shape: BoxShape.circle,

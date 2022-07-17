@@ -11,51 +11,55 @@
 // ignore_for_file: type=lint
 
 import 'package:auto_route/auto_route.dart' as _i14;
-import 'package:flutter/material.dart' as _i41;
+import 'package:flutter/material.dart' as _i43;
 
-import '../../about/view/about_screen.dart' as _i32;
-import '../../Addresses/view/add_new_address_screen.dart' as _i30;
-import '../../Addresses/view/addresses_screen.dart' as _i29;
+import '../../about/view/about_screen.dart' as _i33;
+import '../../Addresses/view/add_new_address_screen.dart' as _i31;
+import '../../Addresses/view/addresses_screen.dart' as _i30;
 import '../../auth/view/choose_user_type_screen.dart' as _i8;
 import '../../auth/view/email_verfication_screen.dart' as _i9;
 import '../../auth/view/forget_password_screen.dart' as _i10;
 import '../../auth/view/login_screen.dart' as _i7;
 import '../../auth/view/register_screen.dart' as _i12;
 import '../../auth/view/reset_password_screen.dart' as _i11;
-import '../../brakes/view/brakes_screen.dart' as _i26;
-import '../../carAccessories/view/car_accessories_screen.dart' as _i19;
+import '../../brakes/view/brakes_screen.dart' as _i27;
+import '../../carAccessories/view/car_accessories_screen.dart' as _i20;
 import '../../cart/view/cart_screen.dart' as _i16;
-import '../../categories/carMades/view/all_car_mades_screen.dart' as _i21;
+import '../../categories/carMades/view/all_car_mades_screen.dart' as _i22;
 import '../../categories/manufacturers/view/all_manufacturers_screen.dart'
-    as _i22;
+    as _i23;
 import '../../categories/view/categories_screen.dart' as _i17;
 import '../../categories/view/sub_categories_screen.dart' as _i18;
-import '../../delivery/view/delivery_screen.dart' as _i39;
-import '../../engineOil/view/engine_oil_screen.dart' as _i23;
+import '../../categories/view/sub_sub_category_screen.dart' as _i19;
+import '../../categories/viewModel/subCategories/sub_categories_cubit.dart'
+    as _i44;
+import '../../delivery/view/delivery_screen.dart' as _i40;
+import '../../engineOil/view/engine_oil_screen.dart' as _i24;
 import '../../favorites/view/favorites_screen.dart' as _i15;
-import '../../filters/view/filters_screen.dart' as _i20;
+import '../../filters/view/filters_screen.dart' as _i21;
 import '../../home/view/home_screen.dart' as _i13;
-import '../../legalNotice/view/legal_notice_screen.dart' as _i35;
-import '../../localization/view/change_language_screen.dart' as _i28;
+import '../../legalNotice/view/legal_notice_screen.dart' as _i36;
+import '../../localization/view/change_language_screen.dart' as _i29;
 import '../../mainScreen/tab_page.dart' as _i6;
-import '../../payment/view/payment_screen.dart' as _i34;
-import '../../privacy/view/privacy_screen.dart' as _i37;
-import '../../profile/view/edit_profile_screen.dart' as _i31;
-import '../../profile/view/profile_screen.dart' as _i27;
-import '../../returns/view/returns_refunds_screen.dart' as _i33;
-import '../../rightOfWithDrawal/view/rights_of_withdrawal.dart' as _i36;
+import '../../payment/view/payment_screen.dart' as _i35;
+import '../../privacy/view/privacy_screen.dart' as _i38;
+import '../../profile/view/edit_profile_screen.dart' as _i32;
+import '../../profile/view/profile_screen.dart' as _i28;
+import '../../returns/view/returns_refunds_screen.dart' as _i34;
+import '../../rightOfWithDrawal/view/rights_of_withdrawal.dart' as _i37;
 import '../../splash/view/splash_screen.dart' as _i1;
-import '../../support/view/support_screen.dart' as _i40;
-import '../../terms/view/terms_screen.dart' as _i38;
-import '../../tools/view/tools_screen.dart' as _i25;
-import '../../tyres/view/tyres_screen.dart' as _i24;
+import '../../support/view/submit_a_request.dart' as _i42;
+import '../../support/view/support_screen.dart' as _i41;
+import '../../terms/view/terms_screen.dart' as _i39;
+import '../../tools/view/tools_screen.dart' as _i26;
+import '../../tyres/view/tyres_screen.dart' as _i25;
 import '../../vendor/dashboard/view/seller_dashboard.dart' as _i4;
 import '../../vendor/home/view/vendor_home_screen.dart' as _i3;
 import '../../vendor/products/view/my_products_screen.dart' as _i5;
 import '../../vendor/resumeData/view/resume_data_screen.dart' as _i2;
 
 class AppRouter extends _i14.RootStackRouter {
-  AppRouter([_i41.GlobalKey<_i41.NavigatorState>? navigatorKey])
+  AppRouter([_i43.GlobalKey<_i43.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
@@ -100,10 +104,11 @@ class AppRouter extends _i14.RootStackRouter {
           orElse: () => const EmailVerficationRouterArgs());
       return _i14.MaterialPageX<dynamic>(
           routeData: routeData,
-          child: _i9.EmailVerficationScreen(
-              key: args.key,
-              stateOfVerfication: args.stateOfVerfication,
-              phoneNumber: args.phoneNumber));
+          child: _i14.WrappedRoute(
+              child: _i9.EmailVerificationScreen(
+                  key: args.key,
+                  stateOfVerification: args.stateOfVerification,
+                  phoneNumber: args.phoneNumber)));
     },
     ForgetPasswordRouter.name: (routeData) {
       return _i14.MaterialPageX<dynamic>(
@@ -159,13 +164,21 @@ class AppRouter extends _i14.RootStackRouter {
                   categoryName: args.categoryName,
                   parentId: args.parentId)));
     },
+    SubSubCategoriesRouter.name: (routeData) {
+      final args = routeData.argsAs<SubSubCategoriesRouterArgs>();
+      return _i14.MaterialPageX<dynamic>(
+          routeData: routeData,
+          child: _i14.WrappedRoute(
+              child: _i19.SubSubCategoriesScreen(
+                  key: args.key, subCategoriesCubit: args.subCategoriesCubit)));
+    },
     CarAccessoriesScreen.name: (routeData) {
       final args = routeData.argsAs<CarAccessoriesScreenArgs>(
           orElse: () => const CarAccessoriesScreenArgs());
       return _i14.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i14.WrappedRoute(
-              child: _i19.CarAccessoriesScreen(
+              child: _i20.CarAccessoriesScreen(
                   key: args.key, name: args.name, parentId: args.parentId)));
     },
     FilterRouter.name: (routeData) {
@@ -174,18 +187,18 @@ class AppRouter extends _i14.RootStackRouter {
       return _i14.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i14.WrappedRoute(
-              child: _i20.FiltersScreen(
+              child: _i21.FiltersScreen(
                   key: args.key,
                   categoryName: args.categoryName,
                   parentId: args.parentId)));
     },
     AllCarMadesScreen.name: (routeData) {
       return _i14.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i21.AllCarMadesScreen());
+          routeData: routeData, child: const _i22.AllCarMadesScreen());
     },
     AllManufacturersScreen.name: (routeData) {
       return _i14.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i22.AllManufacturersScreen());
+          routeData: routeData, child: const _i23.AllManufacturersScreen());
     },
     EngineOilScreen.name: (routeData) {
       final args = routeData.argsAs<EngineOilScreenArgs>(
@@ -193,7 +206,7 @@ class AppRouter extends _i14.RootStackRouter {
       return _i14.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i14.WrappedRoute(
-              child: _i23.EngineOilScreen(
+              child: _i24.EngineOilScreen(
                   key: args.key, categoryId: args.categoryId)));
     },
     TyresScreen.name: (routeData) {
@@ -202,7 +215,7 @@ class AppRouter extends _i14.RootStackRouter {
       return _i14.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i14.WrappedRoute(
-              child: _i24.TyresScreen(key: args.key, tabIndex: args.tabIndex)));
+              child: _i25.TyresScreen(key: args.key, tabIndex: args.tabIndex)));
     },
     ToolsScreen.name: (routeData) {
       final args = routeData.argsAs<ToolsScreenArgs>(
@@ -210,7 +223,7 @@ class AppRouter extends _i14.RootStackRouter {
       return _i14.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i14.WrappedRoute(
-              child: _i25.ToolsScreen(
+              child: _i26.ToolsScreen(
                   key: args.key, categoryId: args.categoryId)));
     },
     BrakesRouter.name: (routeData) {
@@ -219,70 +232,74 @@ class AppRouter extends _i14.RootStackRouter {
       return _i14.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i14.WrappedRoute(
-              child: _i26.BrakesScreen(
+              child: _i27.BrakesScreen(
                   key: args.key,
                   categoryName: args.categoryName,
                   parentId: args.parentId)));
     },
     ProfileScreen.name: (routeData) {
       return _i14.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i27.ProfileScreen());
+          routeData: routeData, child: const _i28.ProfileScreen());
     },
     ChangeLanguageScreen.name: (routeData) {
       return _i14.MaterialPageX<dynamic>(
           routeData: routeData,
-          child: _i14.WrappedRoute(child: const _i28.ChangeLanguageScreen()));
+          child: _i14.WrappedRoute(child: const _i29.ChangeLanguageScreen()));
     },
     AddressesScreen.name: (routeData) {
       return _i14.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i29.AddressesScreen());
+          routeData: routeData, child: const _i30.AddressesScreen());
     },
     AddNewAddressScreen.name: (routeData) {
       return _i14.MaterialPageX<dynamic>(
           routeData: routeData,
-          child: _i14.WrappedRoute(child: const _i30.AddNewAddressScreen()));
+          child: _i14.WrappedRoute(child: const _i31.AddNewAddressScreen()));
     },
     EditProfileScreen.name: (routeData) {
       return _i14.MaterialPageX<dynamic>(
           routeData: routeData,
-          child: _i14.WrappedRoute(child: const _i31.EditProfileScreen()));
+          child: _i14.WrappedRoute(child: const _i32.EditProfileScreen()));
     },
     AboutUsRouter.name: (routeData) {
       return _i14.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i32.AboutScreen());
+          routeData: routeData, child: const _i33.AboutScreen());
     },
     ReturnsAndRefundsScreen.name: (routeData) {
       return _i14.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i33.ReturnsAndRefundsScreen());
+          routeData: routeData, child: const _i34.ReturnsAndRefundsScreen());
     },
     PaymentScreen.name: (routeData) {
       return _i14.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i34.PaymentScreen());
+          routeData: routeData, child: const _i35.PaymentScreen());
     },
     LegalNoticeScreen.name: (routeData) {
       return _i14.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i35.LegalNoticeScreen());
+          routeData: routeData, child: const _i36.LegalNoticeScreen());
     },
     RightsOfWithdrawalScreen.name: (routeData) {
       return _i14.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i36.RightsOfWithdrawalScreen());
+          routeData: routeData, child: const _i37.RightsOfWithdrawalScreen());
     },
     PrivacyScreen.name: (routeData) {
       return _i14.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i37.PrivacyScreen());
+          routeData: routeData, child: const _i38.PrivacyScreen());
     },
-    TermsAndConitionsScreen.name: (routeData) {
+    TermsAndConditionsScreen.name: (routeData) {
       return _i14.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i38.TermsAndConitionsScreen());
+          routeData: routeData, child: const _i39.TermsAndConditionsScreen());
     },
     DeliveryScreen.name: (routeData) {
       return _i14.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i39.DeliveryScreen());
+          routeData: routeData, child: const _i40.DeliveryScreen());
     },
     SupportScreen.name: (routeData) {
       return _i14.MaterialPageX<dynamic>(
           routeData: routeData,
-          child: _i14.WrappedRoute(child: const _i40.SupportScreen()));
+          child: _i14.WrappedRoute(child: const _i41.SupportScreen()));
+    },
+    SubmitRequestRouter.name: (routeData) {
+      return _i14.MaterialPageX<dynamic>(
+          routeData: routeData, child: const _i42.SubmitARequest());
     }
   };
 
@@ -304,6 +321,8 @@ class AppRouter extends _i14.RootStackRouter {
                     path: '', parent: CategoriesRouter.name),
                 _i14.RouteConfig(SubCategoriesScreen.name,
                     path: ':categoryId', parent: CategoriesRouter.name),
+                _i14.RouteConfig(SubSubCategoriesRouter.name,
+                    path: 'sub-sub-categories', parent: CategoriesRouter.name),
                 _i14.RouteConfig(CarAccessoriesScreen.name,
                     path: 'car-accessories', parent: CategoriesRouter.name),
                 _i14.RouteConfig(FilterRouter.name,
@@ -351,12 +370,14 @@ class AppRouter extends _i14.RootStackRouter {
                     path: 'right-of-withdrawal', parent: ProfileRouter.name),
                 _i14.RouteConfig(PrivacyScreen.name,
                     path: 'privacy-policy', parent: ProfileRouter.name),
-                _i14.RouteConfig(TermsAndConitionsScreen.name,
+                _i14.RouteConfig(TermsAndConditionsScreen.name,
                     path: 'terms', parent: ProfileRouter.name),
                 _i14.RouteConfig(DeliveryScreen.name,
                     path: 'delivery', parent: ProfileRouter.name),
                 _i14.RouteConfig(SupportScreen.name,
-                    path: 'support', parent: ProfileRouter.name)
+                    path: 'support', parent: ProfileRouter.name),
+                _i14.RouteConfig(SubmitRequestRouter.name,
+                    path: 'submit-request', parent: ProfileRouter.name)
               ])
         ]),
         _i14.RouteConfig(LoginRouter.name, path: 'login'),
@@ -436,16 +457,16 @@ class ChooseTypeRouter extends _i14.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i9.EmailVerficationScreen]
+/// [_i9.EmailVerificationScreen]
 class EmailVerficationRouter
     extends _i14.PageRouteInfo<EmailVerficationRouterArgs> {
   EmailVerficationRouter(
-      {_i41.Key? key, int stateOfVerfication = 0, String? phoneNumber})
+      {_i43.Key? key, int stateOfVerification = 0, String? phoneNumber})
       : super(EmailVerficationRouter.name,
             path: 'email_verfication',
             args: EmailVerficationRouterArgs(
                 key: key,
-                stateOfVerfication: stateOfVerfication,
+                stateOfVerification: stateOfVerification,
                 phoneNumber: phoneNumber));
 
   static const String name = 'EmailVerficationRouter';
@@ -453,17 +474,17 @@ class EmailVerficationRouter
 
 class EmailVerficationRouterArgs {
   const EmailVerficationRouterArgs(
-      {this.key, this.stateOfVerfication = 0, this.phoneNumber});
+      {this.key, this.stateOfVerification = 0, this.phoneNumber});
 
-  final _i41.Key? key;
+  final _i43.Key? key;
 
-  final int stateOfVerfication;
+  final int stateOfVerification;
 
   final String? phoneNumber;
 
   @override
   String toString() {
-    return 'EmailVerficationRouterArgs{key: $key, stateOfVerfication: $stateOfVerfication, phoneNumber: $phoneNumber}';
+    return 'EmailVerficationRouterArgs{key: $key, stateOfVerification: $stateOfVerification, phoneNumber: $phoneNumber}';
   }
 }
 
@@ -488,7 +509,7 @@ class ResetPasswordRouter extends _i14.PageRouteInfo<void> {
 /// generated route for
 /// [_i12.RegisterScreen]
 class RegisterRouter extends _i14.PageRouteInfo<RegisterRouterArgs> {
-  RegisterRouter({_i41.Key? key, int? userType})
+  RegisterRouter({_i43.Key? key, int? userType})
       : super(RegisterRouter.name,
             path: 'register',
             args: RegisterRouterArgs(key: key, userType: userType));
@@ -499,7 +520,7 @@ class RegisterRouter extends _i14.PageRouteInfo<RegisterRouterArgs> {
 class RegisterRouterArgs {
   const RegisterRouterArgs({this.key, this.userType});
 
-  final _i41.Key? key;
+  final _i43.Key? key;
 
   final int? userType;
 
@@ -563,7 +584,7 @@ class CategoriesScreen extends _i14.PageRouteInfo<void> {
 /// generated route for
 /// [_i18.SubCategoriesScreen]
 class SubCategoriesScreen extends _i14.PageRouteInfo<SubCategoriesScreenArgs> {
-  SubCategoriesScreen({_i41.Key? key, String? categoryName, String? parentId})
+  SubCategoriesScreen({_i43.Key? key, String? categoryName, String? parentId})
       : super(SubCategoriesScreen.name,
             path: ':categoryId',
             args: SubCategoriesScreenArgs(
@@ -576,7 +597,7 @@ class SubCategoriesScreen extends _i14.PageRouteInfo<SubCategoriesScreenArgs> {
 class SubCategoriesScreenArgs {
   const SubCategoriesScreenArgs({this.key, this.categoryName, this.parentId});
 
-  final _i41.Key? key;
+  final _i43.Key? key;
 
   final String? categoryName;
 
@@ -589,10 +610,38 @@ class SubCategoriesScreenArgs {
 }
 
 /// generated route for
-/// [_i19.CarAccessoriesScreen]
+/// [_i19.SubSubCategoriesScreen]
+class SubSubCategoriesRouter
+    extends _i14.PageRouteInfo<SubSubCategoriesRouterArgs> {
+  SubSubCategoriesRouter(
+      {_i43.Key? key, required _i44.SubCategoriesCubit subCategoriesCubit})
+      : super(SubSubCategoriesRouter.name,
+            path: 'sub-sub-categories',
+            args: SubSubCategoriesRouterArgs(
+                key: key, subCategoriesCubit: subCategoriesCubit));
+
+  static const String name = 'SubSubCategoriesRouter';
+}
+
+class SubSubCategoriesRouterArgs {
+  const SubSubCategoriesRouterArgs(
+      {this.key, required this.subCategoriesCubit});
+
+  final _i43.Key? key;
+
+  final _i44.SubCategoriesCubit subCategoriesCubit;
+
+  @override
+  String toString() {
+    return 'SubSubCategoriesRouterArgs{key: $key, subCategoriesCubit: $subCategoriesCubit}';
+  }
+}
+
+/// generated route for
+/// [_i20.CarAccessoriesScreen]
 class CarAccessoriesScreen
     extends _i14.PageRouteInfo<CarAccessoriesScreenArgs> {
-  CarAccessoriesScreen({_i41.Key? key, String? name, String? parentId})
+  CarAccessoriesScreen({_i43.Key? key, String? name, String? parentId})
       : super(CarAccessoriesScreen.name,
             path: 'car-accessories',
             args: CarAccessoriesScreenArgs(
@@ -604,7 +653,7 @@ class CarAccessoriesScreen
 class CarAccessoriesScreenArgs {
   const CarAccessoriesScreenArgs({this.key, this.name, this.parentId});
 
-  final _i41.Key? key;
+  final _i43.Key? key;
 
   final String? name;
 
@@ -617,9 +666,9 @@ class CarAccessoriesScreenArgs {
 }
 
 /// generated route for
-/// [_i20.FiltersScreen]
+/// [_i21.FiltersScreen]
 class FilterRouter extends _i14.PageRouteInfo<FilterRouterArgs> {
-  FilterRouter({_i41.Key? key, String? categoryName, String? parentId})
+  FilterRouter({_i43.Key? key, String? categoryName, String? parentId})
       : super(FilterRouter.name,
             path: 'car-filters',
             args: FilterRouterArgs(
@@ -631,7 +680,7 @@ class FilterRouter extends _i14.PageRouteInfo<FilterRouterArgs> {
 class FilterRouterArgs {
   const FilterRouterArgs({this.key, this.categoryName, this.parentId});
 
-  final _i41.Key? key;
+  final _i43.Key? key;
 
   final String? categoryName;
 
@@ -644,7 +693,7 @@ class FilterRouterArgs {
 }
 
 /// generated route for
-/// [_i21.AllCarMadesScreen]
+/// [_i22.AllCarMadesScreen]
 class AllCarMadesScreen extends _i14.PageRouteInfo<void> {
   const AllCarMadesScreen()
       : super(AllCarMadesScreen.name, path: 'all-car-mades');
@@ -653,7 +702,7 @@ class AllCarMadesScreen extends _i14.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i22.AllManufacturersScreen]
+/// [_i23.AllManufacturersScreen]
 class AllManufacturersScreen extends _i14.PageRouteInfo<void> {
   const AllManufacturersScreen()
       : super(AllManufacturersScreen.name, path: 'all-manufacturers');
@@ -662,9 +711,9 @@ class AllManufacturersScreen extends _i14.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i23.EngineOilScreen]
+/// [_i24.EngineOilScreen]
 class EngineOilScreen extends _i14.PageRouteInfo<EngineOilScreenArgs> {
-  EngineOilScreen({_i41.Key? key, String? categoryId})
+  EngineOilScreen({_i43.Key? key, String? categoryId})
       : super(EngineOilScreen.name,
             path: 'engine-oil',
             args: EngineOilScreenArgs(key: key, categoryId: categoryId));
@@ -675,7 +724,7 @@ class EngineOilScreen extends _i14.PageRouteInfo<EngineOilScreenArgs> {
 class EngineOilScreenArgs {
   const EngineOilScreenArgs({this.key, this.categoryId});
 
-  final _i41.Key? key;
+  final _i43.Key? key;
 
   final String? categoryId;
 
@@ -686,9 +735,9 @@ class EngineOilScreenArgs {
 }
 
 /// generated route for
-/// [_i24.TyresScreen]
+/// [_i25.TyresScreen]
 class TyresScreen extends _i14.PageRouteInfo<TyresScreenArgs> {
-  TyresScreen({_i41.Key? key, int? tabIndex})
+  TyresScreen({_i43.Key? key, int? tabIndex})
       : super(TyresScreen.name,
             path: 'tyres', args: TyresScreenArgs(key: key, tabIndex: tabIndex));
 
@@ -698,7 +747,7 @@ class TyresScreen extends _i14.PageRouteInfo<TyresScreenArgs> {
 class TyresScreenArgs {
   const TyresScreenArgs({this.key, this.tabIndex});
 
-  final _i41.Key? key;
+  final _i43.Key? key;
 
   final int? tabIndex;
 
@@ -709,9 +758,9 @@ class TyresScreenArgs {
 }
 
 /// generated route for
-/// [_i25.ToolsScreen]
+/// [_i26.ToolsScreen]
 class ToolsScreen extends _i14.PageRouteInfo<ToolsScreenArgs> {
-  ToolsScreen({_i41.Key? key, String? categoryId})
+  ToolsScreen({_i43.Key? key, String? categoryId})
       : super(ToolsScreen.name,
             path: 'tools',
             args: ToolsScreenArgs(key: key, categoryId: categoryId));
@@ -722,7 +771,7 @@ class ToolsScreen extends _i14.PageRouteInfo<ToolsScreenArgs> {
 class ToolsScreenArgs {
   const ToolsScreenArgs({this.key, this.categoryId});
 
-  final _i41.Key? key;
+  final _i43.Key? key;
 
   final String? categoryId;
 
@@ -733,9 +782,9 @@ class ToolsScreenArgs {
 }
 
 /// generated route for
-/// [_i26.BrakesScreen]
+/// [_i27.BrakesScreen]
 class BrakesRouter extends _i14.PageRouteInfo<BrakesRouterArgs> {
-  BrakesRouter({_i41.Key? key, String? categoryName, String? parentId})
+  BrakesRouter({_i43.Key? key, String? categoryName, String? parentId})
       : super(BrakesRouter.name,
             path: 'brakes',
             args: BrakesRouterArgs(
@@ -747,7 +796,7 @@ class BrakesRouter extends _i14.PageRouteInfo<BrakesRouterArgs> {
 class BrakesRouterArgs {
   const BrakesRouterArgs({this.key, this.categoryName, this.parentId});
 
-  final _i41.Key? key;
+  final _i43.Key? key;
 
   final String? categoryName;
 
@@ -760,7 +809,7 @@ class BrakesRouterArgs {
 }
 
 /// generated route for
-/// [_i27.ProfileScreen]
+/// [_i28.ProfileScreen]
 class ProfileScreen extends _i14.PageRouteInfo<void> {
   const ProfileScreen() : super(ProfileScreen.name, path: '');
 
@@ -768,7 +817,7 @@ class ProfileScreen extends _i14.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i28.ChangeLanguageScreen]
+/// [_i29.ChangeLanguageScreen]
 class ChangeLanguageScreen extends _i14.PageRouteInfo<void> {
   const ChangeLanguageScreen()
       : super(ChangeLanguageScreen.name, path: 'language');
@@ -777,7 +826,7 @@ class ChangeLanguageScreen extends _i14.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i29.AddressesScreen]
+/// [_i30.AddressesScreen]
 class AddressesScreen extends _i14.PageRouteInfo<void> {
   const AddressesScreen() : super(AddressesScreen.name, path: 'addresses');
 
@@ -785,7 +834,7 @@ class AddressesScreen extends _i14.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i30.AddNewAddressScreen]
+/// [_i31.AddNewAddressScreen]
 class AddNewAddressScreen extends _i14.PageRouteInfo<void> {
   const AddNewAddressScreen()
       : super(AddNewAddressScreen.name, path: 'modify-address');
@@ -794,7 +843,7 @@ class AddNewAddressScreen extends _i14.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i31.EditProfileScreen]
+/// [_i32.EditProfileScreen]
 class EditProfileScreen extends _i14.PageRouteInfo<void> {
   const EditProfileScreen()
       : super(EditProfileScreen.name, path: 'edit-profile');
@@ -803,7 +852,7 @@ class EditProfileScreen extends _i14.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i32.AboutScreen]
+/// [_i33.AboutScreen]
 class AboutUsRouter extends _i14.PageRouteInfo<void> {
   const AboutUsRouter() : super(AboutUsRouter.name, path: 'about-us');
 
@@ -811,7 +860,7 @@ class AboutUsRouter extends _i14.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i33.ReturnsAndRefundsScreen]
+/// [_i34.ReturnsAndRefundsScreen]
 class ReturnsAndRefundsScreen extends _i14.PageRouteInfo<void> {
   const ReturnsAndRefundsScreen()
       : super(ReturnsAndRefundsScreen.name, path: 'replacement');
@@ -820,7 +869,7 @@ class ReturnsAndRefundsScreen extends _i14.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i34.PaymentScreen]
+/// [_i35.PaymentScreen]
 class PaymentScreen extends _i14.PageRouteInfo<void> {
   const PaymentScreen() : super(PaymentScreen.name, path: 'payment');
 
@@ -828,7 +877,7 @@ class PaymentScreen extends _i14.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i35.LegalNoticeScreen]
+/// [_i36.LegalNoticeScreen]
 class LegalNoticeScreen extends _i14.PageRouteInfo<void> {
   const LegalNoticeScreen()
       : super(LegalNoticeScreen.name, path: 'legal-notice');
@@ -837,7 +886,7 @@ class LegalNoticeScreen extends _i14.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i36.RightsOfWithdrawalScreen]
+/// [_i37.RightsOfWithdrawalScreen]
 class RightsOfWithdrawalScreen extends _i14.PageRouteInfo<void> {
   const RightsOfWithdrawalScreen()
       : super(RightsOfWithdrawalScreen.name, path: 'right-of-withdrawal');
@@ -846,7 +895,7 @@ class RightsOfWithdrawalScreen extends _i14.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i37.PrivacyScreen]
+/// [_i38.PrivacyScreen]
 class PrivacyScreen extends _i14.PageRouteInfo<void> {
   const PrivacyScreen() : super(PrivacyScreen.name, path: 'privacy-policy');
 
@@ -854,16 +903,16 @@ class PrivacyScreen extends _i14.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i38.TermsAndConitionsScreen]
-class TermsAndConitionsScreen extends _i14.PageRouteInfo<void> {
-  const TermsAndConitionsScreen()
-      : super(TermsAndConitionsScreen.name, path: 'terms');
+/// [_i39.TermsAndConditionsScreen]
+class TermsAndConditionsScreen extends _i14.PageRouteInfo<void> {
+  const TermsAndConditionsScreen()
+      : super(TermsAndConditionsScreen.name, path: 'terms');
 
-  static const String name = 'TermsAndConitionsScreen';
+  static const String name = 'TermsAndConditionsScreen';
 }
 
 /// generated route for
-/// [_i39.DeliveryScreen]
+/// [_i40.DeliveryScreen]
 class DeliveryScreen extends _i14.PageRouteInfo<void> {
   const DeliveryScreen() : super(DeliveryScreen.name, path: 'delivery');
 
@@ -871,9 +920,18 @@ class DeliveryScreen extends _i14.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i40.SupportScreen]
+/// [_i41.SupportScreen]
 class SupportScreen extends _i14.PageRouteInfo<void> {
   const SupportScreen() : super(SupportScreen.name, path: 'support');
 
   static const String name = 'SupportScreen';
+}
+
+/// generated route for
+/// [_i42.SubmitARequest]
+class SubmitRequestRouter extends _i14.PageRouteInfo<void> {
+  const SubmitRequestRouter()
+      : super(SubmitRequestRouter.name, path: 'submit-request');
+
+  static const String name = 'SubmitRequestRouter';
 }

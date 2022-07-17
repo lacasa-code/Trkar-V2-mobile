@@ -15,7 +15,7 @@ class MapDialog extends StatefulWidget {
   const MapDialog({
     Key? key,
     required this.onPickedLocation,
-    this.thinBorder = false,
+    this.thinBorder = true,
     this.showOKButton = true,
   }) : super(key: key);
   final void Function(LatLng, String) onPickedLocation;

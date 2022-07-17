@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:trkar/core/components/search_modal_bottom_sheet.dart';
+import 'package:trkar/core/components/loader_widget.dart';
 
 import '../../../core/components/register_button.dart';
 import '../../viewModel/lang/lang_cubit.dart';
@@ -22,7 +24,6 @@ class ChooseLangWidget extends StatelessWidget {
                 onPressed: () {
                   context.read<LangCubit>().changeLanguage(
                         context: context,
-                        canPop: Navigator.canPop(context),
                       );
                 }),
             Positioned(
@@ -38,7 +39,7 @@ class ChooseLangWidget extends StatelessWidget {
                     radius: ScreenUtil().radius(20),
                     child: const Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: CircularProgressIndicator(),
+                      child: LoaderWidget(),
                     ),
                   ),
                 ),

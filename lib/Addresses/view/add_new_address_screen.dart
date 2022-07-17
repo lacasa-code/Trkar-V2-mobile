@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trkar/core/components/search_modal_bottom_sheet.dart';
 import 'package:trkar/core/components/searchable_dropdown_widget.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import '../viewModel/addNewAddress/add_new_address_cubit.dart';
@@ -12,6 +13,7 @@ import '../../core/themes/screen_utility.dart';
 import '../../core/extensions/string.dart';
 import '../../core/components//register_button.dart';
 import '../../core/components//register_field.dart';
+import 'package:trkar/core/components/loader_widget.dart';
 
 class AddNewAddressScreen extends StatefulWidget implements AutoRouteWrapper {
   const AddNewAddressScreen({
@@ -182,9 +184,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                 BlocBuilder<AddNewAddressCubit, AddNewAddressState>(
                   builder: (context, state) {
                     if (state is AddNewAddressLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
+                      return const LoaderWidget();
                     }
                     return RegisterButton(
                       title: 'save',

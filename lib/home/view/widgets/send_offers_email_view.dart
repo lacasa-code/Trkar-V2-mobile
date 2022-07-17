@@ -33,7 +33,7 @@ class _SendOffersEmailViewState extends State<SendOffersEmailView> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Text(
-                  widget.title ?? 'recieve_offersmail_header'.translate,
+                  widget.title ?? 'receive_offers_mail_header'.translate,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: ScreenUtil().setSp(15),
@@ -59,7 +59,7 @@ class _SendOffersEmailViewState extends State<SendOffersEmailView> {
                   SizedBox(
                     width: ScreenUtil().setWidth(250),
                     child: Text(
-                      'recieve_offersmail'.translate,
+                      'receive_offers_mail'.translate,
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(11),
                       ),

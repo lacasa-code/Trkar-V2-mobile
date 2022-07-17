@@ -30,6 +30,13 @@ class TabPage extends StatefulWidget implements AutoRouteWrapper {
 class _TabPageState extends State<TabPage> {
   var svgAssetsPath = 'assets/icons/svg/';
   late List<dynamic> pages;
+  TabsRouter? myTabsRouter;
+
+  var isInit = true;
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -63,75 +70,102 @@ class _TabPageState extends State<TabPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AutoTabsScaffold(
       routes: const [
         HomeRouter(),
         CategoriesRouter(),
-        FavoritesRouter(),
         CartRouter(),
+        FavoritesRouter(),
         ProfileRouter(),
       ],
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       // backgroundColor: Colors.transparent,
       // extendBody: true,
 
-      floatingActionButton: SvgPicture.asset(
-        'assets/icons/svg/cart-button.svg',
-        fit: BoxFit.cover,
+      // appBarBuilder: myTabsRouter?.activeIndex == 4
+      //     ? (_, tabsRouter) => AppBar(
+      //           backgroundColor: Colors.transparent,
+      //           elevation: 0,
+      //           leading: Icon(
+      //             Icons.arrow_back_ios,
+      //             color: Theme.of(context).primaryIconTheme.color,
+      //             size: ScreenUtil().radius(15),
+      //           ),
+      //         )
+      //     : null,
+      floatingActionButton: InkWell(
+        onTap: () {
+          myTabsRouter?.setActiveIndex(2);
+          myTabsRouter?.popTop();
+        },
+        child: SvgPicture.asset(
+          'assets/icons/svg/cart-button.svg',
+          fit: BoxFit.cover,
+        ),
       ),
-      bottomNavigationBuilder: (_, tabRouter) => SizedBox(
-        height: ScreenUtil().setHeight(60),
-        child: BottomAppBar(
-          shape: const CircularNotchedRectangle(),
+      bottomNavigationBuilder: (_, tabRouter) {
+        myTabsRouter = tabRouter;
 
-          notchMargin: ScreenUtil().radius(2),
-          // color: Colors.red,
-          elevation: 10,
-          // color: Colors.white.withAlpha(0),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: List.generate(
-                pages.length,
-                (index) {
-                  var e = pages[index];
-                  return e['title'].isEmpty
-                      ? const SizedBox()
-                      : InkWell(
-                          onTap: () {
-                            tabRouter.setActiveIndex(index);
-                            tabRouter.current.router.popTop();
-                          },
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SvgPicture.asset(
-                                e['icon'],
-                                color: tabRouter.activeIndex == index
-                                    ? Theme.of(context).primaryColor
-                                    : Colors.grey,
-                                height: ScreenUtil().setHeight(35),
-                                width: ScreenUtil().setWidth(35),
-                              ),
-                              Text(
-                                e['title'],
-                                style: TextStyle(
+        log('message from builder ${myTabsRouter?.activeIndex}');
+        return SizedBox(
+          height: ScreenUtil().setHeight(60),
+          child: BottomAppBar(
+            shape: const CircularNotchedRectangle(),
+
+            notchMargin: ScreenUtil().radius(2),
+            // color: Colors.red,
+            elevation: 10,
+            // color: Colors.white.withAlpha(0),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: List.generate(
+                  pages.length,
+                  (index) {
+                    var e = pages[index];
+                    return e['title'].isEmpty
+                        ? const SizedBox()
+                        : InkWell(
+                            onTap: () {
+                              tabRouter.setActiveIndex(index);
+                              tabRouter.current.router.popTop();
+                            },
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SvgPicture.asset(
+                                  e['icon'],
                                   color: tabRouter.activeIndex == index
                                       ? Theme.of(context).primaryColor
                                       : Colors.grey,
+                                  height: ScreenUtil().setHeight(35),
+                                  width: ScreenUtil().setWidth(35),
                                 ),
-                              )
-                            ],
-                          ),
-                        );
-                },
+                                Text(
+                                  e['title'],
+                                  style: TextStyle(
+                                    color: tabRouter.activeIndex == index
+                                        ? Theme.of(context).primaryColor
+                                        : Colors.grey,
+                                  ),
+                                )
+                              ],
+                            ),
+                          );
+                  },
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

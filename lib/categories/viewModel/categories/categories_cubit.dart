@@ -120,7 +120,7 @@ class CategoriesCubit extends Cubit<CategoriesState> {
   List<Category> get category => [
         ...?_category,
       ];
-  List<Category> get maincategory => [
+  List<Category> get mainCategory => [
         ...?_allcategory?.where((e) => e.parentId == '0').toList(),
       ];
 
@@ -129,19 +129,19 @@ class CategoriesCubit extends Cubit<CategoriesState> {
     required int index,
   }) {
     log('hi From NewMessage');
-    if (maincategory.isNotEmpty) {
+    if (mainCategory.isNotEmpty) {
       context.read<SearchCubit>().getCarMades(
             context,
-            categoryId: maincategory[index].id,
+            categoryId: mainCategory[index].id,
           );
       emit(TabBarChanged());
     }
   }
 
-  double getTabBarSize(int index) => ScreenUtil().setHeight(103 *
-      (subCategories(maincategory[index].id ?? 0).length > 40
+  double getTabBarSize(int index) => ScreenUtil().setHeight(81.15 *
+      ((subCategories(mainCategory[index].id ?? 0).length > 40
           ? 40
-          : subCategories(maincategory[index].id ?? 0).length));
+          : subCategories(mainCategory[index].id ?? 0).length)));
   List<Category> get homeCategories {
     List<Category> _myCat = [];
     for (var i = 0; i < _homeCategoriesIds.length; i++) {

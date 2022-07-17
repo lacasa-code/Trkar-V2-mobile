@@ -9,19 +9,23 @@ import 'package:trkar/core/extensions/string.dart';
 class RegisterButton extends StatelessWidget {
   const RegisterButton({
     Key? key,
-    required this.title,
+    this.title,
     required this.onPressed,
     this.removePadding = false,
     this.icon,
     this.color,
     this.radius = 30,
+    this.textSize,
+    this.noLocalTitle,
   }) : super(key: key);
-  final String title;
+  final String? title;
   final void Function() onPressed;
   final bool removePadding;
   final Widget? icon;
   final Color? color;
   final double radius;
+  final String? noLocalTitle;
+  final num? textSize;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -35,12 +39,18 @@ class RegisterButton extends StatelessWidget {
           icon: icon ?? const BoxHelper(),
           label: FittedBox(
             child: Text(
-              title.translate,
+              noLocalTitle ?? title?.translate ?? '',
               style: color == Colors.white
                   ? MainTheme.buttonStyle.copyWith(
                       color: Theme.of(context).primaryColor,
+                      fontSize: textSize == null
+                          ? null
+                          : ScreenUtil().setSp(textSize!),
                     )
-                  : MainTheme.buttonStyle,
+                  : MainTheme.buttonStyle.copyWith(
+                      fontSize: textSize == null
+                          ? null
+                          : ScreenUtil().setSp(textSize!)),
             ),
           ),
           style: ButtonStyle(
@@ -50,7 +60,8 @@ class RegisterButton extends StatelessWidget {
               ),
             ),
             backgroundColor: MaterialStateProperty.all<Color>(
-                color ?? Theme.of(context).primaryColor),
+              color ?? Theme.of(context).primaryColor,
+            ),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(radius),

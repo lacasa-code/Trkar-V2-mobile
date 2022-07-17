@@ -16,7 +16,7 @@ class DropDownWidget extends StatelessWidget {
     this.validator,
     this.textAlignment,
     this.removePadding = false,
-    this.thinBorder = false,
+    this.thinBorder = true,
   }) : super(key: key);
   final int? selectedValueIndex;
   final List<String?> values;
@@ -71,6 +71,7 @@ class DropDownWidget extends StatelessWidget {
         ),
         icon: Icon(
           Icons.arrow_drop_down,
+          size: ScreenUtil().radius(35),
           color:
               thinBorder ? MainStyle.lightGreyColor : MainStyle.darkGreyColor,
         ),

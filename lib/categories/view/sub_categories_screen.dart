@@ -2,33 +2,32 @@ import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:trkar/categories/view/widgets/category_item.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:trkar/categories/view/widgets/categories_filter_view.dart';
 import 'package:trkar/categories/view/widgets/manufacturers_details_item.dart';
 import 'package:trkar/categories/view/widgets/sub_category_item.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
+import 'package:trkar/core/components/customized_app_bar.dart';
 import 'package:trkar/core/components/register_button.dart';
-import 'package:trkar/core/components/register_field.dart';
 import 'package:trkar/core/components/search_app_bar.dart';
-import 'package:trkar/core/components/search_icon.dart';
-import 'package:trkar/core/components/search_modal_bottom_sheet.dart';
 import 'package:trkar/core/components/search_view.dart';
-import 'package:trkar/core/components/searchable_dropdown_widget.dart';
+import 'package:trkar/core/components/search_widget.dart';
+import 'package:trkar/core/components/section_header_item.dart';
+import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/helper/helper.dart';
-import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/core/router/router.gr.dart' as route;
+import 'package:trkar/core/themes/screen_utility.dart';
+import 'package:trkar/filterCars/model/manufacturers_model.dart';
 import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
 import 'package:trkar/home/view/widgets/my_drawer.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../core/extensions/string.dart';
-import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
-import 'package:trkar/tab/viewModel/cubit/tab_cubit.dart';
 import '../../core/extensions/media_query.dart';
 import '../../search/viewModel/search/search_cubit.dart';
+import 'package:trkar/core/components/loader_widget.dart';
 
 class SubCategoriesScreen extends StatefulWidget implements AutoRouteWrapper {
   const SubCategoriesScreen({
@@ -75,6 +74,7 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
   void initState() {
     filterCarsCubit = context.read<FilterCarsCubit>();
     searchCubit = context.read<SearchCubit>()..getCarMades(context);
+
     subcategoriesCubit = BlocProvider.of<SubCategoriesCubit>(context)
       ..getSubCategories(context);
     super.initState();
@@ -111,117 +111,102 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
       //     },
       //   ),
       // ),
-      appBar: SearchAppBar(scaffoldKey: scaffoldKey),
+      appBar: CustomizedAppBar(
+        context: context,
+        scaffoldKey: scaffoldKey,
+        title: widget.categoryName ?? '',
+      ),
+      // appBar: SearchAppBar(scaffoldKey: scaffoldKey),
       body: BlocBuilder<SubCategoriesCubit, SubCategoriesState>(
         builder: (context, state) {
           if (state is SubCategoriesLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const LoaderWidget();
           }
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SearchView(searchCubit: searchCubit),
-                BlocBuilder<FilterCarsCubit, FilterCarsState>(
-                  builder: (context, state) {
-                    return Column(
-                      children: [
-                        state is CarMadesLoading
-                            ? const LoaderWidget()
-                            : BrandsView(filterCarsCubit: filterCarsCubit),
-                        state is ManufacturersLoading
-                            ? const LoaderWidget()
-                            : ManufacturersView(
-                                filterCarsCubit: filterCarsCubit),
-                      ],
-                    );
-                  },
+                SearchField(
+                  removePadding: false,
+                  suffixIcon: Transform.scale(
+                    scale: 0.5,
+                    child: InkWell(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (_) {
+                            return const CategoriesFilterView();
+                          },
+                        );
+                      },
+                      child: SvgPicture.asset(
+                        'assets/icons/svg/filter.svg',
+                      ),
+                    ),
+                  ),
                 ),
+                SearchView(searchCubit: searchCubit),
+                // BlocBuilder<FilterCarsCubit, FilterCarsState>(
+                //   builder: (context, state) {
+                //     return Column(
+                //       children: [
+                //         state is CarMadesLoading
+                //             ? const LoaderWidget()
+                //             : BrandsView(filterCarsCubit: filterCarsCubit),
+                //         state is ManufacturersLoading
+                //             ? const LoaderWidget()
+                //             : ManufacturersView(
+                //                 filterCarsCubit: filterCarsCubit),
+                //       ],
+                //     );
+                //   },
+                // ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 10),
-                      child: Text(
-                        '${'categories'.translate} :',
-                        textAlign: TextAlign.start,
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    SectionHeaderItem(
+                      title: '${'categories'.translate} :',
+                      onViewAllPressed: () {
+                        context.router.push(
+                          route.SubSubCategoriesRouter(
+                            subCategoriesCubit:
+                                context.read<SubCategoriesCubit>(),
+                          ),
+                        );
+                      },
+                      showViewAll: subcategoriesCubit.subCategories.length > 5,
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: List.generate(
+                            subcategoriesCubit.subCategories.length > 5
+                                ? 5
+                                : subcategoriesCubit.subCategories.length,
+                            (index) {
+                          var cat = subcategoriesCubit.subCategories[index];
+                          return SubCategoryCard(
+                            showDivider: cat !=
+                                subcategoriesCubit.subCategories.toList().last,
+                            onPressed: () async =>
+                                subcategoriesCubit.subCategoriesOnClickHandler(
+                              context: context,
+                              catId: cat.id,
+                              categoryName: Helper.currentLanguage == 'ar'
+                                  ? cat.nameAr
+                                  : cat.nameEn,
+                              catSlug: cat.slug,
+                            ),
+                            categoryName: Helper.currentLanguage == 'ar'
+                                ? cat.nameAr
+                                : cat.nameEn,
+                            categoryImage: cat.image,
+                          );
+                        }),
                       ),
                     ),
-                    Column(
-                      children: List.generate(
-                          subcategoriesCubit.subCategories
-                              .where((element) {
-                                return element.parentId ==
-                                    subcategoriesCubit.parentId.toString();
-                              })
-                              .toList()
-                              .length, (index) {
-                        var cat = subcategoriesCubit.subCategories
-                            .where((element) =>
-                                element.parentId ==
-                                subcategoriesCubit.parentId.toString())
-                            .toList()[index];
-                        return SubCategoryCard(
-                          showDivider: cat !=
-                              subcategoriesCubit.subCategories
-                                  .where((element) {
-                                    return element.parentId ==
-                                        subcategoriesCubit.parentId.toString();
-                                  })
-                                  .toList()
-                                  .last,
-                          onPressed: () async {
-                            log('catId =>${cat.id}');
-                            if (cat.slug == 'car-accessories') {
-                              context.router.push(
-                                route.CarAccessoriesScreen(),
-                              );
-                              return;
-                            }
-                            if (cat.slug == 'engine-oil') {
-                              // NavigationService.push(
-                              //   page: EngineOilScreen.routeName,
-                              // );
-                              context.router.push(
-                                 route.EngineOilScreen(categoryId: cat.id.toString()),
-                              );
-                              return;
-                            }
-                            var hasSubCat = await subcategoriesCubit
-                                .hasSubCategories(cat.id ?? 0, context);
-                            if (hasSubCat) {
-                              // NavigationService.push(
-                              //     page: SubCategoriesScreen.routeName,
-                              //     arguments: {
-                              //       'category_name':
-                              //           Helper.currentLanguage == 'ar'
-                              //               ? cat.nameAr
-                              //               : cat.nameEn,
-                              //       'parent_id': cat.id,
-                              //     });
-                              context.router.push(
-                                route.SubCategoriesScreen(
-                                  categoryName: Helper.currentLanguage == 'ar'
-                                      ? cat.nameAr
-                                      : cat.nameEn,
-                                  parentId: cat.id.toString(),
-                                ),
-                              );
-                            }
-                          },
-                          categoryName: Helper.currentLanguage == 'ar'
-                              ? cat.nameAr
-                              : cat.nameEn,
-                          categoryImage: cat.image,
-                        );
-                      }),
+                    const BoxHelper(
+                      height: 30,
                     ),
                   ],
                 ),

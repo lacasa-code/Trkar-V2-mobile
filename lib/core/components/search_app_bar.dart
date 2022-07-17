@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:trkar/core/components/custom_search_delegate.dart';
+import 'package:trkar/core/components/search_widget.dart';
 import '../extensions/string.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import './register_field.dart';
@@ -25,11 +26,11 @@ class _SearchAppBarState extends State<SearchAppBar> {
   var isTitle = false;
   @override
   Widget build(BuildContext context) {
-    // log('can go back:=>${context.router.canNavigateBack} canpop:=>${context.router.canPopSelfOrChildren}');
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: Row(
+          // crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Visibility(
               visible: context.router.canPopSelfOrChildren && Platform.isIOS,
@@ -37,7 +38,6 @@ class _SearchAppBarState extends State<SearchAppBar> {
                 padding: EdgeInsets.zero,
                 alignment: Alignment.center,
                 onPressed: () {
-                  log('scaff');
                   context.router.pop();
                 },
                 icon: const Icon(
@@ -49,7 +49,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
               padding: EdgeInsets.zero,
               alignment: Alignment.center,
               onPressed: () {
-                log('scaff');
+                FocusManager.instance.primaryFocus?.unfocus();
                 widget.scaffoldKey.currentState?.openDrawer();
               },
               icon: const Icon(
@@ -57,38 +57,9 @@ class _SearchAppBarState extends State<SearchAppBar> {
               ),
             ),
             Expanded(
-              child: AnimatedCrossFade(
-                duration: const Duration(
-                  milliseconds: 200,
-                ),
-                crossFadeState: isTitle
-                    ? CrossFadeState.showFirst
-                    : CrossFadeState.showSecond,
-                firstChild: const SizedBox(),
-                secondChild: InkWell(
-                  onTap: () {
-                    showSearch(
-                      context: context,
-                      delegate: CustomSearchDelegate(),
-                    );
-                  },
-                  child: RegisterField(
-                    enabled: false,
-                    textInputAction: TextInputAction.search,
-                    thinBorder: true,
-                    removePadding: true,
-                    suffixIcon: IconButton(
-                      icon: const Icon(
-                        Icons.search,
-                      ),
-                      color: Theme.of(context).primaryColor,
-                      onPressed: () {},
-                    ),
-                    hintText: 'search_hint',
-                  ),
-                ),
-              ),
-            ),
+                child: const SearchField(
+                    // removePadding: false,
+                    )),
             // IconButton(
             //   onPressed: () {
             //     setState(() {

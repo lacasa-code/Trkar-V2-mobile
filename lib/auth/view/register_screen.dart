@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -13,11 +14,13 @@ import 'package:trkar/core/components/or_widget.dart';
 import 'package:trkar/core/components/profile_picture_widget.dart';
 import 'package:trkar/core/components/register_button.dart';
 import 'package:trkar/core/components/register_field.dart';
+import 'package:trkar/core/components/search_modal_bottom_sheet.dart';
 import 'package:trkar/core/components/searchable_dropdown_widget.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/extensions/string.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/core/router/router.gr.dart';
+import 'package:trkar/core/components/loader_widget.dart';
 
 class RegisterScreen extends StatefulWidget implements AutoRouteWrapper {
   const RegisterScreen({
@@ -82,6 +85,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
       body: Stack(
         children: [
+          Positioned(
+            top: ScreenUtil().setHeight(335),
+            right: -ScreenUtil().setWidth(440),
+            bottom: ScreenUtil().setHeight(235),
+            left: 0,
+            child: const CircleWidget(),
+          ),
+          Positioned(
+            top: ScreenUtil().setHeight(490),
+            left: -ScreenUtil().setWidth(440),
+            bottom: ScreenUtil().setHeight(80),
+            right: 0,
+            child: const CircleWidget(),
+          ),
           SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.only(
@@ -141,6 +158,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       hintText: 'username',
                       controller: registerCubit.usernameController,
                       validator: registerCubit.userNameValidator,
+                      formatters: [
+                        FilteringTextInputFormatter.allow(
+                          RegExp('[a-zA-Z ]'),
+                        ),
+                      ],
                     ),
                     RegisterField(
                       thinBorder: true,
@@ -154,6 +176,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Visibility(
                       visible: registerCubit.userType == 1,
                       child: RegisterField(
+                        formatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        maxLength: 9,
                         thinBorder: true,
                         prefixWithDivider: true,
                         prefixIcon: const Icon(Icons.phone_outlined),
@@ -330,11 +356,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     BlocBuilder<RegisterCubit, RegisterState>(
                       builder: (context, state) {
                         if (state is RegisterLoading) {
-                          return const Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.orangeAccent,
-                            ),
-                          );
+                          return const LoaderWidget();
                         }
                         return RegisterButton(
                           title: 'create_new_acc',
@@ -355,20 +377,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
             ),
-          ),
-          Positioned(
-            top: ScreenUtil().setHeight(335),
-            right: -ScreenUtil().setWidth(440),
-            bottom: ScreenUtil().setHeight(235),
-            left: 0,
-            child: const CircleWidget(),
-          ),
-          Positioned(
-            top: ScreenUtil().setHeight(490),
-            left: -ScreenUtil().setWidth(440),
-            bottom: ScreenUtil().setHeight(80),
-            right: 0,
-            child: const CircleWidget(),
           ),
         ],
       ),

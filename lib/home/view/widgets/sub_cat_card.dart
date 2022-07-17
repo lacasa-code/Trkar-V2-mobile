@@ -39,7 +39,7 @@ class _SubCatCardState extends State<SubCatCard> {
   Widget build(BuildContext context) {
     var list = categoriesCubit.subCategories(widget.catID ?? 0);
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: list.isEmpty
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -60,13 +60,10 @@ class _SubCatCardState extends State<SubCatCard> {
                         );
                       }
                     },
-                    leading: Transform.scale(
-                      scale: 0.6,
-                      child: Image.network(
-                        widget.image ?? '',
-                        errorBuilder: (_, __, ___) => Image.asset(
-                          'assets/icons/edit_note.png',
-                        ),
+                    leading: Image.network(
+                      widget.image ?? '',
+                      errorBuilder: (_, __, ___) => Image.asset(
+                        'assets/icons/edit_note.png',
                       ),
                     ),
                     title: Text(
@@ -79,7 +76,7 @@ class _SubCatCardState extends State<SubCatCard> {
               )
             : ExpansionTile(
                 leading: Transform.scale(
-                  scale: 0.6,
+                  scale: 1,
                   child: Image.network(
                     widget.image ?? '',
                     errorBuilder: (_, __, ___) => Image.asset(

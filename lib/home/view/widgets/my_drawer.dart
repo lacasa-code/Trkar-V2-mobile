@@ -13,12 +13,10 @@ class MyDrawer extends StatefulWidget {
 
 class _MyDrawerState extends State<MyDrawer> {
   late CategoriesCubit categoriesCubit;
-  late SubCategoriesCubit subCategoriesCubit;
 
   @override
   void initState() {
     categoriesCubit = context.read<CategoriesCubit>();
-    subCategoriesCubit = context.read<SubCategoriesCubit>()..init();
     super.initState();
   }
 
@@ -33,7 +31,7 @@ class _MyDrawerState extends State<MyDrawer> {
               child: SafeArea(
                 child: Column(
                   children: [
-                    ...categoriesCubit.maincategory
+                    ...categoriesCubit.mainCategory
                         .map(
                           (e) => ExpansionTile(
                             initiallyExpanded: e.slug == 'car-parts',

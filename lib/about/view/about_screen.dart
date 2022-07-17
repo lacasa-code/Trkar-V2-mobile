@@ -65,7 +65,7 @@ class _AboutScreenState extends State<AboutScreen> {
             AboutTrkarCardItem(
               title: 'terms',
               onPressed: () {
-                context.router.push(const TermsAndConitionsScreen());
+                context.router.push(const TermsAndConditionsScreen());
               },
             ),
             AboutTrkarCardItem(

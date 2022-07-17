@@ -10,6 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:trkar/core/components/custom_new_dialog.dart';
 import 'package:trkar/core/components/result_dialog.dart';
+import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/core/router/router.gr.dart';
 import '../../repo/user_register_repo.dart';
@@ -32,9 +33,9 @@ class RegisterCubit extends Cubit<RegisterState> {
     var registerData = await UserRegisterRepo.registerUser(
       context,
       body: {
-        'email': emailController.text,
+        'email': emailController.text.trim(),
         'password': passwordController.text,
-        'username': usernameController.text,
+        'username': usernameController.text.trim(),
         // 'country_id': countryId,
         // 'city_id': cityId,
         // 'area_id': areaId,
@@ -50,7 +51,7 @@ class RegisterCubit extends Cubit<RegisterState> {
       },
     );
     if (registerData == null) {
-       showDialog(
+      showDialog(
         context: context,
         builder: (_) => ResultDialog(
           resultType: ResultType.failed,
@@ -88,20 +89,20 @@ class RegisterCubit extends Cubit<RegisterState> {
   }
 
   Future<void> _registerVendor(BuildContext context) async {
-    emit(RegisterLoading());
     // context.router.push(
     //   EmailVerficationRouter(
-    //     stateOfVerfication: 1,
+    //     stateOfVerification: 1,
     //     phoneNumber: phoneController.text,
     //   ),
     // );
     // return;
+    emit(RegisterLoading());
 
     var registerData = await VendorRegisterRepo.registerVendor(
       context,
       body: {
-        'username': usernameController.text,
-        'email': emailController.text,
+        'username': usernameController.text.trim(),
+        'email': emailController.text.trim(),
         'password': passwordController.text,
         'phone': phoneController.text,
       },
@@ -119,14 +120,18 @@ class RegisterCubit extends Cubit<RegisterState> {
     }
     if (registerData.status == true) {
       emit(RegisterDone());
+      await Helper.storeNewVendorData(registerData);
       Fluttertoast.showToast(msg: registerData.message ?? '');
-      // context.router.push(
-      //   EmailVerficationRouter(),
-      // );
-      context.router.pushAndPopUntil(
-        const LoginRouter(),
-        predicate: (r) => false,
+      context.router.push(
+        EmailVerficationRouter(
+          stateOfVerification: 1,
+          phoneNumber: phoneController.text,
+        ),
       );
+      // context.router.pushAndPopUntil(
+      //   const LoginRouter(),
+      //   predicate: (r) => false,
+      // );
     } else {
       String errorMessage = '';
 
@@ -158,6 +163,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   Future<void> register(context) async {
     FocusManager.instance.primaryFocus?.unfocus();
     var validate = formKey.currentState!.validate();
+    log((!validate && !kDebugMode).toString());
     if (!validate && !kDebugMode) {
       return;
     }
@@ -195,6 +201,10 @@ class RegisterCubit extends Cubit<RegisterState> {
     if (v.length < 3) {
       return 'invalid_username'.translate;
     }
+    //  if (v.startsWith(' ')) {
+    //   // return 'invalid_username'.translate;
+    //   return'UserName shouldnt start with blank';
+    // }
     return null;
   }
 
@@ -212,8 +222,11 @@ class RegisterCubit extends Cubit<RegisterState> {
     if (v!.isEmpty) {
       return 'phone_required'.translate;
     }
-    if (v.length < 10) {
+    if (v.length < 9) {
       return 'invalid_phone'.translate;
+    }
+    if (!v.startsWith('5')) {
+      return 'wrong_phone'.translate;
     }
     return null;
   }
@@ -246,9 +259,10 @@ class RegisterCubit extends Cubit<RegisterState> {
     if (v!.isEmpty) {
       return 'password_required'.translate;
     }
-    if (!v.contains(RegExp(
-        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$'))) {
+    if (!v.contains(
+        RegExp(r'^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$'))) {
       return 'invalid_password'.translate;
+      // return "You must use letters, numbers and symbols, uppercase letters";
     }
     return null;
   }

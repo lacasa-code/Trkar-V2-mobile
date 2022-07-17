@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:trkar/core/components/register_button.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 
 class ProductItem extends StatelessWidget {
@@ -12,101 +13,125 @@ class ProductItem extends StatelessWidget {
   final bool canAddToCart;
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
       width: ScreenUtil().setWidth(170),
-      child: Card(
-        elevation: 6,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Align(
-                alignment: Alignment.center,
-                child: Image.asset(
-                  imagePath ?? 'assets/images/oil3.jpg',
-                  width: ScreenUtil().setWidth(150),
-                  height: ScreenUtil().setHeight(150),
-                  fit: BoxFit.cover,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              decoration: const BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    color: Color(0xffF3F4F5),
+                    width: 2,
+                  ),
+                  left: BorderSide(
+                    color: Color(0xffF3F4F5),
+                    width: 2,
+                  ),
+                  right: BorderSide(
+                    color: Color(0xffF3F4F5),
+                    width: 2,
+                  ),
                 ),
               ),
-              const BoxHelper(
-                height: 10,
+              child: Image.asset(
+                imagePath ?? 'assets/images/oil3.jpg',
+                width: double.infinity,
+                height: ScreenUtil().setHeight(150),
+                fit: BoxFit.cover,
               ),
-              const Text(
-                'Article Number: 2324',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black45,
-                ),
-              ),
-              const BoxHelper(
-                height: 10,
-              ),
-              const Text(
-                'ProductName',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  // color: Colors.black45,
-                ),
-              ),
-              Row(
+            ),
+          ),
+          // const BoxHelper(
+          //   height: 10,
+          // ),
+          Card(
+            margin: EdgeInsets.zero,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25),
+            ),
+            elevation: 8,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const Text(
-                    'SR32',
+                    'Article Number: 2324',
                     style: TextStyle(
-                      decoration: TextDecoration.lineThrough,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black45,
+                      color: Colors.black,
                     ),
                   ),
                   const BoxHelper(
-                    width: 10,
+                    height: 10,
                   ),
-                  Chip(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                  const Text(
+                    'ProductName',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      // color: Colors.black45,
                     ),
-                    backgroundColor: Colors.red,
-                    label: const Text(
-                      '37%',
-                      style: TextStyle(
-                        color: Colors.white,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'SR32',
+                        style: TextStyle(
+                          decoration: TextDecoration.lineThrough,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black45,
+                        ),
+                      ),
+                      Chip(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        backgroundColor: Colors.red,
+                        label: const Text(
+                          '37% OFF',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  // const Text(
+                  //   'SR60',
+                  //   style: TextStyle(
+                  //     fontWeight: FontWeight.bold,
+                  //   ),
+                  // ),
+                  // const BoxHelper(
+                  //   height: 10,
+                  // ),
+                  Visibility(
+                    visible: canAddToCart,
+                    child: SizedBox(
+                      width: ScreenUtil().setWidth(135),
+                      height: ScreenUtil().setHeight(52),
+                      child: Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: RegisterButton(
+                          icon: const Icon(Icons.add_shopping_cart),
+                          radius: 14,
+                          title: 'add_to_cart',
+                          onPressed: () {},
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
-              const Text(
-                'SR60',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const BoxHelper(
-                height: 10,
-              ),
-              Visibility(
-                visible: canAddToCart,
-                child: SizedBox(
-                  width: ScreenUtil().setWidth(135),
-                  child: const Card(
-                    elevation: 5,
-                    color: Colors.blue,
-                    child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                      child: Icon(
-                        Icons.add_shopping_cart,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

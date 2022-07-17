@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:trkar/auth/view/login_screen.dart';
 import 'package:trkar/auth/viewModel/validateToken/validate_token_cubit.dart';
@@ -58,8 +59,24 @@ class _SplashScreenState extends State<SplashScreen> {
               padding: const EdgeInsets.symmetric(
                 horizontal: 15,
               ),
-              child: Image.asset(
-                'assets/icons/splashscreen-trkar-logo-white.gif',
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                textDirection: TextDirection.ltr,
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Image.asset(
+                      'assets/icons/splashscreen-trkar-logo-white.gif',
+                    ),
+                  ),
+                  Expanded(
+                    child: SvgPicture.asset(
+                      'assets/icons/svg/spare-parts.svg',
+                      height: ScreenUtil().setHeight(20),
+                      width: ScreenUtil().setWidth(20),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:trkar/core/router/router.gr.dart';
+import '../../../core/extensions/string.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:trkar/core/themes/screen_utility.dart';
 
 class ProfileHeaderItem extends StatelessWidget {
   const ProfileHeaderItem({
@@ -14,7 +18,70 @@ class ProfileHeaderItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
+      // height: ScreenUtil().setHeight(90),
+      // width: ScreenUtil().setWidth(90),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: ListTile(
+          // leading: Container(
+          //   decoration: BoxDecoration(
+          //     // TODO :remove comment
+          //     // border: Border.all(width: 2,color: Theme.of(context).primaryColor),
+          //     shape: BoxShape.circle,
+          //     image: DecorationImage(
+          //       image: userImage == null
+          //           ? const AssetImage('assets/images/profile2.png')
+          //           : NetworkImage(
+          //               userImage ?? '',
+          //             ) as ImageProvider,
+          //       fit: BoxFit.cover,
+          //     ),
+          //   ),
+          // ),
+          onTap: () {
+            context.router.push(
+              const EditProfileScreen(),
+            );
+          },
+          leading: CircleAvatar(
+            backgroundColor: MainStyle.lightGreyColor,
+            radius: ScreenUtil().radius(35),
+            child: Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: CircleAvatar(
+                radius: ScreenUtil().radius(34),
+                backgroundImage: userImage == null
+                    ? const AssetImage('assets/images/profile2.png')
+                    : NetworkImage(
+                        userImage ?? '',
+                      ) as ImageProvider,
+              ),
+            ),
+          ),
+          title: Text(
+            'hi'.translate + (', ${userName ?? ''}'),
+            style: Theme.of(context).textTheme.headline1?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: ScreenUtil().setSp(15),
+                ),
+          ),
+          subtitle: Text(
+            emailAddress ?? '',
+            style: Theme.of(context).textTheme.headline5?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: ScreenUtil().setSp(12),
+                ),
+          ),
+          trailing: Icon(
+            Icons.arrow_forward_ios,
+            size: ScreenUtil().radius(15),
+            color: Theme.of(context).primaryIconTheme.color,
+          ),
+        ),
+      ),
+    );
+    /** return Container(
       padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(35)),
       margin: EdgeInsets.only(bottom: ScreenUtil().setHeight(60)),
       child: Stack(
@@ -84,6 +151,6 @@ class ProfileHeaderItem extends StatelessWidget {
           )
         ],
       ),
-    );
+    );*/
   }
 }

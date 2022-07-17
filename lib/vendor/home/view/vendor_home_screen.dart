@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trkar/core/components/home_product_item.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/components/vendor_drawer.dart';
+import 'package:trkar/core/router/router.gr.dart';
 import '../../../core/extensions/string.dart';
 import 'package:auto_route/auto_route.dart';
 
@@ -38,14 +39,42 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: const [
             VendorHomeHeaderItem(),
+            CreateStoreButton(),
             LatestAddedProductView(),
             TopSellersProducts(),
             MostViewedProducts(),
           ],
         ),
       ),
+    );
+  }
+}
+
+class CreateStoreButton extends StatelessWidget {
+  const CreateStoreButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      child: InkWell(
+          onTap: () {
+            context.router.push(
+              const ResumeDataRouter(),
+            );
+          },
+          child: const Text(
+            'Create Store Data',
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+              fontWeight: FontWeight.bold,
+            ),
+          )),
     );
   }
 }

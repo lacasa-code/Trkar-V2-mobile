@@ -8,6 +8,7 @@ import 'package:trkar/core/components/search_modal_bottom_sheet.dart';
 import 'package:trkar/core/components/sub_cat_item.dart';
 import 'package:trkar/core/helper/helper.dart';
 import '../../../core/extensions/string.dart';
+import 'package:trkar/core/components/loader_widget.dart';
 
 
 class CarBrakesSubCategoriesView extends StatelessWidget {

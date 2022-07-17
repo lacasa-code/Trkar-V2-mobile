@@ -1,3 +1,5 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../themes/screen_utility.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +13,7 @@ class MultiselectDropdownWidget extends StatelessWidget {
     this.validator,
     this.onChanged,
     this.labelText,
-    this.thinBorder = false,
+    this.thinBorder = true,
     this.enabled = true,
     this.removePadding = false,
     this.inititalValue,
@@ -47,8 +49,7 @@ class MultiselectDropdownWidget extends StatelessWidget {
                       horizontal: 5.0,
                     ),
                     child: Chip(
-                        backgroundColor:
-                            Theme.of(context).primaryColor,
+                        backgroundColor: Theme.of(context).primaryColor,
                         label: Text(
                           v[index],
                           style: const TextStyle(
@@ -100,7 +101,12 @@ class MultiselectDropdownWidget extends StatelessWidget {
             ),
           ),
         ),
-        dropDownButton: const Icon(Icons.keyboard_arrow_down),
+        dropDownButton: Icon(
+          Icons.arrow_drop_down,
+          size: ScreenUtil().radius(35),
+          color:
+              thinBorder ? MainStyle.lightGreyColor : MainStyle.darkGreyColor,
+        ),
         onChanged: onChanged,
         enabled: enabled,
         items: values,

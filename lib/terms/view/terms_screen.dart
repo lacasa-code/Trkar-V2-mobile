@@ -5,16 +5,16 @@ import 'package:trkar/core/helper/navigator.dart';
 import 'package:trkar/home/view/widgets/my_drawer.dart';
 import '../../core/extensions/string.dart';
 
-class TermsAndConitionsScreen extends StatefulWidget {
-  const TermsAndConitionsScreen({Key? key}) : super(key: key);
+class TermsAndConditionsScreen extends StatefulWidget {
+  const TermsAndConditionsScreen({Key? key}) : super(key: key);
   static const routeName = '/terms-and-conditions';
 
   @override
-  State<TermsAndConitionsScreen> createState() =>
-      _TermsAndConitionsScreenState();
+  State<TermsAndConditionsScreen> createState() =>
+      _TermsAndConditionsScreenState();
 }
 
-class _TermsAndConitionsScreenState extends State<TermsAndConitionsScreen> {
+class _TermsAndConditionsScreenState extends State<TermsAndConditionsScreen> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {

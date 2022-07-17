@@ -27,20 +27,19 @@ class DropDownTileView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: EdgeInsets.symmetric(
-              vertical: 5, horizontal: removePadding ? 0 : 15),
-          child: Text(
-            title.translate,
-            style: TextStyle(
-              color: Colors.black,
-              // fontWeight: FontWeight.bold,
-              fontSize: ScreenUtil().setSp(14),
-            ),
-          ),
-        ),
-      SearchableDropDownWidget(
-      
+        // Padding(
+        //   padding: EdgeInsets.symmetric(
+        //       vertical: 5, horizontal: removePadding ? 0 : 15),
+        //   child: Text(
+        //     title.translate,
+        //     style: TextStyle(
+        //       color: Colors.black,
+        //       // fontWeight: FontWeight.bold,
+        //       fontSize: ScreenUtil().setSp(14),
+        //     ),
+        //   ),
+        // ),
+        SearchableDropDownWidget(
           removePadding: removePadding,
           initialValue: selectedValue,
           enabled: enabled,

@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/home/view/widgets/home_carousel_card.dart';
 import '../../core/router/router.gr.dart' as route;
@@ -16,6 +17,7 @@ import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
 import 'package:trkar/home/view/widgets/home_categories_item.dart';
 import 'package:trkar/home/view/widgets/my_drawer.dart';
 import 'package:trkar/home/view/widgets/recently_viewed_product_view.dart';
+import 'package:trkar/core/components/loader_widget.dart';
 
 import 'package:trkar/home/view/widgets/send_offers_email_view.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -206,32 +208,77 @@ class _HomeScreenState extends State<HomeScreen>
                     Container(
                       margin: const EdgeInsets.symmetric(
                           horizontal: 15, vertical: 10),
-                      decoration: BoxDecoration(
-                          color: Colors.grey.shade200,
-                          borderRadius: BorderRadius.circular(25)),
+                      // decoration: BoxDecoration(
+                      //     color: Colors.grey.shade200,
+                      // borderRadius: BorderRadius.circular(25)),
                       child: TabBar(
                         indicator: BoxDecoration(
                           color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(25),
+                          borderRadius: BorderRadius.circular(13),
                         ),
                         labelColor: Colors.white,
                         unselectedLabelColor: Colors.black,
-                        // labelPadding: const EdgeInsets.symmetric(
-                        //     horizontal: 15, vertical: 10),
+                        indicatorSize: TabBarIndicatorSize.label,
+                        labelPadding: const EdgeInsets.symmetric(
+                          horizontal: 15,
+                        ),
+                        // padding: EdgeInsets.symmetric(horizontal: 15),
                         controller: _controller,
-                        tabs: categoriesCubit.maincategory
-                            .map(
-                              (e) => ListTile(
-                                contentPadding: EdgeInsets.zero,
-                                title: Text(e.name ?? ''),
-                                leading: Image.network(
-                                  e.image ?? '',
-                                  height: ScreenUtil().setHeight(40),
-                                  width: ScreenUtil().setWidth(40),
+                        tabs: List.generate(
+                          categoriesCubit.mainCategory.length,
+                          (index) {
+                            var e = categoriesCubit.mainCategory[index];
+                            return Container(
+                              // width: ScreenUtil().setWidth(170),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 2,
                                 ),
+                                borderRadius: BorderRadius.circular(13),
                               ),
-                            )
-                            .toList(),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 3,
+                                vertical: 10,
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: SvgPicture.asset(
+                                      'assets/icons/svg/${index == 0 ? 'car' : 'truck'}.svg',
+                                      height: ScreenUtil().setHeight(13),
+                                      width: ScreenUtil().setWidth(13),
+                                      color: _controller.index == index
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                  ),
+                                  // const BoxHelper(
+                                  //   width: 10,
+                                  // ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      e.name ?? '',
+                                      style: TextStyle(
+                                        fontSize: ScreenUtil().setSp(12),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                          // ListTile(
+                          //   contentPadding: EdgeInsets.zero,
+                          //   title: Text(e.name ?? ''),
+                          //   leading: SvgPicture.asset(
+                          //     'assets/icons/svg/car.svg',
+                          //     // height: ScreenUtil().setHeight(40),
+                          //     // width: ScreenUtil().setWidth(40),
+                          //   ),
+                          // ),
+                        ).toList(),
                       ),
                     ),
                     SearchView(
@@ -241,11 +288,20 @@ class _HomeScreenState extends State<HomeScreen>
                       height: categoriesCubit.getTabBarSize(_controller.index),
                       child: TabBarView(
                         controller: _controller,
-                        children: categoriesCubit.maincategory.map(
+                        children: categoriesCubit.mainCategory.map(
                           (e) {
                             var subCategories =
                                 categoriesCubit.subCategories(e.id ?? 0);
-                            return Column(
+                            return GridView(
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                childAspectRatio: 1.1,
+                                // crossAxisSpacing: 20,
+                                // mainAxisExtent: 20,
+                                // mainAxisSpacing: 1,
+                              ),
                               children: List.generate(
                                 subCategories.length > 40
                                     ? 40
@@ -407,86 +463,6 @@ class _HomeScreenState extends State<HomeScreen>
                   ],
                 ),
                 const RecentlyViewedProductsView(),
-                const SendOffersEmailView(),
-
-                // const BoxHelper(
-                //   height: 80,
-                // ),
-                /*
-                Expanded(
-                  child: TabBarView(
-                    controller: _controller,
-                    children: categoriesCubit.maincategory
-                        .map(
-                          (e) => Column(
-                            children: [
-                              SingleChildScrollView(
-                                child: Wrap(
-                                  spacing: ScreenUtil().setWidth(10),
-                                  children: List.generate(
-                                    categoriesCubit
-                                                .subCategories(e.id ?? 0)
-                                                .length >
-                                            6
-                                        ? 6
-                                        : categoriesCubit
-                                           
-                                            .subCategories(e.id ?? 0)
-                                            .length,
-                                    (index) {
-                                      var subCat = categoriesCubit
-                                          .subCategories(e.id ?? 0)[index];
-                                      return HomeCategoryItem(
-                                        title: subCat.name,
-                                        imagePath: subCat.image,
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                              const BoxHelper(height: 20),
-                              TextButton(
-                                  onPressed: () {
-                                    var cat = categoriesCubit
-                                        .maincategory[_controller.index];
-                                    var hasSubCat =
-                                        categoriesCubit.hasSubCategory(cat.id);
-                                    // if (hasSubCat) {
-                                    var subCat =
-                                        context.read<SubCategoriesCubit>();
-                                    subCat.categoryName = cat.name;
-                                    subCat.parentId = cat.id;
-                                    NavigationService.push(
-                                      page: SubCategoriesScreen.routeName,
-                                      arguments: {
-                                        'category_name': cat.name,
-                                        'parent_id': cat.id,
-                                      },
-                                    );
-                                  },
-                                  child: Text(
-                                    'more'.translate,
-                                    style: const TextStyle(
-                                        decoration: TextDecoration.underline,
-                                        fontWeight: FontWeight.bold),
-                                  ))
-                            ],
-                          ),
-                        )
-                        .toList(),
-                  ),
-                ),
-                */
-                // const BoxHelper(
-                //   height: 80,
-                // ),
-                // Image.asset(
-                //   'assets/icons/trkarLogoWhite.png',
-                //   // alignment: Al,
-                // ),
-                // const BoxHelper(
-                //   height: 30,
-                // ),
               ],
             ),
           ),

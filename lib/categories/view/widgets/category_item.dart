@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -7,12 +9,12 @@ class CategoryItem extends StatelessWidget {
     @required this.onPressed,
     @required this.categoryName,
     @required this.categoryImage,
-    this.isVerticalList = false,
+    this.isListView = false,
   }) : super(key: key);
   final void Function()? onPressed;
   final String? categoryName;
   final String? categoryImage;
-  final bool isVerticalList;
+  final bool isListView;
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +24,15 @@ class CategoryItem extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(25),
         ),
-        elevation: 8,
+        margin: isListView
+            ? const EdgeInsets.symmetric(vertical: 10, horizontal: 15)
+            : null,
+        elevation: 4,
         child: Padding(
-          padding: isVerticalList
+          padding: isListView
               ? const EdgeInsets.symmetric(vertical: 10, horizontal: 15)
               : EdgeInsets.zero,
-          child: isVerticalList
+          child: isListView
               ? ListTile(
                   leading: Image.network(
                     categoryImage ?? '',
@@ -69,12 +74,15 @@ class CategoryItem extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            categoryName ?? '',
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
+                          SizedBox(
+                            width: ScreenUtil().setWidth(120),
+                            child: Text(
+                              categoryName ?? '',
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           Icon(

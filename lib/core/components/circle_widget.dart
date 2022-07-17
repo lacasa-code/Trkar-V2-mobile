@@ -20,7 +20,7 @@ class CircleWidget extends StatelessWidget {
           //   color: const Color(0xffF3F4F5),
           //   width: 2,
           // ),
-          color: Color(0xffFBD494).withOpacity(0.7),
+          color: const Color(0xffFBD494).withOpacity(0.7),
           shape: BoxShape.circle,
         ),
       ),

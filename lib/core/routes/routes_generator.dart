@@ -129,10 +129,10 @@ class RoutesGenerator {
             child: const RegisterScreen(),
           ),
         );
-      case EmailVerficationScreen.routeName:
+      case EmailVerificationScreen.routeName:
         return MaterialPageRoute(
           settings: settings,
-          builder: (_) => const EmailVerficationScreen(),
+          builder: (_) => const EmailVerificationScreen(),
         );
       case ForgetPasswordScreen.routeName:
         return MaterialPageRoute(
@@ -174,10 +174,10 @@ class RoutesGenerator {
           settings: settings,
           builder: (_) => const ReturnsAndRefundsScreen(),
         );
-      case TermsAndConitionsScreen.routeName:
+      case TermsAndConditionsScreen.routeName:
         return MaterialPageRoute(
           settings: settings,
-          builder: (_) => const TermsAndConitionsScreen(),
+          builder: (_) => const TermsAndConditionsScreen(),
         );
       case SupportScreen.routeName:
         return MaterialPageRoute(

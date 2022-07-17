@@ -12,6 +12,7 @@ import 'package:trkar/home/view/widgets/my_drawer.dart';
 import '../../core/extensions/string.dart';
 import 'package:flag/flag.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trkar/core/components/loader_widget.dart';
 
 class DeliveryScreen extends StatefulWidget {
   const DeliveryScreen({Key? key}) : super(key: key);

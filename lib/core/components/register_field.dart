@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,7 +14,7 @@ class RegisterField extends StatelessWidget {
     this.suffixIcon,
     this.keyboardType,
     this.obsecureText = false,
-    this.thinBorder = false,
+    this.thinBorder = true,
     this.controller,
     this.validator,
     this.autovalidateMode,
@@ -26,6 +28,8 @@ class RegisterField extends StatelessWidget {
     this.textInputAction,
     this.prefixWithDivider = false,
     this.enabled = true,
+    this.makeContentPadding = false,
+    this.onTap,
   }) : super(key: key);
   final String? labelText;
   final String? hintText;
@@ -46,6 +50,8 @@ class RegisterField extends StatelessWidget {
   final bool removePadding;
   final bool hideBorder;
   final TextInputAction? textInputAction;
+  final bool makeContentPadding;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +60,8 @@ class RegisterField extends StatelessWidget {
           ? EdgeInsets.zero
           : const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: TextFormField(
+        onTap: onTap,
+        readOnly: !enabled,
         textInputAction: textInputAction,
         maxLength: maxLength,
         maxLines: maxLines,
@@ -65,75 +73,76 @@ class RegisterField extends StatelessWidget {
         obscureText: obsecureText,
         keyboardType: keyboardType,
         decoration: InputDecoration(
-            counterText: '',
-            filled: true,
-            fillColor: Colors.white,
-            labelText: labelText?.translate,
-            hintText: hintText?.translate,
-            labelStyle: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: thinBorder
-                  ? MainStyle.lightGreyColor
-                  : MainStyle.darkGreyColor,
-            ),
-            hintStyle: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: thinBorder
-                  ? MainStyle.lightGreyColor
-                  : MainStyle.darkGreyColor,
-            ),
-            border: hideBorder
-                ? null
-                : OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(thinBorder ? 12 : 25),
-                    borderSide: BorderSide(
-                      width: thinBorder ? 1 : 2,
-                      color: thinBorder
-                          ? MainStyle.lightGreyColor
-                          : MainStyle.darkGreyColor,
-                    ),
+          contentPadding: makeContentPadding
+              ? const EdgeInsets.symmetric(vertical: 25, horizontal: 20)
+              : null,
+          counterText: '',
+          filled: true,
+          fillColor: Colors.white,
+          labelText: labelText?.translate,
+          hintText: hintText?.translate,
+          labelStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            color:
+                thinBorder ? MainStyle.lightGreyColor : MainStyle.darkGreyColor,
+          ),
+          hintStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            color:
+                thinBorder ? MainStyle.lightGreyColor : MainStyle.darkGreyColor,
+          ),
+          border: hideBorder
+              ? null
+              : OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(thinBorder ? 12 : 25),
+                  borderSide: BorderSide(
+                    width: thinBorder ? 1 : 2,
+                    color: thinBorder
+                        ? MainStyle.lightGreyColor
+                        : MainStyle.darkGreyColor,
                   ),
-            enabledBorder: hideBorder
-                ? null
-                : OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(thinBorder ? 12 : 25),
-                    borderSide: BorderSide(
-                      width: thinBorder ? 1 : 2,
-                      color: thinBorder
-                          ? MainStyle.lightGreyColor
-                          : MainStyle.darkGreyColor,
-                    ),
+                ),
+          enabledBorder: hideBorder
+              ? null
+              : OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(thinBorder ? 12 : 25),
+                  borderSide: BorderSide(
+                    width: thinBorder ? 1 : 2,
+                    color: thinBorder
+                        ? MainStyle.lightGreyColor
+                        : MainStyle.darkGreyColor,
                   ),
-            focusedBorder: hideBorder
-                ? null
-                : OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(thinBorder ? 12 : 25),
-                    borderSide: BorderSide(
-                      width: thinBorder ? 1 : 2,
-                      color: Theme.of(context).primaryColor,
-                    ),
+                ),
+          focusedBorder: hideBorder
+              ? null
+              : OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(thinBorder ? 12 : 25),
+                  borderSide: BorderSide(
+                    width: thinBorder ? 1 : 2,
+                    color: Theme.of(context).primaryColor,
                   ),
-            suffixIcon: suffixIcon,
-            prefixIcon: prefixIcon != null && prefixWithDivider
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: prefixIcon,
-                        ),
-                        Container(
-                          width: ScreenUtil().setWidth(1),
-                          height: ScreenUtil().setHeight(30),
-                          color: Theme.of(context).textTheme.headline2?.color,
-                        ),
-                      ],
-                    ),
-                  )
-                : prefixIcon,
-            enabled: enabled),
+                ),
+          suffixIcon: suffixIcon,
+          prefixIcon: prefixIcon != null && prefixWithDivider
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: prefixIcon,
+                      ),
+                      Container(
+                        width: ScreenUtil().setWidth(1),
+                        height: ScreenUtil().setHeight(30),
+                        color: Theme.of(context).textTheme.headline2?.color,
+                      ),
+                    ],
+                  ),
+                )
+              : prefixIcon,
+        ),
       ),
     );
   }

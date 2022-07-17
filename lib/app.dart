@@ -11,6 +11,7 @@ import 'package:trkar/core/router/router.gr.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
+import 'package:trkar/localization/viewModel/lang/lang_cubit.dart';
 import 'package:trkar/profile/viewModel/userProfile/user_profile_cubit.dart';
 
 class MyApp extends StatefulWidget {
@@ -33,6 +34,9 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider(
           create: (_) => UserProfileCubit(),
+        ),
+        BlocProvider<LangCubit>(
+          create: (_) => LangCubit(),
         ),
         BlocProvider(
           create: (_) => LogoutCubit(),
@@ -85,7 +89,7 @@ class _MyAppState extends State<MyApp> {
         routeInformationParser: _appRouter.defaultRouteParser(),
         debugShowCheckedModeBanner: false,
         title: 'Trkar',
-
+        
         theme: ThemeData(
           // This is the theme of your application.
           //

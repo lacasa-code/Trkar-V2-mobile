@@ -241,8 +241,8 @@ class UpdateUserProfileCubit extends Cubit<UpdateUserProfileState> {
     if (v!.isEmpty) {
       return 'password_required'.translate;
     }
-    if (!v.contains(RegExp(
-        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$'))) {
+    if (!v.contains(
+        RegExp(r'^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$'))) {
       return 'invalid_password'.translate;
     }
     return null;

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/core/router/router.gr.dart';
 import '../../../auth/view/login_screen.dart';
 import '../../../core/helper/navigator.dart';
@@ -17,26 +18,25 @@ class LangCubit extends Cubit<LangState> {
   LangCubit() : super(LangInitial());
   Future<void> changeLanguage({
     required BuildContext context,
-    required bool canPop,
   }) async {
     emit(
       LoadingState(),
     );
     await GetStorage().write(
       'language',
-      _currentLanugage,
+      _currentLanguage,
     );
     await GetStorage().write(
       'lang',
       true,
     );
     await localization.setNewLanguage(
-      _currentLanugage,
+      _currentLanguage,
       true,
     );
     emit(
       ChosenLanguage(
-        language: _currentLanugage,
+        language: _currentLanguage,
       ),
     );
     // var canPop = context.router.canNavigateBack;
@@ -53,15 +53,25 @@ class LangCubit extends Cubit<LangState> {
     Phoenix.rebirth(context);
   }
 
-  String _currentLanugage = localization.currentLanguage.toString();
-  String get currentLanguage => _currentLanugage;
+  String _currentLanguage = localization.currentLanguage.toString();
+  String get currentLanguage => _currentLanguage;
 
-  void chooseLanguage(String code) {
-    _currentLanugage = code;
+  void chooseLanguage(
+    String? code,
+    BuildContext context,
+  ) {
+    if (code == null || code == Helper.currentLanguage) {
+      context.router.pop();
+      return;
+    }
+    _currentLanguage = code;
     emit(
       ChosenLanguage(
         language: code,
       ),
+    );
+    changeLanguage(
+      context: context,
     );
   }
 
@@ -69,12 +79,12 @@ class LangCubit extends Cubit<LangState> {
     Languages(
       language: 'العربية',
       code: 'ar',
-      flag: 'assets/icons/lang/ar.png',
+      flag: 'assets/icons/lang/arabic.png',
     ),
     Languages(
       language: 'English',
       code: 'en',
-      flag: 'assets/icons/lang/en.png',
+      flag: 'assets/icons/lang/english.png',
     ),
   ];
 }

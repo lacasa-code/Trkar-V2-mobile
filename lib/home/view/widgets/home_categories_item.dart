@@ -19,10 +19,15 @@ class HomeCategoryItem extends StatelessWidget {
       onTap: onTap,
       child: Card(
         elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            15,
+          ),
+        ),
         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          child: Row(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -31,8 +36,8 @@ class HomeCategoryItem extends StatelessWidget {
                   'assets/icons/trkarLogoWhite.png',
                 ),
                 image: NetworkImage(imagePath ?? ''),
-                width: ScreenUtil().setWidth(75),
-                height: ScreenUtil().setHeight(75),
+                width: ScreenUtil().setWidth(100),
+                height: ScreenUtil().setHeight(100),
                 fit: BoxFit.cover,
                 imageErrorBuilder: (_, __, st) {
                   log('$st');
@@ -60,11 +65,10 @@ class HomeCategoryItem extends StatelessWidget {
                   title ?? '',
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
-                  maxLines: 2,
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
-                    fontSize: ScreenUtil().setSp(20),
+                    fontSize: ScreenUtil().setSp(15),
                   ),
                 ),
               ),

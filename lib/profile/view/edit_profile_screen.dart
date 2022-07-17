@@ -5,11 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trkar/addressesData/viewModel/countries/countries_cubit.dart';
 import 'package:trkar/core/components/circle_widget.dart';
+import 'package:trkar/core/components/loader_widget.dart';
 import 'package:trkar/core/components/map_dialog.dart';
 import 'package:trkar/core/components/profile_picture_widget.dart';
 import 'package:trkar/core/components/register_button.dart';
 import 'package:trkar/core/components/register_field.dart';
 import 'package:trkar/core/components/search_app_bar.dart';
+import 'package:trkar/core/components/search_modal_bottom_sheet.dart';
 import 'package:trkar/core/components/searchable_dropdown_widget.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/helper/navigator.dart';
@@ -89,9 +91,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       body: BlocBuilder<UserProfileCubit, UserProfileState>(
         builder: (context, userDataState) {
           if (userDataState is UserProfileLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const LoaderWidget();
           }
 
           return Stack(
@@ -192,14 +192,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       CrossAxisAlignment.stretch,
                                   children: [
                                     state is CountryLoading
-                                        ? Center(
+                                        ? const Center(
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: CircularProgressIndicator(
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                              ),
+                                              padding: EdgeInsets.all(8.0),
+                                              child: LoaderWidget(),
                                             ),
                                           )
                                         : addressDataCubit.countries.isEmpty
@@ -260,15 +256,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                           addressDataCubit.cities.isNotEmpty ||
                                               state is CityLoading,
                                       child: state is CityLoading
-                                          ? Center(
+                                          ? const Center(
                                               child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  color: Theme.of(context)
-                                                      .primaryColor,
-                                                ),
+                                                padding: EdgeInsets.all(8.0),
+                                                child: LoaderWidget(),
                                               ),
                                             )
                                           : addressDataCubit.cities.isEmpty
@@ -331,15 +322,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                           addressDataCubit.areas.isNotEmpty ||
                                               state is AreaLoading,
                                       child: state is AreaLoading
-                                          ? Center(
+                                          ? const Center(
                                               child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  color: Theme.of(context)
-                                                      .primaryColor,
-                                                ),
+                                                padding: EdgeInsets.all(8.0),
+                                                child: LoaderWidget(),
                                               ),
                                             )
                                           : addressDataCubit.areas.isEmpty
@@ -434,11 +420,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 UpdateUserProfileState>(
                               builder: (context, state) {
                                 if (state is UpdateUserProfileLoading) {
-                                  return Center(
-                                    child: CircularProgressIndicator(
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                  );
+                                  return const LoaderWidget();
                                 }
                                 return RegisterButton(
                                   radius: 10,
@@ -521,11 +503,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 UpdateUserProfileState>(
                               builder: (context, state) {
                                 if (state is UpdateUserPasswordLoading) {
-                                  return Center(
-                                    child: CircularProgressIndicator(
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                  );
+                                  return const LoaderWidget();
                                 }
                                 return RegisterButton(
                                   radius: 10,

@@ -123,7 +123,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       title: 'send_message',
                       onPressed: () {
                         context.router.push(
-                          EmailVerficationRouter(stateOfVerfication: 2),
+                          EmailVerficationRouter(stateOfVerification: 2),
                           // predicate: (_) => false,
                         );
                       },
