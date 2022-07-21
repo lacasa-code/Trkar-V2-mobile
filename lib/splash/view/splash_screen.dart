@@ -25,13 +25,14 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 3), () async {
+      var validateTokenCubit = context.read<ValidateTokenCubit>();
       if (GetStorage().hasData('vendor')) {
-        context.router.pushAndPopUntil(
-          const VendorHomeRouter(),
-          predicate: (predicate) => false,
-        );
+        await validateTokenCubit.validateToken(context);
       } else {
-        await context.read<ValidateTokenCubit>().validateToken(context);
+        await validateTokenCubit.validateToken(
+          context,
+          isUserToken: true,
+        );
       }
     });
     super.initState();

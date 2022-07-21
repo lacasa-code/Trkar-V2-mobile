@@ -14,6 +14,7 @@ import 'package:trkar/core/extensions/string.dart';
 import 'package:trkar/core/components/register_button.dart';
 import 'package:trkar/core/components/register_field.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
+import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/core/router/router.gr.dart';
 import 'package:trkar/core/components/loader_widget.dart';
 
@@ -105,6 +106,9 @@ class LoginView extends StatelessWidget {
                     children: [
                       InkWell(
                         onTap: () {
+                          Helper.setUserTypeToVerification(
+                            isCustomerRegister ? 'customer' : 'vendor',
+                          );
                           context.router.push(
                             const ForgetPasswordRouter(),
                           );

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,7 +22,10 @@ class CategoriesFilterView extends StatefulWidget {
 }
 
 class _CategoriesFilterViewState extends State<CategoriesFilterView> {
-  int? selectedBrandIndex, selectedManufacturerIndex;
+  int? selectedBrandIndex,
+      selectedManufacturerIndex,
+      selectedYear,
+      selectedCountry;
   late FilterCarsCubit filterCarsCubit;
   @override
   void initState() {
@@ -31,6 +36,7 @@ class _CategoriesFilterViewState extends State<CategoriesFilterView> {
   @override
   Widget build(BuildContext context) {
     return StatefulBuilder(builder: (context, setState) {
+      log('message ${(selectedBrandIndex == null && selectedManufacturerIndex == null && (selectedYear == null && selectedCountry == null))}');
       return Container(
         color: Colors.white,
         child: SingleChildScrollView(
@@ -60,19 +66,23 @@ class _CategoriesFilterViewState extends State<CategoriesFilterView> {
                     ),
                     TextButton(
                       onPressed: (selectedBrandIndex == null &&
-                              selectedManufacturerIndex == null)
+                              selectedManufacturerIndex == null &&
+                              (selectedYear == null && selectedCountry == null))
                           ? null
                           : () {
                               setState(() {
                                 selectedBrandIndex = null;
                                 selectedManufacturerIndex = null;
+                                selectedYear = null;
+                                selectedCountry = null;
                               });
                             },
                       child: Text(
                         'reset'.translate,
                         style: Theme.of(context).textTheme.headline4?.copyWith(
                               color: (selectedBrandIndex == null &&
-                                      selectedManufacturerIndex == null)
+                              selectedManufacturerIndex == null &&
+                              (selectedYear == null && selectedCountry == null))
                                   ? MainStyle.lightGreyColor
                                   : null,
                               fontWeight: FontWeight.bold,
@@ -144,6 +154,67 @@ class _CategoriesFilterViewState extends State<CategoriesFilterView> {
                           });
                         },
                         isSelected: selectedManufacturerIndex == index,
+                      );
+                    },
+                  ).toList(),
+                ),
+              ),
+              SectionHeaderItem(
+                title: '${'manufacturing_year'.translate} :',
+                onViewAllPressed: () {
+                  context.router.pop();
+                  context.router.push(
+                    const route.AllManufacturersScreen(),
+                  );
+                },
+                showViewAll: false,
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: List.generate(
+                    filterCarsCubit.carYears.length,
+                    (index) {
+                      var year = filterCarsCubit.carYears[index];
+                      return SelectedSectionChip(
+                        name: year.year ?? '',
+                        onPressed: () {
+                          setState(() {
+                            selectedYear = index;
+                          });
+                        },
+                        isSelected: selectedYear == index,
+                      );
+                    },
+                  ).toList(),
+                ),
+              ),
+              SectionHeaderItem(
+                title: '${'country_of_origin'.translate} :',
+                onViewAllPressed: () {
+                  context.router.pop();
+                  context.router.push(
+                    const route.AllManufacturersScreen(),
+                  );
+                },
+                showViewAll: false,
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: List.generate(
+                    filterCarsCubit.originalCountry.length,
+                    (index) {
+                      var originalCountry =
+                          filterCarsCubit.originalCountry[index];
+                      return SelectedSectionChip(
+                        name: originalCountry.name ?? '',
+                        onPressed: () {
+                          setState(() {
+                            selectedCountry = index;
+                          });
+                        },
+                        isSelected: selectedCountry == index,
                       );
                     },
                   ).toList(),

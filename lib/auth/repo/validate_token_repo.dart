@@ -2,12 +2,14 @@ import '../model/validate_token_model.dart';
 import '../../core/helper/network_utils.dart';
 
 class ValidateTokenRepo {
-  static Future<ValidateTokenModel?> validateToken(context) async {
+  static Future<ValidateTokenModel?> validateToken(
+    context, {
+    required bool isUserToken,
+  }) async {
     final _util = NetworkUtil();
     var response = await _util.get(
-      'isValidToken',
+      '${isUserToken ? '' : 'vendor/'}isValidToken',
       context: context,
-      withHeader: true,
     );
     if (response == null) {
       return null;

@@ -207,7 +207,7 @@ class UpdateUserProfileCubit extends Cubit<UpdateUserProfileState> {
     if (v!.isEmpty) {
       return 'phone_required'.translate;
     }
-    if (v.length < 10) {
+    if (v.length < 9) {
       return 'invalid_phone'.translate;
     }
     return null;

@@ -79,6 +79,24 @@ class LoginCubit extends Cubit<LoginState> {
       } else {
         errorMessage = loginData.message ?? '';
       }
+      if (loginData.code == 402) {
+        await Helper.storeNewUserData(loginData);
+        emit(LoginError());
+        Helper.setUserTypeToVerification(
+          'customer',
+        );
+        Fluttertoast.showToast(
+          msg: loginData.message ?? '',
+        );
+        context.router.pushAndPopUntil(
+          EmailVerificationRouter(
+            email: loginData.data?.email ?? '',
+            resendCode: true,
+          ),
+          predicate: (r) => false,
+        );
+        return;
+      }
       showDialog(
         context: context,
         builder: (_) => ResultDialog(
@@ -122,6 +140,22 @@ class LoginCubit extends Cubit<LoginState> {
       );
       emit(LoginDone());
     } else {
+      if (loginData.code == 402) {
+        await Helper.storeNewVendorData(loginData);
+        emit(LoginError());
+        Helper.setUserTypeToVerification('vendor');
+        Fluttertoast.showToast(
+          msg: loginData.message ?? '',
+        );
+        context.router.pushAndPopUntil(
+          EmailVerificationRouter(
+            email: loginData.data?.email ?? '',
+            resendCode: true,
+          ),
+          predicate: (r) => false,
+        );
+        return;
+      }
       var errorMessage = '';
       if (loginData.errorMessages != null) {
         if (loginData.errorMessages?.username != null) {

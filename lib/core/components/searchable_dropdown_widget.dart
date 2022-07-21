@@ -18,6 +18,7 @@ class SearchableDropDownWidget extends StatelessWidget {
     this.enabled = true,
     this.initialValue,
     this.removePadding = false,
+    this.contentPadding,
     this.mode = Mode.MENU,
   }) : super(key: key);
   final int? selectedValueIndex;
@@ -31,6 +32,7 @@ class SearchableDropDownWidget extends StatelessWidget {
   final bool removePadding;
   final Mode mode;
   final String? initialValue;
+  final EdgeInsetsGeometry? contentPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -45,18 +47,20 @@ class SearchableDropDownWidget extends StatelessWidget {
           showSearchBox: true,
           selectedItem: initialValue,
           dropdownBuilder: (c, text) => Text(
-            text ?? labelText.translate,
+            text ?? labelText.translate.toTitleCase,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: text != null
                 ? null
                 : TextStyle(
                     fontWeight: FontWeight.bold,
                     color: thinBorder
-                        ? MainStyle.lightGreyColor
+                        ? MainStyle.newGreyColor.withOpacity(0.6)
                         : MainStyle.darkGreyColor,
                   ),
           ),
           dropdownSearchDecoration: InputDecoration(
-            contentPadding:
+            contentPadding: contentPadding ??
                 const EdgeInsets.symmetric(horizontal: 7, vertical: 6),
             fillColor: Colors.white,
             filled: true,
@@ -64,8 +68,11 @@ class SearchableDropDownWidget extends StatelessWidget {
             labelStyle: TextStyle(
               fontWeight: FontWeight.bold,
               color: thinBorder
-                  ? MainStyle.lightGreyColor
+                  ? MainStyle.newGreyColor.withOpacity(0.6)
                   : MainStyle.darkGreyColor,
+            ),
+            errorStyle: TextStyle(
+              color: Theme.of(context).errorColor,
             ),
             helperStyle: TextStyle(
               fontWeight: FontWeight.bold,
@@ -96,6 +103,13 @@ class SearchableDropDownWidget extends StatelessWidget {
               borderSide: BorderSide(
                 width: thinBorder ? 1 : 2,
                 color: Theme.of(context).primaryColor,
+              ),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(thinBorder ? 12 : 25),
+              borderSide: BorderSide(
+                width: thinBorder ? 1 : 2,
+                color: Theme.of(context).errorColor,
               ),
             ),
           ),

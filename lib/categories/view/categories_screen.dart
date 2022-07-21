@@ -187,7 +187,9 @@ class GridCategoryView extends StatelessWidget {
                 ..getCarMades(
                   context,
                   categoryId: cat.id,
-                );
+                )
+                ..getCarYears(context)
+                ..getOriginCountries(context);
 
               var hasSubCat = categoriesCubit.hasSubCategory(cat.id);
               // if (hasSubCat) {
@@ -208,7 +210,10 @@ class GridCategoryView extends StatelessWidget {
               context.router.push(
                 route.SubCategoriesScreen(
                   categoryName: cat.name,
-                  parentId: cat.id.toString(),
+                  categoryId: cat.id.toString(),
+                  parentId: int.parse(cat.parentId ?? '0') > 0
+                      ? cat.parentId
+                      : cat.id.toString(),
                 ),
               );
             },
@@ -299,7 +304,10 @@ class GridCategoryView extends StatelessWidget {
                 context.router.push(
                   route.SubCategoriesScreen(
                     categoryName: cat.name,
-                    parentId: cat.parentId,
+                    categoryId: cat.id.toString(),
+                    parentId: int.parse(cat.parentId ?? '0') > 0
+                        ? cat.parentId
+                        : cat.id.toString(),
                   ),
                 );
               }
@@ -342,7 +350,9 @@ class CategoryListView extends StatelessWidget {
                   ..getCarMades(
                     context,
                     categoryId: cat.id,
-                  );
+                  )
+                  ..getCarYears(context)
+                  ..getOriginCountries(context);
 
                 var hasSubCat = categoriesCubit.hasSubCategory(cat.id);
                 // if (hasSubCat) {
@@ -363,7 +373,10 @@ class CategoryListView extends StatelessWidget {
                 context.router.push(
                   route.SubCategoriesScreen(
                     categoryName: cat.name,
-                    parentId: cat.id.toString(),
+                    categoryId: cat.id.toString(),
+                    parentId: int.parse(cat.parentId ?? '0') > 0
+                        ? cat.parentId
+                        : cat.id.toString(),
                   ),
                 );
               },
@@ -454,7 +467,10 @@ class CategoryListView extends StatelessWidget {
                   context.router.push(
                     route.SubCategoriesScreen(
                       categoryName: cat.name,
-                      parentId: cat.parentId,
+                      categoryId: cat.id.toString(),
+                      parentId: int.parse(cat.parentId ?? '0') > 0
+                          ? cat.parentId
+                          : cat.id.toString(),
                     ),
                   );
                 }

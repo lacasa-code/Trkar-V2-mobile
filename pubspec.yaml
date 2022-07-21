@@ -45,6 +45,7 @@ dependencies:
   flutter_phoenix: ^1.0.0
   flutter_screenutil: ^5.4.0
   flutter_svg: ^0.22.0
+  flutter_switch: ^0.3.2
   fluttericon: ^2.0.0
   fluttertoast: ^8.0.9
   geocoding: ^2.0.4
@@ -57,6 +58,7 @@ dependencies:
   loading_overlay: ^0.3.0
   localization: ^2.1.0
   pin_code_fields: ^7.4.0
+  textfield_tags: ^2.0.1
   url_launcher: ^6.1.2
   vin_decoder: 0.2.1-nullsafety
 

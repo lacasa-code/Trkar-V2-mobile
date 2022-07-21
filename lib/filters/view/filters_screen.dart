@@ -47,7 +47,11 @@ class _FiltersScreenState extends State<FiltersScreen> {
   late SearchCubit searchCubit;
   @override
   void initState() {
-    searchCubit = context.read<SearchCubit>()..getCarMades(context);
+    searchCubit = context.read<SearchCubit>()
+      ..getCarMades(
+        context,
+        categoryId: widget.parentId,
+      );
     context.read<SubCategoriesCubit>().getSubCategories(context);
     super.initState();
   }

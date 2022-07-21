@@ -17,6 +17,7 @@ class RegisterButton extends StatelessWidget {
     this.radius = 30,
     this.textSize,
     this.noLocalTitle,
+    this.isDeleteButton = false,
   }) : super(key: key);
   final String? title;
   final void Function() onPressed;
@@ -26,6 +27,7 @@ class RegisterButton extends StatelessWidget {
   final double radius;
   final String? noLocalTitle;
   final num? textSize;
+  final bool isDeleteButton;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -42,7 +44,9 @@ class RegisterButton extends StatelessWidget {
               noLocalTitle ?? title?.translate ?? '',
               style: color == Colors.white
                   ? MainTheme.buttonStyle.copyWith(
-                      color: Theme.of(context).primaryColor,
+                      color: isDeleteButton
+                          ? Colors.red
+                          : Theme.of(context).primaryColor,
                       fontSize: textSize == null
                           ? null
                           : ScreenUtil().setSp(textSize!),
@@ -56,7 +60,7 @@ class RegisterButton extends StatelessWidget {
           style: ButtonStyle(
             side: MaterialStateProperty.all(
               BorderSide(
-                color: Theme.of(context).primaryColor,
+                color:isDeleteButton?Colors.red: Theme.of(context).primaryColor,
               ),
             ),
             backgroundColor: MaterialStateProperty.all<Color>(

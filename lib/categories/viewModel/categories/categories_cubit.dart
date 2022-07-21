@@ -195,9 +195,17 @@ class CategoriesCubit extends Cubit<CategoriesState> {
       ];
   bool hasSubCategory(int? parentId) {
     categoryId = parentId;
-    return (_category?.indexWhere(
-                (element) => element.parentId == categoryId.toString()) ??
-            -1) >=
-        0;
+    log('categ index ${_allcategory?.indexWhere((element) => element.parentId == categoryId.toString())}');
+    return _category!.isNotEmpty
+        ? (_category?.indexWhere(
+                    (element) => element.parentId == categoryId.toString()) ??
+                -1) >=
+            0
+        : _allcategory!.isNotEmpty
+            ? (_allcategory?.indexWhere((element) =>
+                        element.parentId == categoryId.toString()) ??
+                    -1) >=
+                0
+            : false;
   }
 }

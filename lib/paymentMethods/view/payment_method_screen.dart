@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:auto_route/auto_route.dart';
@@ -7,6 +9,8 @@ import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/router/router.gr.dart';
 import '../../core/components/circle_widget.dart';
 import '../../core/extensions/string.dart';
+import 'widgets/payment_method_card.dart';
+import 'widgets/payment_method_empty_view.dart';
 
 class PaymentMethodScreen extends StatefulWidget {
   const PaymentMethodScreen({Key? key}) : super(key: key);
@@ -16,6 +20,7 @@ class PaymentMethodScreen extends StatefulWidget {
 }
 
 class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
+  bool hasMethods = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,37 +67,9 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               // mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const BoxHelper(
-                  height: 150,
-                ),
-                SvgPicture.asset(
-                  'assets/icons/svg/payment-method.svg',
-                ),
-                const BoxHelper(
-                  height: 10,
-                ),
-                Text(
-                  'payment_method'.translate,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headline1?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: ScreenUtil().setSp(18),
-                      ),
-                ),
-                const BoxHelper(
-                  height: 5,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Text(
-                    'payment_method_body'.translate,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headline1?.copyWith(
-                          fontWeight: FontWeight.normal,
-                          fontSize: ScreenUtil().setSp(14),
-                        ),
-                  ),
-                ),
+                !hasMethods
+                    ? const PaymentMethodEmptyView()
+                    : const PaymentMethodsView(),
                 const BoxHelper(
                   height: 65,
                 ),
@@ -100,10 +77,15 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                   height: ScreenUtil().setHeight(60),
                   child: RegisterButton(
                     radius: 10,
-                    onPressed: () {
-                      context.router.push(
-                        const CreateNewPaymentMethodRouter(),
+                    onPressed: () async {
+                      var result = await context.router.push(
+                        const ChooseCardTypeRouter(),
                       );
+                      if (result == true) {
+                        setState(() {
+                          hasMethods = true;
+                        });
+                      }
                     },
                     title: 'add_new_payment_method',
                   ),
@@ -113,6 +95,26 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class PaymentMethodsView extends StatelessWidget {
+  const PaymentMethodsView({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: const [
+        BoxHelper(
+          height: 35,
+        ),
+        PaymentMethodCard(),
+        PaymentMethodCard(),
+        PaymentMethodCard(),
+      ],
     );
   }
 }

@@ -165,7 +165,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               hintText: 'phone',
                               controller:
                                   updateUserProfileCubit.phoneController,
-                              maxLength: 10,
+                              maxLength: 9,
                               formatters: [
                                 FilteringTextInputFormatter.digitsOnly,
                               ],

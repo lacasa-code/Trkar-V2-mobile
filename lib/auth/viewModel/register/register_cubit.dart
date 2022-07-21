@@ -63,9 +63,18 @@ class RegisterCubit extends Cubit<RegisterState> {
     }
     if (registerData.status == true) {
       emit(RegisterDone());
-      Fluttertoast.showToast(msg: registerData.message ?? '');
+      Fluttertoast.showToast(
+        msg: registerData.message ?? '',
+      );
+      await Helper.storeNewUserData(
+        registerData,
+      );
+      Helper.setUserTypeToVerification('customer');
       context.router.push(
-        EmailVerficationRouter(),
+        EmailVerificationRouter(
+          email: emailController.text,
+          stateOfVerification: 1,
+        ),
       );
     } else {
       String errorMessage = '';
@@ -122,10 +131,12 @@ class RegisterCubit extends Cubit<RegisterState> {
       emit(RegisterDone());
       await Helper.storeNewVendorData(registerData);
       Fluttertoast.showToast(msg: registerData.message ?? '');
+      Helper.setUserTypeToVerification('vendor');
+
       context.router.push(
-        EmailVerficationRouter(
+        EmailVerificationRouter(
+          email: emailController.text,
           stateOfVerification: 1,
-          phoneNumber: phoneController.text,
         ),
       );
       // context.router.pushAndPopUntil(

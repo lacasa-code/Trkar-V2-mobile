@@ -88,7 +88,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           height: 15,
                         ),
                         ProfileItem(
-                          onPressed: () {},
+                          onPressed: () {
+                            context.router.push(
+                              const OrderHistoryRouter(),
+                            );
+                          },
                           title: 'my_orders_history',
                           svgPictureName: 'my-orders-icon',
                         ),

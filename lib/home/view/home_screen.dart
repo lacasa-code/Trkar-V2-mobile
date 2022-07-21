@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
+import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/home/view/widgets/home_carousel_card.dart';
 import '../../core/router/router.gr.dart' as route;
 import 'package:flutter/material.dart';
@@ -74,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    // log('controller Null => ${_controller == null}');
+    log('activationCode => ${Helper.currentUser?.data?.activationCode}');
     return BlocBuilder<CategoriesCubit, CategoriesState>(
       builder: (context, state) {
         if (state is AllCategoriesLoading) {
@@ -445,7 +446,12 @@ class _HomeScreenState extends State<HomeScreen>
                                           const route.CategoriesScreen(),
                                           SubCategoriesScreen(
                                             categoryName: cat.name,
-                                            parentId: cat.id.toString(),
+                                            categoryId: cat.id.toString(),
+                                            parentId:
+                                                int.parse(cat.parentId ?? '0') >
+                                                        0
+                                                    ? cat.parentId
+                                                    : cat.id.toString(),
                                           )
                                         ]));
                                       }

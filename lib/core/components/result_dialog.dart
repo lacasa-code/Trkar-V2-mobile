@@ -6,7 +6,12 @@ import '../extensions/string.dart';
 import './register_button.dart';
 import './sized_box_helper.dart';
 
-enum ResultType { success, failed, error }
+enum ResultType {
+  success,
+  failed,
+  error,
+  none,
+}
 
 class ResultDialog extends StatelessWidget {
   const ResultDialog({
@@ -28,8 +33,11 @@ class ResultDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SvgPicture.asset(
-              'assets/icons/svg/${resultType.name}.svg',
+            Visibility(
+              visible: resultType!=ResultType.none,
+              child: SvgPicture.asset(
+                'assets/icons/svg/${resultType.name}.svg',
+              ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),

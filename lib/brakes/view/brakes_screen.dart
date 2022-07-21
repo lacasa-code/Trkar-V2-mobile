@@ -59,7 +59,7 @@ class _BrakesScreenState extends State<BrakesScreen> {
     searchCubit = context.read<SearchCubit>()
       ..getCarMades(
         context,
-        // categoryId: widget.parentId,
+        categoryId: widget.parentId,
       );
 
     super.initState();

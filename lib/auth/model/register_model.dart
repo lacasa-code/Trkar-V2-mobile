@@ -78,6 +78,7 @@ class UserData {
     this.deletedAt,
     this.createdAt,
     this.updatedAt,
+    this.activationCode,
   });
 
   int? id;
@@ -99,6 +100,7 @@ class UserData {
   dynamic deletedAt;
   DateTime? createdAt;
   DateTime? updatedAt;
+  String? activationCode;
 
   factory UserData.fromJson(Map<String, dynamic> json) => UserData(
         id: json["id"],
@@ -118,8 +120,13 @@ class UserData {
         lastLogin: json["last_login"],
         inBlock: json["in_block"],
         deletedAt: json["deleted_at"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
+        activationCode: json["activation_code"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -142,5 +149,6 @@ class UserData {
         "deleted_at": deletedAt,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
+        "activation_code": activationCode,
       };
 }

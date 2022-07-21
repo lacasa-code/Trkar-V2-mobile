@@ -3,7 +3,9 @@ import 'package:trkar/Addresses/view/add_new_address_screen.dart';
 import 'package:trkar/Addresses/view/addresses_screen.dart';
 import 'package:trkar/about/view/about_screen.dart';
 import 'package:trkar/auth/view/choose_user_type_screen.dart';
-import 'package:trkar/auth/view/email_verfication_screen.dart';
+import 'package:trkar/auth/view/email_verification_screen.dart';
+import 'package:trkar/auth/view/forget_password_verification_screen.dart';
+import 'package:trkar/auth/view/phone_verification_screen.dart';
 import 'package:trkar/auth/view/forget_password_screen.dart';
 import 'package:trkar/auth/view/login_screen.dart';
 import 'package:trkar/auth/view/register_screen.dart';
@@ -24,7 +26,9 @@ import 'package:trkar/home/view/home_screen.dart';
 import 'package:trkar/legalNotice/view/legal_notice_screen.dart';
 import 'package:trkar/localization/view/change_language_screen.dart';
 import 'package:trkar/mainScreen/tab_page.dart';
+import 'package:trkar/order/view/order_history_screen.dart';
 import 'package:trkar/payment/view/payment_screen.dart';
+import 'package:trkar/paymentMethods/view/choose_type_screen.dart';
 import 'package:trkar/paymentMethods/view/create_new_payment_method_screen.dart';
 import 'package:trkar/paymentMethods/view/payment_method_screen.dart';
 import 'package:trkar/privacy/view/privacy_screen.dart';
@@ -38,6 +42,7 @@ import 'package:trkar/support/view/support_screen.dart';
 import 'package:trkar/terms/view/terms_screen.dart';
 import 'package:trkar/tools/view/tools_screen.dart';
 import 'package:trkar/tyres/view/tyres_screen.dart';
+import 'package:trkar/vendor/createProduct/view/create_product_screen.dart';
 import 'package:trkar/vendor/dashboard/view/seller_dashboard.dart';
 import 'package:trkar/vendor/home/view/vendor_home_screen.dart';
 import 'package:trkar/vendor/products/view/my_products_screen.dart';
@@ -220,6 +225,16 @@ import 'package:trkar/vendor/resumeData/view/resume_data_screen.dart';
               name: 'CreateNewPaymentMethodRouter',
               page: CreateNewPaymentMethodScreen,
             ),
+            AutoRoute(
+              path: 'choose-card-type',
+              name: 'ChooseCardTypeRouter',
+              page: ChooseCardTypeScreen,
+            ),
+            AutoRoute(
+              path: 'order-history',
+              name: 'OrderHistoryRouter',
+              page: OrdersHistoryScreen,
+            ),
           ],
         ),
       ],
@@ -235,14 +250,24 @@ import 'package:trkar/vendor/resumeData/view/resume_data_screen.dart';
       page: ChooseUserTypeScreen,
     ),
     AutoRoute(
-      path: 'email_verfication',
-      name: 'EmailVerficationRouter',
+      path: 'email_verification',
+      name: 'EmailVerificationRouter',
       page: EmailVerificationScreen,
+    ),
+    AutoRoute(
+      path: 'phone_verification',
+      name: 'PhoneVerificationRouter',
+      page: PhoneVerificationScreen,
     ),
     AutoRoute(
       path: 'forget_password',
       name: 'ForgetPasswordRouter',
       page: ForgetPasswordScreen,
+    ),
+    AutoRoute(
+      path: 'forget_password_verification',
+      name: 'ForgetPasswordVerificationRouter',
+      page: ForgetPasswordVerificationScreen,
     ),
     AutoRoute(
       path: 'reset_password',
@@ -253,6 +278,16 @@ import 'package:trkar/vendor/resumeData/view/resume_data_screen.dart';
       path: 'register',
       name: 'RegisterRouter',
       page: RegisterScreen,
+    ),
+    AutoRoute(
+      name: 'EditProfileRouter',
+      path: 'vendor-edit-profile',
+      page: EditProfileScreen,
+    ),
+    AutoRoute(
+      name: 'CreateProductRouter',
+      path: 'vendor-create-product',
+      page: CreateProductScreen,
     ),
   ],
 )

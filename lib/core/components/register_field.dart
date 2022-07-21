@@ -16,6 +16,7 @@ class RegisterField extends StatelessWidget {
     this.obsecureText = false,
     this.thinBorder = true,
     this.controller,
+    this.contentPadding,
     this.validator,
     this.autovalidateMode,
     this.maxLines = 1,
@@ -60,6 +61,7 @@ class RegisterField extends StatelessWidget {
   final void Function()? onTap;
   final TextAlign textAlign;
   final FocusNode? focusNode;
+  final EdgeInsetsGeometry? contentPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +86,7 @@ class RegisterField extends StatelessWidget {
         decoration: InputDecoration(
           contentPadding: makeContentPadding
               ? const EdgeInsets.symmetric(vertical: 25, horizontal: 20)
-              : null,
+              : contentPadding,
           counterText: '',
           filled: true,
           fillColor: Colors.white,
@@ -92,13 +94,15 @@ class RegisterField extends StatelessWidget {
           hintText: noLocalHintText ?? hintText?.translate,
           labelStyle: TextStyle(
             fontWeight: FontWeight.bold,
-            color:
-                thinBorder ? MainStyle.lightGreyColor : MainStyle.darkGreyColor,
+            color: thinBorder
+                ? MainStyle.newGreyColor.withOpacity(0.6)
+                : MainStyle.darkGreyColor,
           ),
           hintStyle: TextStyle(
             fontWeight: FontWeight.bold,
-            color:
-                thinBorder ? MainStyle.lightGreyColor : MainStyle.darkGreyColor,
+            color: thinBorder
+                ? MainStyle.newGreyColor.withOpacity(0.6)
+                : MainStyle.darkGreyColor,
           ),
           border: hideBorder
               ? null

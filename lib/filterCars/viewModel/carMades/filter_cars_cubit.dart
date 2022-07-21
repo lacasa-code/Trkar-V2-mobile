@@ -29,6 +29,8 @@ class FilterCarsCubit extends Cubit<FilterCarsState> {
     categoryId,
     bool isSearch = false,
   }) async {
+    _carModels?.clear();
+    _carEngines?.clear();
     emit(CarMadesLoading());
     try {
       var carMadesData = await CarMadesRepo.getCarMades(
@@ -171,6 +173,7 @@ class FilterCarsCubit extends Cubit<FilterCarsState> {
     context, {
     carMadeId,
   }) async {
+    _carEngines?.clear();
     emit(CarModelsLoading());
     try {
       var carYearsData = await CarModelsRepo.getCarModels(

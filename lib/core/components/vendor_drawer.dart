@@ -36,11 +36,11 @@ class VendorDrawer extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
                   child: Text(
-                    'Vendor Name',
-                    style: TextStyle(
+                    Helper.currentVendor?.data?.username ?? '',
+                    style: const TextStyle(
                         fontWeight: FontWeight.bold, color: Colors.black),
                   ),
                 ),
@@ -48,7 +48,11 @@ class VendorDrawer extends StatelessWidget {
             ),
             VendorDrawerItem(
               title: 'edit_profile',
-              onPressed: () {},
+              onPressed: () {
+                // context.navigateTo(
+                //   const EditProfileRouter(),
+                // );
+              },
               icons: Icons.person_outline,
             ),
             VendorDrawerItem(
@@ -62,7 +66,11 @@ class VendorDrawer extends StatelessWidget {
             ),
             VendorDrawerItem(
               title: 'add_new_product',
-              onPressed: () {},
+              onPressed: () {
+                context.navigateTo(
+                  const CreateProductRouter(),
+                );
+              },
               icons: Icons.add,
             ),
             VendorDrawerItem(

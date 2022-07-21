@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trkar/core/components/home_product_item.dart';
 import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:trkar/core/components/vendor_drawer.dart';
+import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/core/router/router.gr.dart';
 import '../../../core/extensions/string.dart';
 import 'package:auto_route/auto_route.dart';
@@ -130,7 +131,7 @@ class VendorHomeHeaderItem extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: Text(
-                    'Vendor Name',
+                    Helper.currentVendor?.data?.username ?? '',
                     style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,

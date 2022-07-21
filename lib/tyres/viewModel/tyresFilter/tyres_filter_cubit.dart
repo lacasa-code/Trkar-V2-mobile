@@ -71,6 +71,7 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
     seasonIndex,
   }) async {
     emit(WidthLoading());
+    log('typeName =>${_types?[tabIndex].name}');
     var widthData = await AttributesRepo.getAttributeByParentId(
       context,
       path: 'seasons',
@@ -133,6 +134,55 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
 
     if (manufacturers.status == true) {
       _manufacturersByWidth = manufacturers.data;
+      log('manufacturer $manufacturer');
+      emit(Done());
+    } else {
+      emit(Error());
+    }
+  }
+
+  Future<void> getAxleByWidthId(
+    context, {
+    widthId,
+  }) async {
+    emit(TyresAxleLoading());
+    var axleData = await AttributesRepo.getAttributeByParentId(
+      context,
+      path: 'axle/$widthId',
+    );
+
+    if (axleData == null) {
+      emit(Error());
+      return;
+    }
+
+    if (axleData.status == true) {
+      _axle = axleData.data;
+
+      emit(Done());
+    } else {
+      emit(Error());
+    }
+  }
+
+  Future<void> getLoadIndexByWidthId(
+    context, {
+    widthId,
+  }) async {
+    emit(TyresLoadIndexLoading());
+    var loadIndexData = await AttributesRepo.getAttributeByParentId(
+      context,
+      path: 'load/index/$widthId',
+    );
+
+    if (loadIndexData == null) {
+      emit(Error());
+      return;
+    }
+
+    if (loadIndexData.status == true) {
+      _loadIndex = loadIndexData.data;
+
       emit(Done());
     } else {
       emit(Error());
@@ -213,6 +263,7 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
     index,
     context,
   ) async {
+    log('tabIndex=> $index');
     if (_tabIndex == index) {
       return;
     }
@@ -246,7 +297,7 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
 
   void onWidthDropdownChanged(
     String? value,
-  ) {
+  ) async {
     if (value == null) {
       return;
     }
@@ -258,18 +309,31 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
     if (index < 0) {
       return;
     }
-    getHeightBySeasonId(
+    await getHeightBySeasonId(
       null,
       widthId: _width?[index].id,
     );
-    getManufacturersByWidthId(
+    await getManufacturersByWidthId(
       null,
       widthId: _width?[index].id,
     );
-    getSpeedRatingByWidthId(
+    await getSpeedRatingByWidthId(
       null,
       widthId: _width?[index].id,
     );
+    if (_tabIndex == 2) {
+      log('tabIndex=> 2 width OnChanged');
+      await getLoadIndexByWidthId(
+        null,
+        widthId: _width?[index].id,
+      );
+    }
+    if (_tabIndex == 3) {
+      await getAxleByWidthId(
+        null,
+        widthId: _width?[index].id,
+      );
+    }
   }
 
   void onHeightDropdownChanged(
@@ -353,6 +417,8 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
   List<Attribute>? _height = [];
   List<Attribute>? _diameter = [];
   List<Attribute>? _speedRating = [];
+  List<Attribute>? _axle = [];
+  List<Attribute>? _loadIndex = [];
   List<Attribute>? _manufacturersByWidth = [];
   List<Manufacturer>? _manufacturer = [];
   List<Type>? _types = [];
@@ -405,6 +471,12 @@ class TyresFilterCubit extends Cubit<TyresFilterState> {
         ...?(_manufacturersByWidth!.isEmpty
             ? _manufacturer?.map((e) => e.name ?? '').toList()
             : _manufacturersByWidth?.map((e) => e.value ?? '').toList()),
+      ];
+  List<String> get axle => [
+        ...?_axle?.map((e) => e.value ?? '').toList(),
+      ];
+  List<String> get loadIndex => [
+        ...?_loadIndex?.map((e) => e.value ?? '').toList(),
       ];
   List<Type> get types => [...?_types];
   int get tabIndex => _tabIndex;

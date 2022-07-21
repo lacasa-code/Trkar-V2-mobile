@@ -5,11 +5,7 @@ import 'package:dio/adapter.dart';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:trkar/core/helper/helper.dart';
-import './navigator.dart';
-import '../../splash/view/splash_screen.dart';
 // import 'helper.dart';
 
 class NetworkUtil {
@@ -43,9 +39,13 @@ class NetworkUtil {
           options: Options(
               headers: withHeader
                   ? {
-                      if (Helper.currentUser != null) ...{
+                      if (Helper.isLoggedIn) ...{
                         HttpHeaders.authorizationHeader:
-                            'Bearer ${Helper.currentUser!.accessToken}',
+                            'Bearer ${Helper.currentUser?.accessToken}',
+                      },
+                      if (Helper.isVendorLoggedIn) ...{
+                        HttpHeaders.authorizationHeader:
+                            'Bearer ${Helper.currentVendor?.accessToken}',
                       },
                       // HttpHeaders.contentTypeHeader: 'application/json',
                       // HttpHeaders.acceptHeader: 'application/json',
@@ -101,9 +101,13 @@ class NetworkUtil {
           options: Options(
               headers: withHeader
                   ? {
-                      if (Helper.currentUser != null) ...{
+                      if (Helper.isLoggedIn) ...{
                         HttpHeaders.authorizationHeader:
-                            'Bearer ${Helper.currentUser!.accessToken}',
+                            'Bearer ${Helper.currentUser?.accessToken}',
+                      },
+                      if (Helper.isVendorLoggedIn) ...{
+                        HttpHeaders.authorizationHeader:
+                            'Bearer ${Helper.currentVendor?.accessToken}',
                       },
                       // HttpHeaders.contentTypeHeader: 'application/json',
                       // HttpHeaders.acceptHeader: 'application/json',

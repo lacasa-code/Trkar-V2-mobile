@@ -17,9 +17,9 @@ import 'package:trkar/core/themes/themes.dart';
 import '../../core/components/sized_box_helper.dart';
 import '../../core/extensions/string.dart';
 
-class EmailVerificationScreen extends StatefulWidget
+class PhoneVerificationScreen extends StatefulWidget
     implements AutoRouteWrapper {
-  const EmailVerificationScreen({
+  const PhoneVerificationScreen({
     Key? key,
     this.stateOfVerification = 0,
     this.phoneNumber,
@@ -32,8 +32,8 @@ class EmailVerificationScreen extends StatefulWidget
   static const routeName = '/email_verfication';
 
   @override
-  _EmailVerificationScreenState createState() =>
-      _EmailVerificationScreenState();
+  _PhoneVerificationScreenState createState() =>
+      _PhoneVerificationScreenState();
 
   @override
   Widget wrappedRoute(BuildContext context) {
@@ -47,7 +47,7 @@ class EmailVerificationScreen extends StatefulWidget
   }
 }
 
-class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
+class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
   late ConfirmCodeCubit confirmCode;
 
   @override
@@ -85,7 +85,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
             right: -ScreenUtil().setWidth(430),
             bottom: ScreenUtil().setHeight(235),
             left: 0,
-            child: CircleWidget(),
+            child: const CircleWidget(),
           ),
           Positioned(
             top: ScreenUtil().setHeight(470),
@@ -169,7 +169,9 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                   ),
                 ),
               ),
-              const VerficationFooterText(),
+              VerificationFooterText(
+                onResendPressed: () {},
+              ),
               const BoxHelper(
                 height: 50,
               ),
@@ -187,17 +189,15 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                                       context,
                                     )
                                 : () {
-                                    widget.stateOfVerification == 2
-                                        ? context.router.replace(
-                                            const ResetPasswordRouter(),
-                                          )
-                                        : // var arg = ModalRoute.of(context)?.settings.arguments;
-                                        context.router.pushAndPopUntil(
-                                            widget.stateOfVerification == 1
-                                                ? const ResumeDataRouter()
-                                                : const SplashRouter(),
-                                            predicate: (_) => false,
-                                          );
+                                    var arg = ModalRoute.of(context)
+                                        ?.settings
+                                        .arguments;
+                                    context.router.pushAndPopUntil(
+                                      widget.stateOfVerification == 1
+                                          ? const ResumeDataRouter()
+                                          : const SplashRouter(),
+                                      predicate: (_) => false,
+                                    );
                                   },
                           ),
                   );

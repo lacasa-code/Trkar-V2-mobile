@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:trkar/auth/viewModel/forgetPassword/forget_password_cubit.dart';
 import 'package:trkar/core/components/circle_widget.dart';
+import 'package:trkar/core/components/loader_widget.dart';
 import '../../core/extensions/string.dart';
-import 'package:trkar/auth/view/email_verfication_screen.dart';
+import 'package:trkar/auth/view/phone_verification_screen.dart';
 import 'package:trkar/auth/view/widgets/header_widget.dart';
 import 'package:trkar/core/components/register_button.dart';
 import 'package:trkar/core/components/register_field.dart';
@@ -11,15 +14,32 @@ import 'package:trkar/core/components/sized_box_helper.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:trkar/core/router/router.gr.dart';
 
-class ForgetPasswordScreen extends StatefulWidget {
+class ForgetPasswordScreen extends StatefulWidget implements AutoRouteWrapper {
   const ForgetPasswordScreen({Key? key}) : super(key: key);
   static const routeName = '/forget_password';
 
   @override
   _ForgetPasswordScreenState createState() => _ForgetPasswordScreenState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    // TODO: implement wrappedRoute
+    return BlocProvider(
+      create: (_) => ForgetPasswordCubit(),
+      child: this,
+    );
+  }
 }
 
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
+  late ForgetPasswordCubit forgetPasswordCubit;
+
+  @override
+  void initState() {
+    forgetPasswordCubit = context.read<ForgetPasswordCubit>();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -104,30 +124,38 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   const BoxHelper(
                     height: 50,
                   ),
-                  RegisterField(
-                    hintText: 'email',
-                    thinBorder: true,
-                    prefixWithDivider: true,
-                    prefixIcon: Icon(
-                      Icons.email_outlined,
-                      color: Theme.of(context).iconTheme.color,
+                  Form(
+                    key: forgetPasswordCubit.formKey,
+                    child: RegisterField(
+                      hintText: 'email',
+                      validator: forgetPasswordCubit.emailValidator,
+                      controller: forgetPasswordCubit.emailController,
+                      thinBorder: true,
+                      prefixWithDivider: true,
+                      prefixIcon: Icon(
+                        Icons.email_outlined,
+                        color: Theme.of(context).iconTheme.color,
+                      ),
                     ),
                   ),
                   const BoxHelper(
                     height: 95,
                   ),
-                  SizedBox(
-                    height: ScreenUtil().setHeight(55),
-                    child: RegisterButton(
-                      radius: 10,
-                      title: 'send_message',
-                      onPressed: () {
-                        context.router.push(
-                          EmailVerficationRouter(stateOfVerification: 2),
-                          // predicate: (_) => false,
-                        );
-                      },
-                    ),
+                  BlocBuilder<ForgetPasswordCubit, ForgetPasswordState>(
+                    builder: (context, state) {
+                      if (state is ForgetPasswordLoading) {
+                        return const LoaderWidget();
+                      }
+                      return SizedBox(
+                        height: ScreenUtil().setHeight(55),
+                        child: RegisterButton(
+                          radius: 10,
+                          title: 'send_message',
+                          onPressed: () =>
+                              forgetPasswordCubit.forgetPassword(context),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),

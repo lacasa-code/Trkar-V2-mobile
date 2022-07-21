@@ -45,39 +45,42 @@ class UserProfileCubit extends Cubit<UserProfileState> {
   }
 
   void storeNewData() {
-    var currentUser = Helper.currentUser;
-    log('message ${_profileData?.image}');
-    var authModel = UserAuthModel(
-      accessToken: currentUser?.accessToken,
-      code: currentUser?.code,
-      data: UserData(
-        address: _profileData?.address,
-        areaId: _profileData?.areaId,
-        cityId: _profileData?.cityId,
-        countryId: _profileData?.countryId,
-        image: _profileData?.image,
-        createdAt: _profileData?.createdAt,
-        deletedAt: _profileData?.deletedAt,
-        email: _profileData?.email,
-        emailVerifiedAt: _profileData?.emailVerifiedAt,
-        id: _profileData?.id,
-        inBlock: _profileData?.inBlock,
-        lastLogin: _profileData?.lastLogin,
-        latitude: _profileData?.latitude,
-        longitude: _profileData?.longitude,
-        phone: _profileData?.phone,
-        phoneVerifiedAt: _profileData?.phoneVerifiedAt,
-        updatedAt: _profileData?.updatedAt,
-        username: _profileData?.username,
-        uuid: _profileData?.uuid,
-      ),
-      expiresIn: currentUser?.expiresIn,
-      erroressages: currentUser?.erroressages,
-      message: currentUser?.message,
-      status: currentUser?.status,
-      tokenType: currentUser?.tokenType,
-    );
-    Helper.storeNewUserData(authModel);
+    if (Helper.isVendorLoggedIn) {
+    } else if (Helper.isLoggedIn) {
+      var currentUser = Helper.currentUser;
+      log('message ${_profileData?.image}');
+      var authModel = UserAuthModel(
+        accessToken: currentUser?.accessToken,
+        code: currentUser?.code,
+        data: UserData(
+          address: _profileData?.address,
+          areaId: _profileData?.areaId,
+          cityId: _profileData?.cityId,
+          countryId: _profileData?.countryId,
+          image: _profileData?.image,
+          createdAt: _profileData?.createdAt,
+          deletedAt: _profileData?.deletedAt,
+          email: _profileData?.email,
+          emailVerifiedAt: _profileData?.emailVerifiedAt,
+          id: _profileData?.id,
+          inBlock: _profileData?.inBlock,
+          lastLogin: _profileData?.lastLogin,
+          latitude: _profileData?.latitude,
+          longitude: _profileData?.longitude,
+          phone: _profileData?.phone,
+          phoneVerifiedAt: _profileData?.phoneVerifiedAt,
+          updatedAt: _profileData?.updatedAt,
+          username: _profileData?.username,
+          uuid: _profileData?.uuid,
+        ),
+        expiresIn: currentUser?.expiresIn,
+        erroressages: currentUser?.erroressages,
+        message: currentUser?.message,
+        status: currentUser?.status,
+        tokenType: currentUser?.tokenType,
+      );
+      Helper.storeNewUserData(authModel);
+    }
   }
 
   ProfileData? _profileData;

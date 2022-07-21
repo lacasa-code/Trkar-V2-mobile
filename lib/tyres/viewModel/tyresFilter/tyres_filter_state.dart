@@ -15,6 +15,10 @@ class HeightLoading extends TyresFilterState {}
 
 class TyresManufacturersLoading extends TyresFilterState {}
 
+class TyresAxleLoading extends TyresFilterState {}
+
+class TyresLoadIndexLoading extends TyresFilterState {}
+
 class Cleared extends TyresFilterState {}
 
 class DiameterLoading extends TyresFilterState {}

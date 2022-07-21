@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:get_storage/get_storage.dart';
 import 'package:trkar/auth/model/register_model.dart';
@@ -20,7 +21,12 @@ class Helper {
   static UserAuthModel? get currentUser => GetStorage().hasData('user')
       ? UserAuthModel.fromJson(jsonDecode(GetStorage().read<String>('user')!))
       : null;
+  static VendorAuthModel? get currentVendor => GetStorage().hasData('vendor')
+      ? VendorAuthModel.fromJson(
+          jsonDecode(GetStorage().read<String>('vendor')!))
+      : null;
   static bool get isLoggedIn => currentUser != null;
+  static bool get isVendorLoggedIn => currentVendor != null;
   static bool get isValidToken =>
       GetStorage().hasData('expires_in') &&
       DateTime.parse(GetStorage().read('expires_in')).isAfter(DateTime.now());
@@ -33,6 +39,7 @@ class Helper {
         authModel.toJson(),
       ),
     );
+    log('activationCode ${currentUser?.data?.activationCode}');
     var tokenExpiresDate = DateTime.now().add(
       Duration(milliseconds: authModel.expiresIn ?? 0),
     );
@@ -70,6 +77,7 @@ class Helper {
     //   'expires_in',
     // );
   }
+
   static Future<void> clearUserData() async {
     var getStorage = GetStorage();
     await getStorage.remove(
@@ -79,5 +87,12 @@ class Helper {
     await getStorage.remove(
       'expires_in',
     );
+  }
+
+  static String _userTypeToVerification = '';
+  static String get userTypeToVerification => _userTypeToVerification;
+
+  static void setUserTypeToVerification(String newUserType) {
+    _userTypeToVerification = newUserType;
   }
 }

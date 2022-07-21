@@ -325,14 +325,15 @@ class _TyresScreenState extends State<TyresScreen>
                                         Visibility(
                                           visible:
                                               tyresFilterCubit.tabIndex == 2,
-                                          child: TyresMultiselectDropDownView(
-                                            title: 'load_index',
-                                            values: const [
-                                              '31',
-                                              '34',
-                                              '12',
-                                            ],
-                                          ),
+                                          child: state is TyresLoadIndexLoading
+                                              ? const LoaderWidget()
+                                              : TyresMultiselectDropDownView(
+                                                  title: 'load_index',
+                                                  enabled: tyresFilterCubit
+                                                      .loadIndex.isNotEmpty,
+                                                  values: tyresFilterCubit
+                                                      .loadIndex,
+                                                ),
                                         ),
                                       ],
                                     ),
@@ -340,58 +341,8 @@ class _TyresScreenState extends State<TyresScreen>
                                 ),
                                 Visibility(
                                   visible: tyresFilterCubit.tabIndex == 3,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 10),
-                                    child: Column(
-                                      children: [
-                                        state is SpeedRatingLoading
-                                            ? const LoaderWidget()
-                                            : TyresMultiselectDropDownView(
-                                                title: 'speed_rating',
-                                                enabled: tyresFilterCubit
-                                                    .speedRating.isNotEmpty,
-                                                values: List.generate(
-                                                  tyresFilterCubit
-                                                      .speedRating.length,
-                                                  (index) => tyresFilterCubit
-                                                      .speedRating[index],
-                                                ),
-                                              ),
-                                        const BoxHelper(
-                                          height: 5,
-                                        ),
-                                        TyresMultiselectDropDownView(
-                                          title: 'axle',
-                                          values: const [
-                                            '31',
-                                            '34',
-                                            '12',
-                                          ],
-                                        ),
-                                        const BoxHelper(
-                                          height: 5,
-                                        ),
-                                        state is TyresManufacturersLoading
-                                            ? const LoaderWidget()
-                                            : TyresMultiselectDropDownView(
-                                                title: 'manufacturer',
-                                                enabled: tyresFilterCubit
-                                                    .speedRating.isNotEmpty,
-                                                values: List.generate(
-                                                  tyresFilterCubit
-                                                      .manufacturer.length,
-                                                  (index) {
-                                                    var manufacturer =
-                                                        tyresFilterCubit
-                                                                .manufacturer[
-                                                            index];
-                                                    return manufacturer;
-                                                  },
-                                                ),
-                                              ),
-                                      ],
-                                    ),
+                                  child: LightTruckView(
+                                    tyresFilterCubit: tyresFilterCubit,
                                   ),
                                 ),
                                 const BoxHelper(
@@ -426,6 +377,67 @@ class _TyresScreenState extends State<TyresScreen>
           );
         },
       ),
+    );
+  }
+}
+
+class LightTruckView extends StatelessWidget {
+  const LightTruckView({
+    Key? key,
+    required this.tyresFilterCubit,
+  }) : super(key: key);
+
+  final TyresFilterCubit tyresFilterCubit;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<TyresFilterCubit, TyresFilterState>(
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          child: Column(
+            children: [
+              state is SpeedRatingLoading
+                  ? const LoaderWidget()
+                  : TyresMultiselectDropDownView(
+                      title: 'speed_rating',
+                      enabled: tyresFilterCubit.speedRating.isNotEmpty,
+                      values: List.generate(
+                        tyresFilterCubit.speedRating.length,
+                        (index) => tyresFilterCubit.speedRating[index],
+                      ),
+                    ),
+              const BoxHelper(
+                height: 5,
+              ),
+              state is TyresAxleLoading
+                  ? const LoaderWidget()
+                  : TyresMultiselectDropDownView(
+                      title: 'axle',
+                      values: tyresFilterCubit.axle,
+                      enabled: tyresFilterCubit.axle.isNotEmpty,
+                    ),
+              const BoxHelper(
+                height: 5,
+              ),
+              state is TyresManufacturersLoading
+                  ? const LoaderWidget()
+                  : TyresMultiselectDropDownView(
+                      title: 'manufacturer',
+                      enabled: tyresFilterCubit.manufacturer.isNotEmpty,
+                      values: List.generate(
+                        tyresFilterCubit.manufacturer.length,
+                        (index) {
+                          var manufacturer =
+                              tyresFilterCubit.manufacturer[index];
+                          return manufacturer;
+                        },
+                      ),
+                    ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

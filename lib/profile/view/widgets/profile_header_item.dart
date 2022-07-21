@@ -60,10 +60,12 @@ class ProfileHeaderItem extends StatelessWidget {
             ),
           ),
           title: Text(
-            'hi'.translate + (', ${userName ?? ''}'),
+            '${'hi'.translate}, $userName',
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
             style: Theme.of(context).textTheme.headline1?.copyWith(
                   fontWeight: FontWeight.bold,
-                  fontSize: ScreenUtil().setSp(15),
+                  fontSize: ScreenUtil().setSp(13),
                 ),
           ),
           subtitle: Text(

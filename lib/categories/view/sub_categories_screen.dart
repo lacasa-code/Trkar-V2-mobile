@@ -33,9 +33,10 @@ class SubCategoriesScreen extends StatefulWidget implements AutoRouteWrapper {
   const SubCategoriesScreen({
     Key? key,
     this.categoryName,
-    @PathParam('categoryId') this.parentId,
+    this.parentId,
+    @PathParam('categoryId') this.categoryId,
   }) : super(key: key);
-  final String? categoryName, parentId;
+  final String? categoryName, categoryId, parentId;
   static const routeName = '/sub-categories-screen';
 
   @override
@@ -55,7 +56,7 @@ class SubCategoriesScreen extends StatefulWidget implements AutoRouteWrapper {
         BlocProvider<SubCategoriesCubit>(
           create: (_) => SubCategoriesCubit(
             categoryName: categoryName,
-            parentId: parentId,
+            parentId: categoryId,
           ),
         ),
       ],
@@ -73,7 +74,11 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
   @override
   void initState() {
     filterCarsCubit = context.read<FilterCarsCubit>();
-    searchCubit = context.read<SearchCubit>()..getCarMades(context);
+    searchCubit = context.read<SearchCubit>()
+      ..getCarMades(
+        context,
+        categoryId: widget.parentId,
+      );
 
     subcategoriesCubit = BlocProvider.of<SubCategoriesCubit>(context)
       ..getSubCategories(context);
@@ -133,6 +138,7 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
                     child: InkWell(
                       onTap: () {
                         showModalBottomSheet(
+                          isScrollControlled: true,
                           context: context,
                           builder: (_) {
                             return const CategoriesFilterView();
