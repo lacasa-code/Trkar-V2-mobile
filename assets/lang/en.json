@@ -338,6 +338,20 @@
     "quantity_reminder": "Quantity Reminder",
     "quantity_reminder_required": "Quantity Reminder Required",
     "add_branch": "Add Branch",
-    "price_helper": "the price shown to customers",
-    "product_tags_required": "Products Tags Required"
+    "actual_product_price": "Actual Price",
+    "price_helper": "The price is shown to administrators only",
+    "product_tags": "Products Tags",
+    "product_tags_required": "Products Tags Required",
+    "discount": "Discount",
+    "discount_required": "Discount Required",
+    "discount_percentage": "Discount Percentage",
+    "additional_product_images": "Additional Product Images",
+    "additional_product_images_required": "Additional Product Images Required",
+    "pick_images": "Pick Images",
+    "add_more": "Add More",
+    "compatible_models": "Compatible Models",
+    "engine_required": "Engine Required",
+    "no_items_to_display": "There are no items to display at the moment! \n click at ",
+    "to_add_new_products": "to add new products",
+    "one_image_warning": "At least one image must be left"
 }

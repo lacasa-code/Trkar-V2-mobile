@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +23,7 @@ class QuantityView extends StatelessWidget {
   final CreateProductCubit createProductCubit;
   @override
   Widget build(BuildContext context) {
+    log('branches of product =>${createProductCubit.branchQuantityFields}');
     return BlocBuilder<StoreBranchesCubit, StoreBranchesState>(
       builder: (context, state) {
         return Column(
@@ -48,7 +51,10 @@ class QuantityView extends StatelessWidget {
                     children: [
                       if (index > 0) ...[
                         InkWell(
-                          onTap: () => createProductCubit.deleteFields(index),
+                          onTap: () => createProductCubit.deleteFields(
+                            index,
+                            context,
+                          ),
                           child: CircleAvatar(
                             radius: ScreenUtil().radius(10),
                             backgroundColor: Colors.red,
@@ -67,6 +73,10 @@ class QuantityView extends StatelessWidget {
                         children: [
                           Expanded(
                             child: SearchableDropDownWidget(
+                              initialValue:
+                                  storeBranchesCubit.branches.length == 1
+                                      ? storeBranchesCubit.branches.first.name
+                                      : null,
                               onChanged: (v) {
                                 if (v == null) {
                                   return;
@@ -135,24 +145,28 @@ class QuantityView extends StatelessWidget {
                 );
               },
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                BoxHelper(
-                  width: 125,
-                  height: 35,
-                  child: RegisterButton(
-                    radius: 12,
-                    removePadding: true,
-                    onPressed: () => createProductCubit.addQuantityFields(),
-                    // title: 'add_branch',
-                    noLocalTitle: 'Add More',
+            Visibility(
+              visible: createProductCubit.branchQuantityFields.length <
+                  storeBranchesCubit.branches.length,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  BoxHelper(
+                    width: 125,
+                    height: 35,
+                    child: RegisterButton(
+                      radius: 12,
+                      removePadding: true,
+                      onPressed: () => createProductCubit.addQuantityFields(),
+                      // title: 'add_branch',
+                      title: 'add_more',
+                    ),
                   ),
-                ),
-                const BoxHelper(
-                  height: 15,
-                ),
-              ],
+                  const BoxHelper(
+                    height: 15,
+                  ),
+                ],
+              ),
             )
           ],
         );

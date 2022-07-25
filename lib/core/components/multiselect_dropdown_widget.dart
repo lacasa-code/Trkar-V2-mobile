@@ -4,8 +4,8 @@ import '../themes/screen_utility.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
-class MultiselectDropdownWidget extends StatelessWidget {
-  const MultiselectDropdownWidget({
+class MultiSelectDropdownWidget extends StatelessWidget {
+  const MultiSelectDropdownWidget({
     Key? key,
     this.selectedValueIndex,
     this.values,
@@ -16,8 +16,9 @@ class MultiselectDropdownWidget extends StatelessWidget {
     this.thinBorder = true,
     this.enabled = true,
     this.removePadding = false,
-    this.inititalValue,
+    this.initialValue = const [],
     this.mode = Mode.MENU,
+    this.contentPadding,
   }) : super(key: key);
   final int? selectedValueIndex;
   final List<String>? values;
@@ -28,8 +29,9 @@ class MultiselectDropdownWidget extends StatelessWidget {
   final bool thinBorder;
   final bool enabled;
   final bool removePadding;
-  final String? inititalValue;
+  final List<String> initialValue;
   final Mode mode;
+  final EdgeInsetsGeometry? contentPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -60,13 +62,12 @@ class MultiselectDropdownWidget extends StatelessWidget {
         ),
         dropdownSearchDecoration: InputDecoration(
           enabled: enabled,
-          contentPadding:
+          contentPadding: contentPadding ??
               const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           fillColor: Colors.white,
           filled: true,
           labelText: labelText,
           labelStyle: TextStyle(
-            fontWeight: FontWeight.bold,
             color:
                 thinBorder ? MainStyle.lightGreyColor : MainStyle.darkGreyColor,
           ),
@@ -111,7 +112,7 @@ class MultiselectDropdownWidget extends StatelessWidget {
         enabled: enabled,
         items: values,
         mode: mode,
-
+        selectedItems: initialValue,
         // onChanged: ,
       ),
     );

@@ -73,6 +73,15 @@ class SubCategoriesCubit extends Cubit<SubCategoriesState> {
     }
   }
 
+  List<SubCategory>? getSubCategoryByParentId(
+    int parentId,
+  ) =>
+      _subCategories
+          ?.where(
+            (element) => int.parse(element.parentId ?? '0') == parentId,
+          )
+          .toList();
+
   Future<void> subCategoriesOnClickHandler({
     required BuildContext context,
     String? catSlug,

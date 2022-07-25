@@ -287,7 +287,7 @@ import 'package:trkar/vendor/resumeData/view/resume_data_screen.dart';
     AutoRoute(
       name: 'CreateProductRouter',
       path: 'vendor-create-product',
-      page: CreateProductScreen,
+      page: CreateProductView,
     ),
   ],
 )

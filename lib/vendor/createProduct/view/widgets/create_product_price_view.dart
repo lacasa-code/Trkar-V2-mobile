@@ -12,11 +12,15 @@ class CreateProductPriceField extends StatelessWidget {
     this.validation,
     this.suffixText,
     this.maxLength,
+    this.hintText,
+    this.hintTextSize,
   }) : super(key: key);
   final String? Function(String?)? validation;
   final TextEditingController? controller;
   final String? suffixText;
   final int? maxLength;
+  final String? hintText;
+  final num? hintTextSize;
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +29,13 @@ class CreateProductPriceField extends StatelessWidget {
       keyboardType: TextInputType.phone,
       removePadding: true,
       controller: controller,
+      maxLength: maxLength,
       validator: validation,
       formatters: [
         FilteringTextInputFormatter.digitsOnly,
       ],
+      hintTextSize: hintTextSize,
+      hintFontWeight: FontWeight.normal,
       suffixIcon: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
@@ -63,7 +70,7 @@ class CreateProductPriceField extends StatelessWidget {
           ],
         ),
       ),
-      hintText: 'product_price',
+      hintText: hintText ?? 'product_price',
     );
   }
 }

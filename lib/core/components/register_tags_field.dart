@@ -9,7 +9,6 @@ class RegisterTagsField extends StatelessWidget {
     this.controller,
     this.validator,
     this.hintText,
-    required this.onFieldChanged,
     this.initialTags,
     this.thinBorder = true,
     this.contentPadding,
@@ -21,7 +20,6 @@ class RegisterTagsField extends StatelessWidget {
   final TextfieldTagsController? controller;
   final String? Function(String?)? validator;
   final String? hintText;
-  final void Function(String) onFieldChanged;
   final List<String>? initialTags;
   final bool thinBorder;
   final EdgeInsetsGeometry? contentPadding;
@@ -34,7 +32,7 @@ class RegisterTagsField extends StatelessWidget {
     return TextFieldTags(
       textfieldTagsController: controller,
       initialTags: initialTags,
-      textSeparators: const [' ', ','],
+      // textSeparators: const [' ', ','],
       letterCase: LetterCase.normal,
       validator: validator,
       inputfieldBuilder: (context, tec, fn, error, onChanged, onSubmitted) {
@@ -42,7 +40,7 @@ class RegisterTagsField extends StatelessWidget {
           return Padding(
             padding: removePadding
                 ? EdgeInsets.zero
-                : EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                : const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             // padding: const EdgeInsets.all(10.0),
             child: TextField(
               controller: tec,
@@ -55,13 +53,11 @@ class RegisterTagsField extends StatelessWidget {
                 labelText: noLocalLabelText ?? labelText?.translate,
                 hintText: noLocalHintText ?? hintText?.translate,
                 labelStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
                   color: thinBorder
                       ? MainStyle.newGreyColor.withOpacity(0.6)
                       : MainStyle.darkGreyColor,
                 ),
                 hintStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
                   color: thinBorder
                       ? MainStyle.newGreyColor.withOpacity(0.6)
                       : MainStyle.darkGreyColor,
@@ -158,7 +154,7 @@ class RegisterTagsField extends StatelessWidget {
                       )
                     : null,
               ),
-              onChanged: onFieldChanged,
+              onChanged: onChanged,
               onSubmitted: onSubmitted,
             ),
           );

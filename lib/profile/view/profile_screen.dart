@@ -34,8 +34,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState() {
-    userProfileCubit = context.read<UserProfileCubit>()
-      ..getUserProfile(context);
+    if (Helper.isLoggedIn) {
+      userProfileCubit = context.read<UserProfileCubit>()
+        ..getUserProfile(context);
+    }
     super.initState();
   }
 

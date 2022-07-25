@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,21 +30,25 @@ import 'widgets/product_advanced_data_view.dart';
 import 'widgets/product_main_details_view.dart';
 import 'widgets/quantity_view.dart';
 
-class CreateProductScreen extends StatefulWidget implements AutoRouteWrapper {
-  const CreateProductScreen({Key? key}) : super(key: key);
-
+class CreateProductView extends StatefulWidget implements AutoRouteWrapper {
+  const CreateProductView({
+    Key? key,
+  }) : super(key: key);
   @override
-  State<CreateProductScreen> createState() => _CreateProductScreenState();
+  State<CreateProductView> createState() => _CreateProductViewState();
 
   @override
   Widget wrappedRoute(BuildContext context) {
+    log('wrapMessage');
     return MultiBlocProvider(
       providers: [
         BlocProvider(
           create: (_) => CategoriesCubit(),
         ),
         BlocProvider(
-          create: (context) => CreateProductCubit(),
+          create: (context) => CreateProductCubit(
+            pageIndex: 0,
+          ),
         ),
         BlocProvider(
           create: (context) => ProductsTypeCubit(),
@@ -59,344 +65,344 @@ class CreateProductScreen extends StatefulWidget implements AutoRouteWrapper {
   }
 }
 
-class _CreateProductScreenState extends State<CreateProductScreen> {
+class _CreateProductViewState extends State<CreateProductView> {
   late CategoriesCubit categoriesCubit;
   late CreateProductCubit createProductCubit;
   late ProductsTypeCubit productsTypeCubit;
   late FilterCarsCubit filterCarsCubit;
   late StoreBranchesCubit storeBranchesCubit;
-  int? categoryId, subCategoryId;
+  // int? categoryId, subCategoryId;
+  late SubCategoriesCubit subCategoriesCubit;
 
   @override
   void initState() {
+    subCategoriesCubit = context.read<SubCategoriesCubit>();
+
     storeBranchesCubit = context.read<StoreBranchesCubit>()
       ..getVendorStore(context);
-    createProductCubit = context.read<CreateProductCubit>();
+    createProductCubit = context.read<CreateProductCubit>()
+      ..getAllCarModels(context);
     categoriesCubit = context.read<CategoriesCubit>();
-    filterCarsCubit = context.read<FilterCarsCubit>()
-      ..getCarYears(context)
-      ..getOriginCountries(context);
-    productsTypeCubit = context.read<ProductsTypeCubit>()
-      ..getProductTypes(context);
-    categoriesCubit
-        .getAllCategories(
-      context,
-    )
-        .then((value) {
-      // createProductCubit.addToCategoryList(
-      //   categoriesCubit: categoriesCubit,
-      //   parentId: 0,
-      //   dropdownId: -1,
-      // );
-    });
+    filterCarsCubit = context.read<FilterCarsCubit>();
+    productsTypeCubit = context.read<ProductsTypeCubit>();
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print(
-        'lengthTag=> ${createProductCubit.productTagController.getTags?.length}');
-    return Scaffold(
-      body: BlocBuilder<CreateProductCubit, CreateProductState>(
-        builder: (context, state) {
-          return SafeArea(
+    log('your category id => ${createProductCubit.categoryId}');
+
+    return BlocBuilder<CreateProductCubit, CreateProductState>(
+      builder: (context, state) {
+        return SafeArea(
+          child: Form(
+            key: createProductCubit.formKey,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // VendorSearchView(
+                //   categoriesCubit: categoriesCubit,
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(
+                //     horizontal: 15,
+                //     vertical: 10,
+                //   ),
+                //   child: Column(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       Text(
+                //         'products'.translate,
+                //         style: Theme.of(context).textTheme.headline1?.copyWith(
+                //               fontWeight: FontWeight.bold,
+                //               fontSize: ScreenUtil().setSp(15),
+                //             ),
+                //       ),
+                //       const BoxHelper(
+                //         height: 3,
+                //       ),
+                //       Text(
+                //         '${'number_of_products'.translate} : 3',
+                //         style: Theme.of(context).textTheme.headline1?.copyWith(
+                //               fontWeight: FontWeight.bold,
+                //               fontSize: ScreenUtil().setSp(13),
+                //             ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                Container(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 15,
+                    vertical: 10,
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 15,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(13),
+                    border: Border.all(
+                      color: MainStyle.lightGreyColor,
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Icon(
-                        Icons.menu,
-                        color: Colors.black,
+                      ProductMainDetailsView(
+                        createProductCubit: createProductCubit,
                       ),
-                      Row(
-                        children: [
-                          IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.notifications_outlined,
-                              color: Colors.black,
-                            ),
+                      BlocBuilder<CategoriesCubit, CategoriesState>(
+                        builder: (context, state) {
+                          return Column(
+                            children: [
+                              CreateProductDropdownTile(
+                                initialValue:
+                                    createProductCubit.categoryId != null
+                                        ? categoriesCubit.category
+                                            .firstWhere((element) =>
+                                                element.id ==
+                                                createProductCubit.categoryId)
+                                            .name
+                                        : null,
+                                enabled: categoriesCubit.category.isNotEmpty,
+                                title: 'category',
+                                validator: createProductCubit.categoryValidate,
+                                values: categoriesCubit.category
+                                    .map((e) => e.name ?? '')
+                                    .toList(),
+                                onChanged: (v) async {
+                                  if (v == null) {
+                                    return;
+                                  }
+                                  var categoryId = categoriesCubit.category
+                                      .firstWhere(
+                                          (element) => element.name == v)
+                                      .id;
+
+                                  // var hasSubCategories =
+                                  //     await subCategoriesCubit.hasSubCategories(
+                                  //   categoryId ?? 0,
+                                  //   context,
+                                  // );
+                                  // if (hasSubCategories) {
+                                  await subCategoriesCubit.getSubCategories(
+                                    context,
+                                    id: categoryId,
+                                  );
+                                  createProductCubit.validateCategoryId(
+                                    categoryId ?? 0,
+                                    categoryIndex: -1,
+                                  );
+                                  // }
+                                  await filterCarsCubit.getManufacturer(
+                                    context,
+                                    categoryId: categoryId,
+                                  );
+                                  await filterCarsCubit.getCarMades(
+                                    context,
+                                    categoryId: categoryId,
+                                  );
+                                  createProductCubit.validateCategoryId(
+                                    categoryId ?? 0,
+                                    categoryIndex: -1,
+                                  );
+                                },
+                              ),
+                              ...List.generate(
+                                createProductCubit.categoryIds.length,
+                                (index) {
+                                  return Visibility(
+                                    visible: subCategoriesCubit
+                                        .getSubCategoryByParentId(
+                                          createProductCubit.categoryIds[index],
+                                        )!
+                                        .isNotEmpty,
+                                    child: CreateProductDropdownTile(
+                                      key: ValueKey(createProductCubit
+                                          .categoryIds[index]),
+                                      enabled: subCategoriesCubit
+                                          .getSubCategoryByParentId(
+                                            createProductCubit
+                                                .categoryIds[index],
+                                          )!
+                                          .isNotEmpty,
+                                      title: index == 0
+                                          ? 'sub_category'
+                                          : 'sub_sub_category',
+                                      validator: index == 0
+                                          ? createProductCubit
+                                              .subcategoryValidate
+                                          : null,
+                                      values: subCategoriesCubit
+                                          .getSubCategoryByParentId(
+                                            createProductCubit
+                                                .categoryIds[index],
+                                          )!
+                                          .map(
+                                            (e) =>
+                                                Helper.currentLanguage == 'ar'
+                                                    ? e.nameAr ?? ''
+                                                    : e.nameEn ?? '',
+                                          )
+                                          .toList(),
+                                      onChanged: (v) async {
+                                        if (v == null) {
+                                          return;
+                                        }
+                                        var categoryId = subCategoriesCubit
+                                            .getSubCategoryByParentId(
+                                              createProductCubit
+                                                  .categoryIds[index],
+                                            )!
+                                            .firstWhere((element) =>
+                                                (Helper.currentLanguage ==
+                                                        'ar' &&
+                                                    element.nameAr == v) ||
+                                                (Helper.currentLanguage ==
+                                                        'en' &&
+                                                    element.nameEn == v))
+                                            .id;
+                                        var hasSubCategories =
+                                            await subCategoriesCubit
+                                                .hasSubCategories(
+                                          categoryId ?? 0,
+                                          context,
+                                        );
+                                        if (hasSubCategories) {
+                                          await subCategoriesCubit
+                                              .getSubCategories(
+                                            context,
+                                            id: categoryId,
+                                          );
+                                          createProductCubit.validateCategoryId(
+                                            categoryId ?? 0,
+                                            categoryIndex: index,
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  );
+                                },
+                              ),
+                              // CreateProductDropdownTile(
+                              //   enabled: categoriesCubit
+                              //       .mainCategory.isNotEmpty,
+                              //   title: 'category',
+                              //   values: categoriesCubit.mainCategory
+                              //       .map((e) => e.name ?? '')
+                              //       .toList(),
+                              //   onChanged: (v) {
+                              //     if (v == null) {
+                              //       return;
+                              //     }
+                              //     setState(() {
+                              //       categoryId = categoriesCubit
+                              //           .mainCategory
+                              //           .firstWhere((element) =>
+                              //               element.name == v)
+                              //           .id;
+                              //     });
+                              //   },
+                              // ),
+                              // CreateProductDropdownTile(
+                              //   enabled: categoryId != null,
+                              //   title: 'sub_category',
+                              //   values: categoriesCubit
+                              //       .subCategories(categoryId ?? 0)
+                              //       .map((e) => e.name ?? '')
+                              //       .toList(),
+                              //   onChanged: (v) {
+                              //     if (v == null) {
+                              //       return;
+                              //     }
+                              //     setState(() {
+                              //       subCategoryId = categoriesCubit
+                              //           .subCategories(categoryId ?? 0)
+                              //           .firstWhere((element) =>
+                              //               element.name == v)
+                              //           .id;
+                              //     });
+                              //   },
+                              // ),
+                              // CreateProductDropdownTile(
+                              //   enabled: subCategoryId != null,
+                              //   title: 'sub_sub_category',
+                              //   values: categoriesCubit
+                              //       .subCategories(subCategoryId ?? 0)
+                              //       .map((e) => e.name ?? '')
+                              //       .toList(),
+                              //   onChanged: (v) {},
+                              // ),
+                            ],
+                          );
+                        },
+                      ),
+                      Visibility(
+                        visible: createProductCubit.viewMode ==
+                            ViewMode.allInformation,
+                        child: ProductAdvancedOptionsView(
+                          productsTypeCubit: productsTypeCubit,
+                          filterCarsCubit: filterCarsCubit,
+                          createProductCubit: createProductCubit,
+                          storeBranchesCubit: storeBranchesCubit,
+                        ),
+                      ),
+                      if (createProductCubit.viewMode ==
+                          ViewMode.basicInformation) ...[
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          child: Divider(
+                            thickness: 1,
                           ),
-                          const CircleAvatar(
-                            backgroundImage: AssetImage(
-                              'assets/images/profile2.png',
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              'advanced_options'.translate,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline1
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: ScreenUtil().setSp(15),
+                                  ),
                             ),
-                          ),
-                        ],
+                            SizedBox(
+                              height: ScreenUtil().setHeight(50),
+                              child: RegisterButton(
+                                radius: 10,
+                                onPressed: () =>
+                                    createProductCubit.changeViewMode(context),
+                                title: 'add',
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                      Visibility(
+                        visible: createProductCubit.viewMode ==
+                            ViewMode.allInformation,
+                        child: state is CreateProductLoading
+                            ? const LoaderWidget()
+                            : RegisterButton(
+                                radius: 10,
+                                onPressed: () =>
+                                    createProductCubit.createProduct(context),
+                                title: createProductCubit.product != null
+                                    ? 'update'
+                                    : 'save',
+                              ),
                       ),
                     ],
                   ),
                 ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Form(
-                      key: createProductCubit.formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          VendorSearchView(
-                            categoriesCubit: categoriesCubit,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 15,
-                              vertical: 10,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'products'.translate,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline1
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: ScreenUtil().setSp(15),
-                                      ),
-                                ),
-                                const BoxHelper(
-                                  height: 3,
-                                ),
-                                Text(
-                                  '${'number_of_products'.translate} : 3',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline1
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: ScreenUtil().setSp(13),
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.symmetric(
-                              horizontal: 15,
-                              vertical: 10,
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 15,
-                              vertical: 10,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(13),
-                              border: Border.all(
-                                color: MainStyle.lightGreyColor,
-                              ),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                ProductMainDetailsView(
-                                  createProductCubit: createProductCubit,
-                                ),
-                                BlocBuilder<CategoriesCubit, CategoriesState>(
-                                  builder: (context, state) {
-                                    return Column(
-                                      children: [
-                                        CreateProductDropdownTile(
-                                          enabled: categoriesCubit
-                                              .mainCategory.isNotEmpty,
-                                          title: 'category',
-                                          validator: createProductCubit
-                                              .categoryValidate,
-                                          values: categoriesCubit.mainCategory
-                                              .map((e) => e.name ?? '')
-                                              .toList(),
-                                          onChanged: (v) async {
-                                            if (v == null) {
-                                              return;
-                                            }
-                                            var categoryId = categoriesCubit
-                                                .mainCategory
-                                                .firstWhere((element) =>
-                                                    element.name == v)
-                                                .id;
-
-                                            await filterCarsCubit
-                                                .getManufacturer(
-                                              context,
-                                              categoryId: categoryId,
-                                            );
-                                            await filterCarsCubit.getCarMades(
-                                              context,
-                                              categoryId: categoryId,
-                                            );
-                                            createProductCubit
-                                                .validateCategoryId(
-                                              categoryId ?? 0,
-                                              categoryIndex: -1,
-                                            );
-                                          },
-                                        ),
-                                        ...List.generate(
-                                          createProductCubit.categoryIds.length,
-                                          (index) {
-                                            return CreateProductDropdownTile(
-                                              key: ValueKey(createProductCubit
-                                                  .categoryIds[index]),
-                                              enabled: categoriesCubit
-                                                  .mainCategory.isNotEmpty,
-                                              title: index == 0
-                                                  ? 'sub_category'
-                                                  : 'sub_sub_category',
-                                              validator: index == 0
-                                                  ? createProductCubit
-                                                      .subcategoryValidate
-                                                  : null,
-                                              values: categoriesCubit
-                                                  .subCategories(
-                                                    createProductCubit
-                                                        .categoryIds[index],
-                                                  )
-                                                  .map((e) => e.name ?? '')
-                                                  .toList(),
-                                              onChanged: (v) {
-                                                if (v == null) {
-                                                  return;
-                                                }
-                                                var categoryId =
-                                                    categoriesCubit.allcategory
-                                                        .firstWhere(
-                                                          (element) =>
-                                                              element.name == v,
-                                                        )
-                                                        .id;
-                                                if (categoriesCubit
-                                                    .hasSubCategory(
-                                                        categoryId)) {
-                                                  createProductCubit
-                                                      .validateCategoryId(
-                                                    categoryId ?? 0,
-                                                    categoryIndex: 0,
-                                                  );
-                                                }
-                                              },
-                                            );
-                                          },
-                                        ),
-                                        // CreateProductDropdownTile(
-                                        //   enabled: categoriesCubit
-                                        //       .mainCategory.isNotEmpty,
-                                        //   title: 'category',
-                                        //   values: categoriesCubit.mainCategory
-                                        //       .map((e) => e.name ?? '')
-                                        //       .toList(),
-                                        //   onChanged: (v) {
-                                        //     if (v == null) {
-                                        //       return;
-                                        //     }
-                                        //     setState(() {
-                                        //       categoryId = categoriesCubit
-                                        //           .mainCategory
-                                        //           .firstWhere((element) =>
-                                        //               element.name == v)
-                                        //           .id;
-                                        //     });
-                                        //   },
-                                        // ),
-                                        // CreateProductDropdownTile(
-                                        //   enabled: categoryId != null,
-                                        //   title: 'sub_category',
-                                        //   values: categoriesCubit
-                                        //       .subCategories(categoryId ?? 0)
-                                        //       .map((e) => e.name ?? '')
-                                        //       .toList(),
-                                        //   onChanged: (v) {
-                                        //     if (v == null) {
-                                        //       return;
-                                        //     }
-                                        //     setState(() {
-                                        //       subCategoryId = categoriesCubit
-                                        //           .subCategories(categoryId ?? 0)
-                                        //           .firstWhere((element) =>
-                                        //               element.name == v)
-                                        //           .id;
-                                        //     });
-                                        //   },
-                                        // ),
-                                        // CreateProductDropdownTile(
-                                        //   enabled: subCategoryId != null,
-                                        //   title: 'sub_sub_category',
-                                        //   values: categoriesCubit
-                                        //       .subCategories(subCategoryId ?? 0)
-                                        //       .map((e) => e.name ?? '')
-                                        //       .toList(),
-                                        //   onChanged: (v) {},
-                                        // ),
-                                      ],
-                                    );
-                                  },
-                                ),
-                                Visibility(
-                                  visible: createProductCubit.viewMode ==
-                                      ViewMode.allInformation,
-                                  child: ProductAdvancedOptionsView(
-                                    productsTypeCubit: productsTypeCubit,
-                                    filterCarsCubit: filterCarsCubit,
-                                    createProductCubit: createProductCubit,
-                                    storeBranchesCubit: storeBranchesCubit,
-                                  ),
-                                ),
-                                if (createProductCubit.viewMode ==
-                                    ViewMode.basicInformation) ...[
-                                  const Divider(
-                                    thickness: 1,
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text(
-                                        'advanced_options'.translate,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline1
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: ScreenUtil().setSp(15),
-                                            ),
-                                      ),
-                                      RegisterButton(
-                                        radius: 10,
-                                        onPressed: () => createProductCubit
-                                            .changeViewMode(context),
-                                        title: 'add',
-                                      )
-                                    ],
-                                  ),
-                                ],
-                                Visibility(
-                                  visible: createProductCubit.viewMode ==
-                                      ViewMode.allInformation,
-                                  child: RegisterButton(
-                                    radius: 10,
-                                    onPressed: () => createProductCubit
-                                        .createProduct(context),
-                                    title: 'save',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const BoxHelper(
-                            height: 160,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
               ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

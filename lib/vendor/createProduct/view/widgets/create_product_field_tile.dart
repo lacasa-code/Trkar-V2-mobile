@@ -41,11 +41,11 @@ class CreateProductFieldTile extends StatelessWidget {
               title.translate.toTitleCase,
               style: Theme.of(context).textTheme.headline1?.copyWith(
                     fontWeight: FontWeight.bold,
-                    fontSize: ScreenUtil().setSp(15),
+                    fontSize: ScreenUtil().setSp(13),
                   ),
             ),
             const BoxHelper(
-              width: 5,
+              width: 3,
             ),
             Visibility(
               visible: extraOptions != null,
@@ -53,7 +53,7 @@ class CreateProductFieldTile extends StatelessWidget {
                 '(${extraOptions?.translate.toTitleCase})',
                 style: Theme.of(context).textTheme.headline1?.copyWith(
                       fontWeight: FontWeight.bold,
-                      fontSize: ScreenUtil().setSp(15),
+                      fontSize: ScreenUtil().setSp(11),
                     ),
               ),
             ),

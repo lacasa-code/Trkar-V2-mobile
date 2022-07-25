@@ -15,6 +15,7 @@ class CreateProductDropdownTile extends StatelessWidget {
     required this.enabled,
     this.validator,
     this.isOptional = false,
+    this.initialValue,
   }) : super(key: key);
   final List<String> values;
   final String title;
@@ -22,6 +23,7 @@ class CreateProductDropdownTile extends StatelessWidget {
   final void Function(String?) onChanged;
   final bool isOptional;
   final String? Function(String?)? validator;
+  final String? initialValue;
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +68,7 @@ class CreateProductDropdownTile extends StatelessWidget {
             ),
             values: values,
             labelText: title,
+            initialValue: initialValue,
             validator: validator,
             onChanged: onChanged),
       ],

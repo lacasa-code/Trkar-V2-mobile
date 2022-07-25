@@ -36,7 +36,7 @@ class CategoriesCubit extends Cubit<CategoriesState> {
 
   Future<void> getAllCategories(context) async {
     log('message');
-    if (_allcategory!.isNotEmpty) {
+    if (_allCategory!.isNotEmpty) {
       return;
     }
     emit(AllCategoriesLoading());
@@ -49,8 +49,8 @@ class CategoriesCubit extends Cubit<CategoriesState> {
         return;
       }
       if (categoriesData.status == true) {
-        _allcategory = categoriesData.data;
-        _allcategory?.sort((a, b) => a.parentId?.compareTo(b.parentId!) ?? 0);
+        _allCategory = categoriesData.data;
+        _allCategory?.sort((a, b) => a.parentId?.compareTo(b.parentId!) ?? 0);
         emit(CategoriesDone());
       } else {
         emit(CategoriesError(
@@ -64,7 +64,7 @@ class CategoriesCubit extends Cubit<CategoriesState> {
 
   int? categoryId;
   List<Category>? _category = [];
-  List<Category>? _allcategory = [];
+  List<Category>? _allCategory = [];
   final List<int> _categoriesScreenSubCatIds = [
     // motorcycle parts ..
     519,
@@ -121,7 +121,7 @@ class CategoriesCubit extends Cubit<CategoriesState> {
         ...?_category,
       ];
   List<Category> get mainCategory => [
-        ...?_allcategory?.where((e) => e.parentId == '0').toList(),
+        ...?_allCategory?.where((e) => e.parentId == '0').toList(),
       ];
 
   onTabBarChanging({
@@ -145,12 +145,12 @@ class CategoriesCubit extends Cubit<CategoriesState> {
   List<Category> get homeCategories {
     List<Category> _myCat = [];
     for (var i = 0; i < _homeCategoriesIds.length; i++) {
-      var index = _allcategory!
+      var index = _allCategory!
           .indexWhere((element) => element.id == _homeCategoriesIds[i]);
       if (index < 0) {
         continue;
       }
-      _myCat.add(_allcategory!
+      _myCat.add(_allCategory!
           .firstWhere((element) => element.id == _homeCategoriesIds[i]));
     }
     return _myCat;
@@ -165,12 +165,12 @@ class CategoriesCubit extends Cubit<CategoriesState> {
   List<Category> get categoriesScreenSubCat {
     List<Category> _myCat = [];
     for (var i = 0; i < _categoriesScreenSubCatIds.length; i++) {
-      var index = _allcategory!
+      var index = _allCategory!
           .indexWhere((element) => element.id == _categoriesScreenSubCatIds[i]);
       if (index < 0) {
         continue;
       }
-      _myCat.add(_allcategory!.firstWhere(
+      _myCat.add(_allCategory!.firstWhere(
           (element) => element.id == _categoriesScreenSubCatIds[i]));
     }
     return _myCat;
@@ -182,9 +182,9 @@ class CategoriesCubit extends Cubit<CategoriesState> {
     // ];
   }
 
-  List<Category> get allcategory => [...?_allcategory];
+  List<Category> get allCategory => [...?_allCategory];
 
-  List<Category> subCategories(int parentId) => _allcategory!
+  List<Category> subCategories(int parentId) => _allCategory!
       .where((element) => element.parentId == parentId.toString())
       .toList();
 
@@ -195,14 +195,14 @@ class CategoriesCubit extends Cubit<CategoriesState> {
       ];
   bool hasSubCategory(int? parentId) {
     categoryId = parentId;
-    log('categ index ${_allcategory?.indexWhere((element) => element.parentId == categoryId.toString())}');
+    log('categ index ${_allCategory?.indexWhere((element) => element.parentId == categoryId.toString())}');
     return _category!.isNotEmpty
         ? (_category?.indexWhere(
                     (element) => element.parentId == categoryId.toString()) ??
                 -1) >=
             0
-        : _allcategory!.isNotEmpty
-            ? (_allcategory?.indexWhere((element) =>
+        : _allCategory!.isNotEmpty
+            ? (_allCategory?.indexWhere((element) =>
                         element.parentId == categoryId.toString()) ??
                     -1) >=
                 0

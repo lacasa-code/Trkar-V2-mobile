@@ -321,6 +321,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.1"
+  flutter_image_compress:
+    dependency: "direct main"
+    description:
+      name: flutter_image_compress
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0"
+  flutter_images_picker:
+    dependency: "direct main"
+    description:
+      name: flutter_images_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0"
   flutter_keyboard_visibility:
     dependency: "direct main"
     description:
@@ -532,6 +546,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  heic_to_jpg:
+    dependency: "direct main"
+    description:
+      name: heic_to_jpg
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   html:
     dependency: transitive
     description:
@@ -736,12 +757,12 @@ packages:
     source: hosted
     version: "0.2.1"
   path_provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.10"
+    version: "2.0.11"
   path_provider_android:
     dependency: transitive
     description:

@@ -14,12 +14,12 @@ class CreateProductTagFieldTile extends StatelessWidget {
     this.validator,
     this.controller,
     this.extraOptions,
-    required this.onChanged,
+    this.initialValues,
   }) : super(key: key);
   final String title;
   final TextfieldTagsController? controller;
   final String? Function(String?)? validator;
-  final void Function(String) onChanged;
+  final List<String>? initialValues;
   final String? extraOptions;
 
   @override
@@ -61,7 +61,7 @@ class CreateProductTagFieldTile extends StatelessWidget {
           removePadding: true,
           // contentPadding:
           //     const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-          onFieldChanged: onChanged,
+          initialTags: initialValues,
           controller: controller,
           validator: validator,
         ),

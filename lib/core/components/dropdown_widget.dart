@@ -80,7 +80,6 @@ class DropDownWidget extends StatelessWidget {
           filled: true,
           hintText: labelText.translate,
           labelStyle: TextStyle(
-            fontWeight: FontWeight.bold,
             color:
                 thinBorder ? MainStyle.lightGreyColor : MainStyle.darkGreyColor,
           ),

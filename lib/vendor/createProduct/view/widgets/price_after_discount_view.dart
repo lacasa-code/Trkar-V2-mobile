@@ -22,7 +22,7 @@ class CreateProductPriceAfterDiscountTile extends StatelessWidget {
           height: 10,
         ),
         Text(
-          'price_after_discount'.translate,
+          'discount'.translate,
           style: Theme.of(context).textTheme.headline1?.copyWith(
                 fontWeight: FontWeight.bold,
                 fontSize: ScreenUtil().setSp(15),
@@ -33,9 +33,10 @@ class CreateProductPriceAfterDiscountTile extends StatelessWidget {
         ),
         CreateProductPriceField(
           maxLength: 2,
-          validation: createProductCubit.priceAfterDiscountValidate,
-          controller: createProductCubit.priceAfterDiscountController,
+          // validation: createProductCubit.priceAfterDiscountValidate,
+          controller: createProductCubit.discountController,
           suffixText: '%',
+          hintText: 'discount_percentage',
         ),
       ],
     );

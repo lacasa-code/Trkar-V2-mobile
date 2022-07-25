@@ -7,17 +7,30 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:textfield_tags/textfield_tags.dart';
+import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
+import 'package:trkar/vendor/createProduct/viewModel/getProductCompatibleModels/get_product_compatible_models_cubit.dart';
+import 'package:trkar/vendor/createProduct/viewModel/getProductImages/get_product_images_cubit.dart';
+import 'package:trkar/vendor/createProduct/viewModel/getProductQuantity/get_product_quantity_cubit.dart';
+import 'package:trkar/vendor/createProduct/viewModel/getProductTags/get_product_tags_cubit.dart';
+import 'package:trkar/vendor/home/viewModel/productDetails/product_details_cubit.dart';
 
-import 'package:trkar/core/components/result_dialog.dart';
-import 'package:trkar/core/helper/laravel_exception.dart';
-import 'package:trkar/core/extensions/string.dart';
-import 'package:trkar/vendor/createProduct/repo/create_product_repo.dart';
-import 'package:trkar/vendor/createProduct/viewModel/storeBranches/store_branches_cubit.dart';
+import '../../../../core/components/result_dialog.dart';
+import '../../../../core/helper/laravel_exception.dart';
+import '../../../../core/extensions/string.dart';
+import '../../../../core/helper/helper.dart';
+import '../../../home/model/my_products_model.dart';
+import '../../../home/viewModel/home/home_cubit.dart';
+import '../../model/product_images_model.dart';
+import '../../repo/create_product_repo.dart';
+import '../../viewModel/storeBranches/store_branches_cubit.dart';
 import '../../repo/add_quantity_to_branch_repo.dart';
 import '../../repo/add_product_tag_repo.dart';
+import '../../repo/add_product_compatible_models_repo.dart';
+import '../../repo/store_additional_images_repo.dart';
+import '../../../../filterCars/model/cars_model.dart';
+import '../../../../filterCars/repo/car_model_repo.dart';
 
 import '../../model/branch_quantity_fields.dart';
-import '../../view/widgets/create_product_dropdown_tile.dart';
 
 part 'create_product_state.dart';
 
@@ -27,7 +40,48 @@ enum ViewMode {
 }
 
 class CreateProductCubit extends Cubit<CreateProductState> {
-  CreateProductCubit() : super(CreateProductInitial());
+  CreateProductCubit({
+    required this.pageIndex,
+    this.product,
+  }) : super(CreateProductInitial()) {
+    if (product != null) {
+      nameArController.text = product?.nameAr ?? '';
+      nameEnController.text = product?.nameEn ?? '';
+      actualPriceController.text = product?.actualPrice ?? '';
+      discountController.text = product?.discount ?? '';
+      descArController.text = product?.detailsAr ?? '';
+      descEnController.text = product?.detailsAr ?? '';
+      serialNumberController.text = product?.serialNumber ?? '';
+      priceController.text = product?.price ?? '';
+      manufacturerId = int.tryParse(product?.manufacturerId ?? '');
+      originalCountryId = int.tryParse(product?.originalCountryId ?? '');
+      carMadeId = int.tryParse(product?.carMadeId ?? '');
+      carModelId = int.tryParse(product?.carModelId ?? '');
+      storeId = int.tryParse(product?.storeId ?? '');
+      carEngineId = int.tryParse(product?.carEngineId ?? '');
+      manufacturingYearId = int.tryParse(product?.yearId ?? '');
+      productUploadedImage = product?.image;
+      _productTypeId = int.tryParse(
+        product?.productTypeId ?? '',
+      );
+      categoryId = int.parse(
+        product?.categoryId ?? '0',
+      );
+      categoryIds.add(
+        int.parse(
+          product?.categoryId ?? '0',
+        ),
+      );
+      categoryIds.add(
+        int.parse(
+          product?.subcategoryId ?? '0',
+        ),
+      );
+      emit(ProductDataFetched());
+    }
+  }
+  final int pageIndex;
+  final Product? product;
 
   // final List<CategoryDropdownModel> _categoryList = [];
 
@@ -39,25 +93,34 @@ class CreateProductCubit extends Cubit<CreateProductState> {
       carModelId,
       storeId,
       carEngineId,
-      manufacturingYearId;
+      manufacturingYearId,
+      categoryId;
   final formKey = GlobalKey<FormState>();
   var nameArController = TextEditingController();
   var nameEnController = TextEditingController();
   var actualPriceController = TextEditingController();
-  var priceAfterDiscountController = TextEditingController();
+  var discountController = TextEditingController();
   var descArController = TextEditingController();
   var descEnController = TextEditingController();
   var serialNumberController = TextEditingController();
   var productTagController = TextfieldTagsController();
   var priceController = TextEditingController();
   var minimumQuantityController = TextEditingController();
+  String? productUploadedImage;
   List<String> productTags = [];
-  final List<BranchQuantityFields> _branchQuantityFields = [
+  List<ProductImagesModel> _additionalImages = [];
+  List<Car>? _carModel = [];
+  List<int> _carModelIds = [];
+  List<String> initialTagsValue = [];
+  List<String> initialCompatibleValue = [];
+  List<BranchQuantityFields> _branchQuantityFields = [
     BranchQuantityFields(
       quantityController: TextEditingController(),
       quantityReminderController: TextEditingController(),
     ),
   ];
+  List<ProductImagesModel> get additionalImages => [..._additionalImages];
+  List<Car> get carModels => [...?_carModel];
   List<BranchQuantityFields> get branchQuantityFields =>
       [..._branchQuantityFields];
 
@@ -126,7 +189,7 @@ class CreateProductCubit extends Cubit<CreateProductState> {
 
   String? priceAfterDiscountValidate(String? v) {
     if (v!.isEmpty) {
-      return 'price_after_discount_required'.translate.toTitleCase;
+      return 'discount_required'.translate.toTitleCase;
     }
     return null;
   }
@@ -263,22 +326,54 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     emit(CategoryDropDownStateChanged());
   }
 
+  Future<void> getAllCarModels(
+    context,
+  ) async {
+    emit(CreateProductCarModelLoading());
+    var carModelData = await CarModelsRepo.getCarModels(context);
+
+    if (carModelData == null) {
+      emit(CarModelError());
+
+      return;
+    }
+    if (carModelData.status == true) {
+      emit(CarModelDone());
+
+      _carModel = carModelData.data;
+    } else {
+      emit(CarModelError());
+    }
+  }
+
   Future<void> createProduct(
     BuildContext context,
   ) async {
-    if (!validate() || _pickedImage == null) {
-      if (_pickedImage == null) {
-        Fluttertoast.showToast(
-          msg: 'product_image_required'.translate,
-          backgroundColor: Colors.red,
-        );
+    if (!validate() ||
+        ((_pickedImage == null || _additionalImages.isEmpty) &&
+            product == null)) {
+      if (product == null) {
+        if (_pickedImage == null) {
+          Fluttertoast.showToast(
+            msg: 'product_image_required'.translate,
+            backgroundColor: Colors.red,
+          );
+        }
+        if (_additionalImages.isEmpty) {
+          Fluttertoast.showToast(
+            msg: 'additional_product_images_required'.translate,
+            backgroundColor: Colors.red,
+          );
+        }
       }
       return;
     }
     emit(CreateProductLoading());
     try {
+      var storeCubit = context.read<StoreBranchesCubit>();
       var createProductData = await CreateProductRepo.createNewProduct(
         context,
+        productId: product?.id,
         body: {
           'name_ar': nameArController.text,
           'name_en': nameEnController.text,
@@ -286,7 +381,9 @@ class CreateProductCubit extends Cubit<CreateProductState> {
           'details_en': descEnController.text,
           'actual_price': actualPriceController.text,
           'product_type_id': productTypeId,
-          'discount': priceAfterDiscountController.text,
+          if (discountController.text.isEmpty) ...{
+            'discount': discountController.text,
+          },
           'image': _pickedImage == null
               ? null
               : await MultipartFile.fromFile(_pickedImage?.path ?? ''),
@@ -295,7 +392,7 @@ class CreateProductCubit extends Cubit<CreateProductState> {
           'year_id': manufacturingYearId,
           'manufacturer_id': manufacturerId,
           'original_country_id': originalCountryId,
-          'store_id': context.read<StoreBranchesCubit>().storeId,
+          'store_id': storeCubit.storeId,
           'serial_number': serialNumberController.text,
           'price': priceController.text,
           if (carMadeId != null) ...{
@@ -328,8 +425,9 @@ class CreateProductCubit extends Cubit<CreateProductState> {
               'product_id': createProductData.data?.id,
               'quantity_reminder': field.quantityReminderController.text,
               'quantity': field.quantityController.text,
-              'branch_id': field.branchId,
+              'branch_id': field.branchId ?? storeCubit.branches.first.id,
             },
+            quantityId: field.quantityId,
           );
           await Future.delayed(
             const Duration(milliseconds: 1),
@@ -337,6 +435,18 @@ class CreateProductCubit extends Cubit<CreateProductState> {
           );
         }
         for (var i = 0; i < productTagController.getTags!.length; i++) {
+          var index = context
+                  .read<ProductDetailsCubit>()
+                  .productData
+                  ?.productTags
+                  ?.indexWhere(
+                    (element) =>
+                        element.name == productTagController.getTags![i],
+                  ) ??
+              -1;
+          if (index >= 1) {
+            continue;
+          }
           var tag = productTagController.getTags![i];
           await addProductTags(
             context,
@@ -350,10 +460,45 @@ class CreateProductCubit extends Cubit<CreateProductState> {
             () {},
           );
         }
+        for (var i = 0; i < _carModelIds.length; i++) {
+          var id = _carModelIds[i];
+          await addProductCompatibleModels(
+            context,
+            body: {
+              'product_id': createProductData.data?.id,
+              'car_model_id': id,
+            },
+          );
+          await Future.delayed(
+            const Duration(milliseconds: 1),
+            () {},
+          );
+        }
+        await addProductImages(
+          context,
+          productId: createProductData.data?.id,
+        );
         Fluttertoast.showToast(
           msg: createProductData.message ?? '',
         );
         emit(CreateProductDone());
+        Future.delayed(
+          const Duration(
+            milliseconds: 2,
+          ),
+          () {
+            if (product != null) {
+              changeViewMode(
+                context,
+                viewMode: ViewMode.basicInformation,
+              );
+            } else {
+              context.read<HomeCubit>().deleteByIndex(
+                    pageIndex,
+                  );
+            }
+          },
+        );
       } else {
         var errorMessage = '';
         if (createProductData.message != null) {
@@ -388,11 +533,13 @@ class CreateProductCubit extends Cubit<CreateProductState> {
   Future<void> addQuantityToBranch(
     context, {
     required Map<String, dynamic> body,
+    @required int? quantityId,
   }) async {
     try {
       var addToBranchData = await AddQuantityToBranchRepo.addQuantity(
         context,
         body: body,
+        quantityId: quantityId,
       );
       if (addToBranchData == null) {
         emit(CreateProductError());
@@ -473,65 +620,113 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     }
   }
 
-  // void addToCategoryList({
-  //   required CategoriesCubit categoriesCubit,
-  //   required int parentId,
-  //   required int dropdownId,
-  // }) {
-  //   for (var i = 0; i < _categoryList.length; i++) {
-  //     log("ID=>${_categoryList[i].id}");
-  //   }
+  Future<void> addProductImages(
+    context, {
+    int? productId,
+  }) async {
+    try {
+      List<MultipartFile> productImages = [];
+      var imageToUpload = _additionalImages
+          .where((element) => element.pickedFile != null)
+          .toList();
+      for (var i = 0; i < imageToUpload.length; i++) {
+        var image = imageToUpload[i];
+        var compressAndGetFile =
+            await Helper.compressAndGetFile(image.pickedFile!);
 
-  //   log('categoryId = $parentId');
-  //   log('categoryHasChild = ${categoriesCubit.hasSubCategory(parentId)}');
-  //   _categoryList.add(CategoryDropdownModel(
-  //     id: dropdownId,
-  //     dropdown: CreateProductDropdownTile(
-  //       enabled: true,
-  //       title: _categoryList.isEmpty
-  //           ? 'category'
-  //           : _categoryList.length == 1
-  //               ? 'sub_category'
-  //               : 'sub_sub_category',
-  //       values: categoriesCubit
-  //           .subCategories(parentId)
-  //           .map((e) => e.name ?? '')
-  //           .toList(),
-  //       onChanged: (v) {
-  //         if (v == null) {
-  //           return;
-  //         }
-  //         var dropdownIndex =
-  //             _categoryList.indexWhere((e) => e.id == dropdownId);
-  //         log('dropdownIndex => $dropdownIndex id $dropdownId');
-  //         if (dropdownIndex >= 0) {
-  //           for (var i = 0; i < _categoryList.length; i++) {
-  //             if (i > dropdownIndex) {
-  //               _categoryList.removeAt(i);
-  //             }
-  //           }
-  //         }
-  //         var categoryId = categoriesCubit.allcategory
-  //             .firstWhere((element) => element.name == v)
-  //             .id;
+        productImages.add(
+          await MultipartFile.fromFile(
+            compressAndGetFile.path,
+          ),
+        );
+      }
+      var addProductTagData =
+          await StoreAdditionalProductImagesRepo.storeImages(
+        context,
+        body: {
+          'product_id': productId,
+          'image[]': productImages,
+        },
+      );
+      if (addProductTagData == null) {
+        emit(CreateProductError());
+        showDialog(
+          context: context,
+          builder: (_) => ResultDialog(
+            resultType: ResultType.failed,
+            message: 'network'.translate,
+          ),
+        );
+        return;
+      }
+      if (addProductTagData.status == false) {
+        emit(CreateProductError());
+        showDialog(
+          context: context,
+          builder: (_) => ResultDialog(
+            resultType: ResultType.failed,
+            message: addProductTagData.message ?? 'something_wrong'.translate,
+          ),
+        );
+        return;
+      }
+    } on LaravelException catch (error) {
+      emit(CreateProductError());
+      showDialog(
+        context: context,
+        builder: (_) => ResultDialog(
+          resultType: ResultType.failed,
+          message: error.exception,
+        ),
+      );
+      return;
+    }
+  }
 
-  //         _categoryId = categoryId;
-  //         if (categoriesCubit.hasSubCategory(
-  //           categoryId,
-  //         )) {
-  //           addToCategoryList(
-  //             categoriesCubit: categoriesCubit,
-  //             parentId: categoryId ?? 0,
-  //             dropdownId: _categoryList.length + 1,
-  //           );
-  //         }
-  //       },
-  //     ),
-  //   ));
-  //   log('length => ${_categoryList.length}');
-
-  //   emit(CategoryDropDownStateChanged());
-  // }
+  Future<void> addProductCompatibleModels(
+    context, {
+    required Map<String, dynamic> body,
+  }) async {
+    try {
+      var addProductTagData =
+          await AddProductCompatibleModelsRepo.addCompatibleModels(
+        context,
+        body: body,
+      );
+      if (addProductTagData == null) {
+        emit(CreateProductError());
+        showDialog(
+          context: context,
+          builder: (_) => ResultDialog(
+            resultType: ResultType.failed,
+            message: 'network'.translate,
+          ),
+        );
+        return;
+      }
+      if (addProductTagData.status == false) {
+        emit(CreateProductError());
+        showDialog(
+          context: context,
+          builder: (_) => ResultDialog(
+            resultType: ResultType.failed,
+            message: addProductTagData.message ?? 'something_wrong'.translate,
+          ),
+        );
+        return;
+      }
+    } on LaravelException catch (error) {
+      emit(CreateProductError());
+      showDialog(
+        context: context,
+        builder: (_) => ResultDialog(
+          resultType: ResultType.failed,
+          message: error.exception,
+        ),
+      );
+      return;
+    }
+  }
 
   void changeProductTypeId(int? productTypeId) {
     if (productTypeId == null) {
@@ -541,10 +736,29 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     emit(ProductTypeStateChanged());
   }
 
+  void pickAdditionalImages() async {
+    var additionalImages = await Helper.selectImages(
+      imageCount: 5,
+    );
+    if (additionalImages.isNotEmpty) {
+      _additionalImages.addAll(
+        additionalImages.map(
+          (e) => ProductImagesModel(
+            pickedFile: e,
+          ),
+        ),
+      );
+      emit(ProductImageListStateChanged());
+    }
+  }
+
   bool validate() => formKey.currentState?.validate() ?? false;
 
-  void changeViewMode(context) {
-    if (!validate() || pickedImage == null) {
+  void changeViewMode(
+    context, {
+    ViewMode? viewMode,
+  }) {
+    if (!validate() || (pickedImage == null && product == null)) {
       showDialog(
         context: context,
         builder: (_) => ResultDialog(
@@ -555,8 +769,13 @@ class CreateProductCubit extends Cubit<CreateProductState> {
 
       return;
     }
-    _viewMode = ViewMode.allInformation;
+    _viewMode = viewMode ?? ViewMode.allInformation;
     emit(ViewModeStateChanged());
+    if (product != null) {
+      getProductData(
+        context,
+      );
+    }
   }
 
   addQuantityFields() {
@@ -569,16 +788,191 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     emit(QuantityFieldsAdded());
   }
 
-  deleteFields(int index) {
-    _branchQuantityFields.removeAt(index);
+  deleteFields(
+    int index,
+    BuildContext context,
+  ) async {
+    var deleteFromApi = _branchQuantityFields[index].quantityId != null;
+    if (deleteFromApi) {
+      var deleteField =
+          await context.read<GetProductQuantityCubit>().deleteBranchQuantity(
+                context,
+                quantityId: _branchQuantityFields[index].quantityId,
+              );
+      if (deleteField) {
+        _branchQuantityFields.removeAt(index);
+      }
+    } else {
+      _branchQuantityFields.removeAt(index);
+    }
     emit(QuantityFieldsAdded());
   }
 
-  void onTagsFieldChanged(String value) {
-    if (value.isEmpty) {
-      productTags.clear();
+  onImageRemoved(int index, BuildContext context) async {
+    var isDeleteFromAPI = _additionalImages[index].imageId != null;
+    if (isDeleteFromAPI) {
+      var networkImagesList = _additionalImages
+          .where((element) => element.imageId != null)
+          .toList();
+      if (networkImagesList.length == 1) {
+        showDialog(
+          context: context,
+          builder: (_) => ResultDialog(
+            resultType: ResultType.none,
+            message: 'one_image_warning'.translate,
+          ),
+        );
+        return;
+      }
+
+      var deletedImage =
+          await context.read<GetProductImagesCubit>().deleteProductImage(
+                context,
+                imageId: _additionalImages[index].imageId,
+              );
+      if (deletedImage) {
+        _additionalImages.removeAt(index);
+      }
+    } else {
+      _additionalImages.removeAt(index);
+    }
+    emit(ProductImageListStateChanged());
+  }
+
+  void onCompatibleModelsChanged(
+    List<String>? values,
+  ) {
+    if (values == null) {
       return;
     }
-    productTags = value.split(',');
+    List<int> ids = [];
+    for (var i = 0; i < values.length; i++) {
+      var index =
+          _carModel?.indexWhere((element) => element.name == values[i]) ?? -1;
+      if (index >= 0) {
+        ids.add(_carModel![index].id!);
+      }
+    }
+    _carModelIds = ids;
+  }
+
+  Future<void> getProductData(
+    BuildContext context,
+  ) async {
+    int? productId = product?.id;
+    emit(ProductDataFetching(
+      productId: productId,
+    ));
+
+    // var compatibleModels = context.read<GetProductCompatibleModelsCubit>();
+    // var imagesCubit = context.read<GetProductImagesCubit>();
+    // var productQuantityCubit = context.read<GetProductQuantityCubit>();
+    // var tagsCubit = context.read<GetProductTagsCubit>();
+    var productDetailsCubit = context.read<ProductDetailsCubit>();
+    await productDetailsCubit.getProductData(
+      context,
+      productId: productId,
+    );
+    var filtersCubit = context.read<FilterCarsCubit>();
+
+    if (productDetailsCubit.productData == null) {
+      getProductData(
+        context,
+      );
+      return;
+    }
+    await filtersCubit.getManufacturer(
+      context,
+      categoryId: categoryId,
+    );
+
+    var productData = productDetailsCubit.productData;
+    initialCompatibleValue = productData!.productCompatibleModels!
+        .map(
+          (e) =>
+              Helper.currentLanguage == 'ar' ? e.nameAr ?? '' : e.nameEn ?? '',
+        )
+        .toList();
+
+    _additionalImages = productData.productImages!
+        .map(
+          (e) => ProductImagesModel(
+            imageId: e.id,
+            networkImage: e.image,
+          ),
+        )
+        .toList();
+
+    List<BranchQuantityFields> _fields = [];
+    for (var i = 0; i < productData.productQuantity!.length; i++) {
+      var branchQuantity = productData.productQuantity![i];
+      _fields.add(
+        BranchQuantityFields(
+          quantityId: branchQuantity.id,
+          quantityController:
+              TextEditingController(text: branchQuantity.quantity),
+          quantityReminderController:
+              TextEditingController(text: branchQuantity.quantityReminder),
+          branchId: branchQuantity.id,
+        ),
+      );
+      _branchQuantityFields = _fields;
+    }
+
+    initialTagsValue = productData.productTags!
+        .map(
+          (e) => e.name ?? '',
+        )
+        .toList();
+    try {
+      for (var i = 0; i < initialTagsValue.length; i++) {
+        productTagController.addTag = initialTagsValue[i];
+      }
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: e.toString(),
+      );
+    }
+    if (carMadeId != null) {
+      await filtersCubit.getCarMades(context);
+
+      await Future.delayed(
+        const Duration(milliseconds: 3),
+      );
+      filtersCubit.getCarModels(
+        context,
+        carMadeId: carEngineId,
+      );
+    }
+    if (carModelId != null) {
+      await Future.delayed(
+        const Duration(milliseconds: 3),
+      );
+      filtersCubit.getCarEngines(context, carModelId: carModelId);
+    }
+
+    emit(ProductDataFetched());
+  }
+
+  @override
+  Future<void> close() {
+    nameArController.dispose();
+    nameEnController.dispose();
+    actualPriceController.dispose();
+    discountController.dispose();
+    descArController.dispose();
+    descEnController.dispose();
+    serialNumberController.dispose();
+    productTagController.dispose();
+    priceController.dispose();
+    minimumQuantityController.dispose();
+
+    for (var i = 0; i < _branchQuantityFields.length; i++) {
+      var field = _branchQuantityFields[i];
+      field.quantityController.dispose();
+      field.quantityReminderController.dispose();
+    }
+
+    return super.close();
   }
 }

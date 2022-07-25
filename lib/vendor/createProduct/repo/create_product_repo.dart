@@ -11,12 +11,13 @@ class CreateProductRepo {
   static Future<CreateProductModel?> createNewProduct(
     context, {
     required Map<String, dynamic> body,
+    int? productId,
   }) async {
     log('createProductData=>$body');
     final util = NetworkUtil();
 
     var response = await util.post(
-      'create/product',
+      productId == null ? 'create/product' : 'update/product/$productId',
       context: context,
       body: FormData.fromMap(body),
     );

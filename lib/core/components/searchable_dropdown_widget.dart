@@ -53,7 +53,6 @@ class SearchableDropDownWidget extends StatelessWidget {
             style: text != null
                 ? null
                 : TextStyle(
-                    fontWeight: FontWeight.bold,
                     color: thinBorder
                         ? MainStyle.newGreyColor.withOpacity(0.6)
                         : MainStyle.darkGreyColor,
@@ -66,7 +65,6 @@ class SearchableDropDownWidget extends StatelessWidget {
             filled: true,
             hintText: labelText.translate,
             labelStyle: TextStyle(
-              fontWeight: FontWeight.bold,
               color: thinBorder
                   ? MainStyle.newGreyColor.withOpacity(0.6)
                   : MainStyle.darkGreyColor,

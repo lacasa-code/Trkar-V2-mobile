@@ -9,11 +9,14 @@ class AddQuantityToBranchRepo {
   static Future<AddQuantityToBranchModel?> addQuantity(
     context, {
     required Map<String, dynamic> body,
+    int? quantityId,
   }) async {
     final util = NetworkUtil();
 
     var response = await util.post(
-      'create/product/qt',
+      quantityId != null
+          ? 'update/product/qt/$quantityId'
+          : 'create/product/qt',
       context: context,
       body: FormData.fromMap(body),
     );

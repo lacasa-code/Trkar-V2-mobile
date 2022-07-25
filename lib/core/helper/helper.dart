@@ -1,7 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:flutter_images_picker/flutter_images_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:heic_to_jpg/heic_to_jpg.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:trkar/auth/model/register_model.dart';
 import 'package:trkar/auth/model/vendor_register_model.dart';
 
@@ -94,5 +101,80 @@ class Helper {
 
   static void setUserTypeToVerification(String newUserType) {
     _userTypeToVerification = newUserType;
+  }
+
+  static Future<List<File>> selectImages({
+    int imageCount = 2,
+  }) async {
+    var pickedImages =
+        await FlutterImagesPicker.pickImages(maxImages: imageCount);
+
+    if (pickedImages.isEmpty) {
+      return [];
+    }
+
+    return pickedImages
+        .map(
+          (e) => File(
+            e.path,
+          ),
+        )
+        .toList();
+  }
+   static Future<File> compressAndGetFile(
+    File pickedFile,
+  ) async {
+    File file = pickedFile;
+    try {
+      var store = await getApplicationDocumentsDirectory();
+      CompressFormat format = CompressFormat.png;
+      log('heicYes $format');
+      var imageFormat = file.path.split('/').last.split('.').last.toLowerCase();
+      if (imageFormat == 'heic') {
+        log('heicYes');
+        String convertedPath =
+            (await getTemporaryDirectory()).path + '/${DateTime.now()}.jpg';
+        var newPath =
+            await HeicToJpg.convert(file.path, jpgPath: convertedPath);
+        file = File(newPath ?? '');
+      }
+      imageFormat = file.path.split('/').last.split('.').last.toLowerCase();
+      log('newFormat $imageFormat');
+      switch (imageFormat) {
+        case 'jpg':
+          format = CompressFormat.jpeg;
+          break;
+        case 'jpeg':
+          format = CompressFormat.jpeg;
+          break;
+        case 'png':
+          format = CompressFormat.png;
+          break;
+        case 'heic':
+          format = CompressFormat.heic;
+          break;
+        case 'webp':
+          format = CompressFormat.webp;
+          break;
+        default:
+      }
+      log('format $format imageFormat $imageFormat');
+      var result = await FlutterImageCompress.compressAndGetFile(
+        file.absolute.path,
+        store.path + file.path.split('/').last,
+        quality: 88,
+        format: format,
+      );
+
+      return result ?? file;
+    } catch (e) {
+      if (kDebugMode) {
+        Fluttertoast.showToast(
+          msg: e.toString(),
+          backgroundColor: Colors.red,
+        );
+      }
+      return file;
+    }
   }
 }

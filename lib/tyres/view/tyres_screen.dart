@@ -656,7 +656,7 @@ class TyresMultiselectDropDownView extends StatelessWidget {
         //     ),
         //   ),
         // ),
-        MultiselectDropdownWidget(
+        MultiSelectDropdownWidget(
           removePadding: true,
           enabled: enabled,
           selectedValueIndex: selectedValue,

@@ -35,6 +35,8 @@ class RegisterField extends StatelessWidget {
     this.noLocalLabelText,
     this.textAlign = TextAlign.start,
     this.focusNode,
+    this.hintTextSize,
+    this.hintFontWeight,
   }) : super(key: key);
   final String? labelText;
   final String? hintText;
@@ -62,6 +64,8 @@ class RegisterField extends StatelessWidget {
   final TextAlign textAlign;
   final FocusNode? focusNode;
   final EdgeInsetsGeometry? contentPadding;
+  final num? hintTextSize;
+  final FontWeight? hintFontWeight;
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +103,8 @@ class RegisterField extends StatelessWidget {
                 : MainStyle.darkGreyColor,
           ),
           hintStyle: TextStyle(
-            fontWeight: FontWeight.bold,
+            fontWeight: hintFontWeight,
+            fontSize: hintTextSize?.toDouble(),
             color: thinBorder
                 ? MainStyle.newGreyColor.withOpacity(0.6)
                 : MainStyle.darkGreyColor,

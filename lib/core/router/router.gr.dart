@@ -83,7 +83,8 @@ class AppRouter extends _i18.RootStackRouter {
     },
     VendorHomeRouter.name: (routeData) {
       return _i18.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i3.VendorHomeScreen());
+          routeData: routeData,
+          child: _i18.WrappedRoute(child: const _i3.VendorHomeScreen()));
     },
     SellerDashboardRouter.name: (routeData) {
       return _i18.MaterialPageX<dynamic>(
@@ -169,7 +170,7 @@ class AppRouter extends _i18.RootStackRouter {
     CreateProductRouter.name: (routeData) {
       return _i18.MaterialPageX<dynamic>(
           routeData: routeData,
-          child: _i18.WrappedRoute(child: const _i16.CreateProductScreen()));
+          child: _i18.WrappedRoute(child: const _i16.CreateProductView()));
     },
     HomeRouter.name: (routeData) {
       return _i18.MaterialPageX<dynamic>(
@@ -710,7 +711,7 @@ class EditProfileRouter extends _i18.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i16.CreateProductScreen]
+/// [_i16.CreateProductView]
 class CreateProductRouter extends _i18.PageRouteInfo<void> {
   const CreateProductRouter()
       : super(CreateProductRouter.name, path: 'vendor-create-product');

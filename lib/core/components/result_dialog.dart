@@ -33,23 +33,25 @@ class ResultDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Visibility(
-              visible: resultType!=ResultType.none,
-              child: SvgPicture.asset(
-                'assets/icons/svg/${resultType.name}.svg',
+            if (resultType != ResultType.none) ...[
+              Visibility(
+                visible: resultType != ResultType.none,
+                child: SvgPicture.asset(
+                  'assets/icons/svg/${resultType.name}.svg',
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                resultType.name.translate,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headline1?.copyWith(
-                      fontSize: ScreenUtil().setSp(16),
-                      fontWeight: FontWeight.bold,
-                    ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Text(
+                  resultType.name.translate,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headline1?.copyWith(
+                        fontSize: ScreenUtil().setSp(16),
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
               ),
-            ),
+            ],
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Text(
@@ -68,7 +70,10 @@ class ResultDialog extends StatelessWidget {
               height: ScreenUtil().setHeight(55),
               width: ScreenUtil().setWidth(125),
               child: RegisterButton(
-                color: resultType == ResultType.success ? null : Colors.red,
+                color: resultType == ResultType.success ||
+                        resultType == ResultType.none
+                    ? null
+                    : Colors.red,
                 radius: 12,
                 title: 'ok',
                 onPressed: () {

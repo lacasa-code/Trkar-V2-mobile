@@ -97,7 +97,7 @@ class Data {
   String? manufacturerId;
   String? originalCountryId;
   String? storeId;
-  int? approved;
+  String? approved;
   DateTime? updatedAt;
   DateTime? createdAt;
   int? id;
@@ -124,7 +124,7 @@ class Data {
         manufacturerId: json["manufacturer_id"],
         originalCountryId: json["original_country_id"],
         storeId: json["store_id"],
-        approved: json["approved"],
+        approved: json["approved"].toString(),
         updatedAt: json["updated_at"] == null
             ? null
             : DateTime.parse(json["updated_at"]),

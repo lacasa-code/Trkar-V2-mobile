@@ -337,7 +337,19 @@
     "manufacturers_required": "الشركة المصنعة مطلوبة",
     "quantity_reminder_required": "تذكير الكمية مطلوب",
     "add_branch": "إضافة فرع",
-    "price_helper": "السعر الذي يظهر للعملاء",
+    "actual_product_price": "السعر الفعلي",
+    "price_helper": "السعر يظهر للإداريين فقط",
     "product_tags": "الكلمات الدلالية للمنتج",
-    "product_tags_required": "الكلمات الدلالية للمنتج مطلوب"
+    "product_tags_required": "الكلمات الدلالية للمنتج مطلوب",
+    "discount": "الخصم",
+    "discount_required": "الخصم مطلوب",
+    "discount_percentage": "نسبة الخصم",
+    "additional_product_images": "صور إضافية للمنتج",
+    "additional_product_images_required": "الصور الإضافية للمنتج مطلوبة",
+    "pick_images": "اختر الصور",
+    "add_more": "إضافة المزيد",
+    "compatible_models": "الموديلات المتوافقة",
+    "no_items_to_display": "لا توجد عناصر لعرضها في الوقت الحالي! \n انقر فوق ",
+    "to_add_new_products": "لإضافة منتجات جديدة",
+    "one_image_warning": "يجب ترك صورة واحدة على الأقل"
 }

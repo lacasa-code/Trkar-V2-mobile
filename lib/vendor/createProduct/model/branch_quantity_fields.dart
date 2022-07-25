@@ -5,6 +5,7 @@ class BranchQuantityFields {
   final TextEditingController quantityReminderController;
   int? branchId;
   final int? quantityId;
+  
 
   BranchQuantityFields({
     required this.quantityController,
