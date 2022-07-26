@@ -18,6 +18,7 @@ import 'package:trkar/vendor/createProduct/view/widgets/vendor_search_view.dart'
 import 'package:trkar/vendor/createProduct/viewModel/createProduct/create_product_cubit.dart';
 import 'package:trkar/vendor/createProduct/viewModel/productsType/products_type_cubit.dart';
 import 'package:trkar/vendor/createProduct/viewModel/storeBranches/store_branches_cubit.dart';
+import '../../../categories/model/categories_model.dart';
 import '../../../core/components/loader_widget.dart';
 import '../../../core/extensions/string.dart';
 import '../../../core/components/register_field.dart';
@@ -91,8 +92,7 @@ class _CreateProductViewState extends State<CreateProductView> {
 
   @override
   Widget build(BuildContext context) {
-    log('your category id => ${createProductCubit.categoryId}');
-
+    // if(createProductCubit.viewMode==ViewMode.)
     return BlocBuilder<CreateProductCubit, CreateProductState>(
       builder: (context, state) {
         return SafeArea(
@@ -153,191 +153,219 @@ class _CreateProductViewState extends State<CreateProductView> {
                       ProductMainDetailsView(
                         createProductCubit: createProductCubit,
                       ),
-                      BlocBuilder<CategoriesCubit, CategoriesState>(
-                        builder: (context, state) {
-                          return Column(
-                            children: [
-                              CreateProductDropdownTile(
-                                initialValue:
-                                    createProductCubit.categoryId != null
-                                        ? categoriesCubit.category
-                                            .firstWhere((element) =>
+                      Visibility(
+                        visible: createProductCubit.viewMode ==
+                            ViewMode.allInformation,
+                        child: BlocBuilder<CategoriesCubit, CategoriesState>(
+                          builder: (context, state) {
+                            return Column(
+                              children: [
+                                CreateProductDropdownTile(
+                                  initialValue: createProductCubit.categoryId !=
+                                          null
+                                      ? categoriesCubit.category
+                                          .firstWhere(
+                                            (element) =>
                                                 element.id ==
-                                                createProductCubit.categoryId)
-                                            .name
-                                        : null,
-                                enabled: categoriesCubit.category.isNotEmpty,
-                                title: 'category',
-                                validator: createProductCubit.categoryValidate,
-                                values: categoriesCubit.category
-                                    .map((e) => e.name ?? '')
-                                    .toList(),
-                                onChanged: (v) async {
-                                  if (v == null) {
-                                    return;
-                                  }
-                                  var categoryId = categoriesCubit.category
-                                      .firstWhere(
-                                          (element) => element.name == v)
-                                      .id;
+                                                createProductCubit.categoryId,
+                                            orElse: () => Category(),
+                                          )
+                                          .name
+                                      : null,
+                                  enabled: categoriesCubit.category.isNotEmpty,
+                                  title: 'category',
+                                  validator:
+                                      createProductCubit.categoryValidate,
+                                  values: categoriesCubit.category
+                                      .map((e) => e.name ?? '')
+                                      .toList(),
+                                  onChanged: (v) async {
+                                    if (v == null) {
+                                      return;
+                                    }
+                                    var categoryId = categoriesCubit.category
+                                        .firstWhere(
+                                            (element) => element.name == v)
+                                        .id;
 
-                                  // var hasSubCategories =
-                                  //     await subCategoriesCubit.hasSubCategories(
-                                  //   categoryId ?? 0,
-                                  //   context,
-                                  // );
-                                  // if (hasSubCategories) {
-                                  await subCategoriesCubit.getSubCategories(
-                                    context,
-                                    id: categoryId,
-                                  );
-                                  createProductCubit.validateCategoryId(
-                                    categoryId ?? 0,
-                                    categoryIndex: -1,
-                                  );
-                                  // }
-                                  await filterCarsCubit.getManufacturer(
-                                    context,
-                                    categoryId: categoryId,
-                                  );
-                                  await filterCarsCubit.getCarMades(
-                                    context,
-                                    categoryId: categoryId,
-                                  );
-                                  createProductCubit.validateCategoryId(
-                                    categoryId ?? 0,
-                                    categoryIndex: -1,
-                                  );
-                                },
-                              ),
-                              ...List.generate(
-                                createProductCubit.categoryIds.length,
-                                (index) {
-                                  return Visibility(
-                                    visible: subCategoriesCubit
-                                        .getSubCategoryByParentId(
-                                          createProductCubit.categoryIds[index],
-                                        )!
-                                        .isNotEmpty,
-                                    child: CreateProductDropdownTile(
-                                      key: ValueKey(createProductCubit
-                                          .categoryIds[index]),
-                                      enabled: subCategoriesCubit
+                                    // var hasSubCategories =
+                                    //     await subCategoriesCubit.hasSubCategories(
+                                    //   categoryId ?? 0,
+                                    //   context,
+                                    // );
+                                    // if (hasSubCategories) {
+                                    await subCategoriesCubit.getSubCategories(
+                                      context,
+                                      id: categoryId,
+                                    );
+                                    createProductCubit.validateCategoryId(
+                                      categoryId ?? 0,
+                                      categoryIndex: -1,
+                                    );
+                                    // }
+                                    await filterCarsCubit.getManufacturer(
+                                      context,
+                                      categoryId: categoryId,
+                                    );
+                                    await filterCarsCubit.getCarMades(
+                                      context,
+                                      categoryId: categoryId,
+                                    );
+                                    createProductCubit.validateCategoryId(
+                                      categoryId ?? 0,
+                                      categoryIndex: -1,
+                                    );
+                                  },
+                                ),
+                                ...List.generate(
+                                  createProductCubit.categoryIds.length,
+                                  (index) {
+                                    return Visibility(
+                                      visible: subCategoriesCubit
                                           .getSubCategoryByParentId(
                                             createProductCubit
                                                 .categoryIds[index],
                                           )!
                                           .isNotEmpty,
-                                      title: index == 0
-                                          ? 'sub_category'
-                                          : 'sub_sub_category',
-                                      validator: index == 0
-                                          ? createProductCubit
-                                              .subcategoryValidate
-                                          : null,
-                                      values: subCategoriesCubit
-                                          .getSubCategoryByParentId(
-                                            createProductCubit
-                                                .categoryIds[index],
-                                          )!
-                                          .map(
-                                            (e) =>
-                                                Helper.currentLanguage == 'ar'
-                                                    ? e.nameAr ?? ''
-                                                    : e.nameEn ?? '',
-                                          )
-                                          .toList(),
-                                      onChanged: (v) async {
-                                        if (v == null) {
-                                          return;
-                                        }
-                                        var categoryId = subCategoriesCubit
+                                      child: CreateProductDropdownTile(
+                                        initialValue: subCategoriesCubit
+                                                .getSubCategoryByParentId(
+                                                  createProductCubit
+                                                      .categoryIds[index],
+                                                )!
+                                                .isNotEmpty
+                                            ? (Helper.currentLanguage == 'ar'
+                                                ? subCategoriesCubit
+                                                    .getSpicificCategoryById(
+                                                        createProductCubit
+                                                            .categoryIds[index])
+                                                    .nameAr
+                                                : subCategoriesCubit
+                                                    .getSpicificCategoryById(
+                                                        createProductCubit
+                                                            .categoryIds[index])
+                                                    .nameEn)
+                                            : null,
+                                        key: ValueKey(createProductCubit
+                                            .categoryIds[index]),
+                                        enabled: subCategoriesCubit
                                             .getSubCategoryByParentId(
                                               createProductCubit
                                                   .categoryIds[index],
                                             )!
-                                            .firstWhere((element) =>
-                                                (Helper.currentLanguage ==
-                                                        'ar' &&
-                                                    element.nameAr == v) ||
-                                                (Helper.currentLanguage ==
-                                                        'en' &&
-                                                    element.nameEn == v))
-                                            .id;
-                                        var hasSubCategories =
-                                            await subCategoriesCubit
-                                                .hasSubCategories(
-                                          categoryId ?? 0,
-                                          context,
-                                        );
-                                        if (hasSubCategories) {
-                                          await subCategoriesCubit
-                                              .getSubCategories(
-                                            context,
-                                            id: categoryId,
-                                          );
-                                          createProductCubit.validateCategoryId(
+                                            .isNotEmpty,
+                                        title: index == 0
+                                            ? 'sub_category'
+                                            : 'sub_sub_category',
+                                        validator: index == 0
+                                            ? createProductCubit
+                                                .subcategoryValidate
+                                            : null,
+                                        values: subCategoriesCubit
+                                            .getSubCategoryByParentId(
+                                              createProductCubit
+                                                  .categoryIds[index],
+                                            )!
+                                            .map(
+                                              (e) =>
+                                                  Helper.currentLanguage == 'ar'
+                                                      ? e.nameAr ?? ''
+                                                      : e.nameEn ?? '',
+                                            )
+                                            .toList(),
+                                        onChanged: (v) async {
+                                          if (v == null) {
+                                            return;
+                                          }
+                                          var categoryId = subCategoriesCubit
+                                              .getSubCategoryByParentId(
+                                                createProductCubit
+                                                    .categoryIds[index],
+                                              )!
+                                              .firstWhere((element) =>
+                                                  (Helper.currentLanguage ==
+                                                          'ar' &&
+                                                      element.nameAr == v) ||
+                                                  (Helper.currentLanguage ==
+                                                          'en' &&
+                                                      element.nameEn == v))
+                                              .id;
+                                          var hasSubCategories =
+                                              await subCategoriesCubit
+                                                  .hasSubCategories(
                                             categoryId ?? 0,
-                                            categoryIndex: index,
+                                            context,
                                           );
-                                        }
-                                      },
-                                    ),
-                                  );
-                                },
-                              ),
-                              // CreateProductDropdownTile(
-                              //   enabled: categoriesCubit
-                              //       .mainCategory.isNotEmpty,
-                              //   title: 'category',
-                              //   values: categoriesCubit.mainCategory
-                              //       .map((e) => e.name ?? '')
-                              //       .toList(),
-                              //   onChanged: (v) {
-                              //     if (v == null) {
-                              //       return;
-                              //     }
-                              //     setState(() {
-                              //       categoryId = categoriesCubit
-                              //           .mainCategory
-                              //           .firstWhere((element) =>
-                              //               element.name == v)
-                              //           .id;
-                              //     });
-                              //   },
-                              // ),
-                              // CreateProductDropdownTile(
-                              //   enabled: categoryId != null,
-                              //   title: 'sub_category',
-                              //   values: categoriesCubit
-                              //       .subCategories(categoryId ?? 0)
-                              //       .map((e) => e.name ?? '')
-                              //       .toList(),
-                              //   onChanged: (v) {
-                              //     if (v == null) {
-                              //       return;
-                              //     }
-                              //     setState(() {
-                              //       subCategoryId = categoriesCubit
-                              //           .subCategories(categoryId ?? 0)
-                              //           .firstWhere((element) =>
-                              //               element.name == v)
-                              //           .id;
-                              //     });
-                              //   },
-                              // ),
-                              // CreateProductDropdownTile(
-                              //   enabled: subCategoryId != null,
-                              //   title: 'sub_sub_category',
-                              //   values: categoriesCubit
-                              //       .subCategories(subCategoryId ?? 0)
-                              //       .map((e) => e.name ?? '')
-                              //       .toList(),
-                              //   onChanged: (v) {},
-                              // ),
-                            ],
-                          );
-                        },
+                                          if (hasSubCategories) {
+                                            await subCategoriesCubit
+                                                .getSubCategories(
+                                              context,
+                                              id: categoryId,
+                                            );
+                                            createProductCubit
+                                                .validateCategoryId(
+                                              categoryId ?? 0,
+                                              categoryIndex: index,
+                                            );
+                                          }
+                                        },
+                                      ),
+                                    );
+                                  },
+                                ),
+                                // CreateProductDropdownTile(
+                                //   enabled: categoriesCubit
+                                //       .mainCategory.isNotEmpty,
+                                //   title: 'category',
+                                //   values: categoriesCubit.mainCategory
+                                //       .map((e) => e.name ?? '')
+                                //       .toList(),
+                                //   onChanged: (v) {
+                                //     if (v == null) {
+                                //       return;
+                                //     }
+                                //     setState(() {
+                                //       categoryId = categoriesCubit
+                                //           .mainCategory
+                                //           .firstWhere((element) =>
+                                //               element.name == v)
+                                //           .id;
+                                //     });
+                                //   },
+                                // ),
+                                // CreateProductDropdownTile(
+                                //   enabled: categoryId != null,
+                                //   title: 'sub_category',
+                                //   values: categoriesCubit
+                                //       .subCategories(categoryId ?? 0)
+                                //       .map((e) => e.name ?? '')
+                                //       .toList(),
+                                //   onChanged: (v) {
+                                //     if (v == null) {
+                                //       return;
+                                //     }
+                                //     setState(() {
+                                //       subCategoryId = categoriesCubit
+                                //           .subCategories(categoryId ?? 0)
+                                //           .firstWhere((element) =>
+                                //               element.name == v)
+                                //           .id;
+                                //     });
+                                //   },
+                                // ),
+                                // CreateProductDropdownTile(
+                                //   enabled: subCategoryId != null,
+                                //   title: 'sub_sub_category',
+                                //   values: categoriesCubit
+                                //       .subCategories(subCategoryId ?? 0)
+                                //       .map((e) => e.name ?? '')
+                                //       .toList(),
+                                //   onChanged: (v) {},
+                                // ),
+                              ],
+                            );
+                          },
+                        ),
                       ),
                       Visibility(
                         visible: createProductCubit.viewMode ==

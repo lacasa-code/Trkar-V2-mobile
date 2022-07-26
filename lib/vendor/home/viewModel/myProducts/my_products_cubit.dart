@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:trkar/categories/viewModel/parentOfSubCategory/parent_of_sub_category_cubit.dart';
 import 'package:trkar/core/components/result_dialog.dart';
 import 'package:trkar/vendor/createProduct/viewModel/getProductCompatibleModels/get_product_compatible_models_cubit.dart';
 import 'package:trkar/vendor/createProduct/viewModel/getProductImages/get_product_images_cubit.dart';
@@ -59,6 +60,9 @@ class MyProductsCubit extends Cubit<MyProductsState> {
                 BlocProvider(
                   create: (context) => ProductDetailsCubit(),
                 ),
+                BlocProvider(
+                  create: (context) => ParentOfSubCategoryCubit(),
+                ),
               ],
               child: CreateProductView(
                 key: ValueKey(
@@ -82,7 +86,7 @@ class MyProductsCubit extends Cubit<MyProductsState> {
         return;
       }
       if (myProductsData.status == true) {
-        _products = myProductsData.data;
+        _products = myProductsData.data?.data;
         emit(MyProductsDone());
       } else {
         emit(MyProductsError());
@@ -96,7 +100,7 @@ class MyProductsCubit extends Cubit<MyProductsState> {
           message: error.exception,
         ),
       );
-      emit(MyProductsLoading());
+      emit(MyProductsError());
     }
   }
 }

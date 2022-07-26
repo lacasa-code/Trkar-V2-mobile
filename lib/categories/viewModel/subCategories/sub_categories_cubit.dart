@@ -81,6 +81,13 @@ class SubCategoriesCubit extends Cubit<SubCategoriesState> {
             (element) => int.parse(element.parentId ?? '0') == parentId,
           )
           .toList();
+  SubCategory getSpicificCategoryById(
+    int subcategoryId,
+  ) =>
+      _subCategories!.firstWhere(
+        (e) => e.id == subcategoryId,
+        orElse:()=> SubCategory(),
+      );
 
   Future<void> subCategoriesOnClickHandler({
     required BuildContext context,

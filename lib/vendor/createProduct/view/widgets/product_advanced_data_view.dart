@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trkar/core/components/image_picker_tile_item.dart';
+import 'package:trkar/filterCars/model/car_mades_model.dart';
 import 'package:trkar/vendor/createProduct/view/widgets/create_product_multiselect_dropdown_tile.dart';
 import 'package:trkar/vendor/createProduct/view/widgets/quantity_view.dart';
 
 import '../../../../core/components/loader_widget.dart';
+import '../../../../filterCars/model/car_engine_model.dart';
+import '../../../../filterCars/model/cars_model.dart';
 import '../../../../filterCars/viewModel/carMades/filter_cars_cubit.dart';
 import '../../viewModel/createProduct/create_product_cubit.dart';
 import '../../viewModel/productsType/products_type_cubit.dart';
@@ -33,7 +36,7 @@ class ProductAdvancedOptionsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log('message tags ${createProductCubit.initialTagsValue}');
+    log('message tags ${createProductCubit.initialTagsValue} ${createProductCubit.carMadeId}');
     return BlocBuilder<CreateProductCubit, CreateProductState>(
       builder: (context, state) {
         if (state is ProductDataFetching &&
@@ -71,7 +74,8 @@ class ProductAdvancedOptionsView extends StatelessWidget {
                   return const LoaderWidget();
                 }
                 return CreateProductDropdownTile(
-                  enabled: productsTypeCubit.productTypes.isNotEmpty,
+                  enabled: (productsTypeCubit.productTypes.isNotEmpty &&
+                      createProductCubit.product == null),
                   onChanged: (v) {
                     if (v == null) {
                       return;
@@ -88,12 +92,14 @@ class ProductAdvancedOptionsView extends StatelessWidget {
                       .map((e) => e.name ?? '')
                       .toList(),
                   title: 'product_type',
-                  initialValue: productsTypeCubit.productTypes
-                      .firstWhere(
-                        (element) =>
-                            element.id == createProductCubit.productTypeId,
-                      )
-                      .name,
+                  initialValue: createProductCubit.product == null
+                      ? null
+                      : productsTypeCubit.productTypes
+                          .firstWhere(
+                            (element) =>
+                                element.id == createProductCubit.productTypeId,
+                          )
+                          .name,
                   validator: createProductCubit.productTypeValidate,
                 );
               },
@@ -123,7 +129,6 @@ class ProductAdvancedOptionsView extends StatelessWidget {
             ),
             CreateProductFieldTile(
               title: 'product_no',
-              maxLength: 6,
               validator: createProductCubit.serialNumberValidate,
               controller: createProductCubit.serialNumberController,
               keyboardType: TextInputType.phone,
@@ -268,6 +273,18 @@ class ProductAdvancedOptionsView extends StatelessWidget {
                     state is CarMadesLoading
                         ? const LoaderWidget()
                         : CreateProductDropdownTile(
+                            initialValue:
+                                createProductCubit.carMadeId != null &&
+                                        filterCarsCubit.carMades.isNotEmpty
+                                    ? filterCarsCubit.carMades
+                                        .firstWhere(
+                                          (element) =>
+                                              element.id ==
+                                              createProductCubit.carMadeId,
+                                          orElse: () => CarMades(),
+                                        )
+                                        .name
+                                    : null,
                             enabled: filterCarsCubit.carMades.isNotEmpty,
                             onChanged: (v) {
                               if (v == null) {
@@ -293,6 +310,18 @@ class ProductAdvancedOptionsView extends StatelessWidget {
                     state is CarModelsLoading
                         ? const LoaderWidget()
                         : CreateProductDropdownTile(
+                            initialValue:
+                                createProductCubit.carModelId != null &&
+                                        filterCarsCubit.carModels.isNotEmpty
+                                    ? filterCarsCubit.carModels
+                                        .firstWhere(
+                                          (element) =>
+                                              element.id ==
+                                              createProductCubit.carModelId,
+                                          orElse: () => Car(),
+                                        )
+                                        .name
+                                    : null,
                             validator: createProductCubit.modelValidate,
                             enabled: filterCarsCubit.carModels.isNotEmpty,
                             onChanged: (v) {
@@ -314,6 +343,17 @@ class ProductAdvancedOptionsView extends StatelessWidget {
                             isOptional: true,
                           ),
                     CreateProductDropdownTile(
+                      initialValue: createProductCubit.carEngineId != null &&
+                              filterCarsCubit.carEngines.isNotEmpty
+                          ? filterCarsCubit.carEngines
+                              .firstWhere(
+                                (element) =>
+                                    element.id ==
+                                    createProductCubit.carEngineId,
+                                orElse: () => CarEngine(),
+                              )
+                              .name
+                          : null,
                       enabled: filterCarsCubit.carEngines.isNotEmpty,
                       onChanged: (v) {
                         if (v == null) {

@@ -95,11 +95,11 @@ class ProductMainDetailsView extends StatelessWidget {
                     hintText: 'product_name_ar',
                     validator: createProductCubit.nameArValidate,
                     hintFontWeight: FontWeight.normal,
-                    formatters: [
-                      FilteringTextInputFormatter.allow(
-                        RegExp('[a-zA-Z ]'),
-                      ),
-                    ],
+                    // formatters: [
+                    //   FilteringTextInputFormatter.allow(
+                    //     RegExp('[a-zA-Z ]'),
+                    //   ),
+                    // ],
                     controller: createProductCubit.nameArController,
                   ),
                   const BoxHelper(
@@ -114,11 +114,11 @@ class ProductMainDetailsView extends StatelessWidget {
                     hintFontWeight: FontWeight.normal,
                     hintText: 'product_name_en',
                     validator: createProductCubit.nameEnValidate,
-                    formatters: [
-                      FilteringTextInputFormatter.allow(
-                        RegExp('[a-zA-Z ]'),
-                      ),
-                    ],
+                    // formatters: [
+                    //   FilteringTextInputFormatter.allow(
+                    //     RegExp('[a-zA-Z ]'),
+                    //   ),
+                    // ],
                   ),
                   const BoxHelper(
                     height: 10,

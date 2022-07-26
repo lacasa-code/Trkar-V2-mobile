@@ -32,7 +32,7 @@ class RegisterTagsField extends StatelessWidget {
     return TextFieldTags(
       textfieldTagsController: controller,
       initialTags: initialTags,
-      // textSeparators: const [' ', ','],
+      textSeparators: const [' ', ','],
       letterCase: LetterCase.normal,
       validator: validator,
       inputfieldBuilder: (context, tec, fn, error, onChanged, onSubmitted) {

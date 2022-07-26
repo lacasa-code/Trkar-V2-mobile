@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:textfield_tags/textfield_tags.dart';
+import 'package:trkar/categories/viewModel/parentOfSubCategory/parent_of_sub_category_cubit.dart';
+import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
 import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
 import 'package:trkar/vendor/createProduct/viewModel/getProductCompatibleModels/get_product_compatible_models_cubit.dart';
 import 'package:trkar/vendor/createProduct/viewModel/getProductImages/get_product_images_cubit.dart';
@@ -67,16 +69,12 @@ class CreateProductCubit extends Cubit<CreateProductState> {
       categoryId = int.parse(
         product?.categoryId ?? '0',
       );
-      categoryIds.add(
-        int.parse(
-          product?.categoryId ?? '0',
-        ),
+      _subcategoryId = int.tryParse(
+        product?.subcategoryId ?? '',
       );
-      categoryIds.add(
-        int.parse(
-          product?.subcategoryId ?? '0',
-        ),
-      );
+      log('subCat is now $_subcategoryId subCat e ${product?.subcategoryId}');
+    
+
       emit(ProductDataFetched());
     }
   }
@@ -94,7 +92,8 @@ class CreateProductCubit extends Cubit<CreateProductState> {
       storeId,
       carEngineId,
       manufacturingYearId,
-      categoryId;
+      categoryId,
+      _subcategoryId;
   final formKey = GlobalKey<FormState>();
   var nameArController = TextEditingController();
   var nameEnController = TextEditingController();
@@ -856,6 +855,27 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     _carModelIds = ids;
   }
 
+  Future<void> getSubCatsOfCategoryIds(
+    BuildContext context,
+  ) async {
+    var subCat = context.read<SubCategoriesCubit>();
+    for (var i = 0; i < _categoryIds.length; i++) {
+      var hasSubCat = await subCat.hasSubCategories(
+        _categoryIds[i],
+        context,
+      );
+      if (hasSubCat) {
+        await subCat.getSubCategories(
+          context,
+          id: _categoryIds[i],
+        );
+        await Future.delayed(
+          const Duration(milliseconds: 2),
+        );
+      }
+    }
+  }
+
   Future<void> getProductData(
     BuildContext context,
   ) async {
@@ -863,7 +883,20 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     emit(ProductDataFetching(
       productId: productId,
     ));
-
+    log('your subCatId=> $_subcategoryId');
+    var parentsCubit = context.read<ParentOfSubCategoryCubit>();
+    var hasParents = await parentsCubit.parentOfSubCategory(
+      context,
+      subcategoryId: _subcategoryId,
+    );
+    if (hasParents) {
+      _categoryIds = parentsCubit.parentsIds;
+      log('hasParents =>$hasParents catLength => ${_categoryIds.length}');
+      getSubCatsOfCategoryIds(context);
+    }
+    await Future.delayed(
+      const Duration(milliseconds: 3),
+    );
     // var compatibleModels = context.read<GetProductCompatibleModelsCubit>();
     // var imagesCubit = context.read<GetProductImagesCubit>();
     // var productQuantityCubit = context.read<GetProductQuantityCubit>();
@@ -941,7 +974,7 @@ class CreateProductCubit extends Cubit<CreateProductState> {
       );
       filtersCubit.getCarModels(
         context,
-        carMadeId: carEngineId,
+        carMadeId: carMadeId,
       );
     }
     if (carModelId != null) {
