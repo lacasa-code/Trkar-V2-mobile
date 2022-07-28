@@ -16,12 +16,13 @@ class RegisterButton extends StatelessWidget {
     this.color,
     this.radius = 30,
     this.textSize,
+    this.removeElevation = false,
     this.noLocalTitle,
     this.isDeleteButton = false,
   }) : super(key: key);
   final String? title;
   final void Function() onPressed;
-  final bool removePadding;
+  final bool removePadding, removeElevation;
   final Widget? icon;
   final Color? color;
   final double radius;
@@ -58,9 +59,12 @@ class RegisterButton extends StatelessWidget {
             ),
           ),
           style: ButtonStyle(
+            elevation: !removeElevation ? null : MaterialStateProperty.all(0),
             side: MaterialStateProperty.all(
               BorderSide(
-                color:isDeleteButton?Colors.red: Theme.of(context).primaryColor,
+                color: isDeleteButton
+                    ? Colors.red
+                    : Theme.of(context).primaryColor,
               ),
             ),
             backgroundColor: MaterialStateProperty.all<Color>(

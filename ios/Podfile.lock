@@ -1,6 +1,11 @@
 PODS:
   - Cache (5.3.0)
   - Flutter (1.0.0)
+  - flutter_image_compress (0.0.1):
+    - Flutter
+    - Mantle
+    - SDWebImage
+    - SDWebImageWebPCoder
   - flutter_images_picker (0.0.1):
     - Flutter
     - Lightbox (~> 2.3.0)
@@ -21,6 +26,8 @@ PODS:
   - GoogleMaps/Base (4.1.0)
   - GoogleMaps/Maps (4.1.0):
     - GoogleMaps/Base
+  - heic_to_jpg (0.0.1):
+    - Flutter
   - image_cropper (0.0.4):
     - Flutter
     - TOCropViewController (~> 2.6.1)
@@ -28,10 +35,28 @@ PODS:
     - Flutter
   - Imaginary (4.3.1):
     - Cache (~> 5.3.0)
+  - libwebp (1.2.1):
+    - libwebp/demux (= 1.2.1)
+    - libwebp/mux (= 1.2.1)
+    - libwebp/webp (= 1.2.1)
+  - libwebp/demux (1.2.1):
+    - libwebp/webp
+  - libwebp/mux (1.2.1):
+    - libwebp/demux
+  - libwebp/webp (1.2.1)
   - Lightbox (2.3.0):
     - Imaginary (~> 4.0)
+  - Mantle (2.2.0):
+    - Mantle/extobjc (= 2.2.0)
+  - Mantle/extobjc (2.2.0)
   - path_provider_ios (0.0.1):
     - Flutter
+  - SDWebImage (5.12.6):
+    - SDWebImage/Core (= 5.12.6)
+  - SDWebImage/Core (5.12.6)
+  - SDWebImageWebPCoder (0.8.4):
+    - libwebp (~> 1.0)
+    - SDWebImage/Core (~> 5.10)
   - Toast (4.0.0)
   - TOCropViewController (2.6.1)
   - url_launcher_ios (0.0.1):
@@ -45,12 +70,14 @@ PODS:
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
+  - flutter_image_compress (from `.symlinks/plugins/flutter_image_compress/ios`)
   - flutter_images_picker (from `.symlinks/plugins/flutter_images_picker/ios`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - geocoding (from `.symlinks/plugins/geocoding/ios`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
   - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
+  - heic_to_jpg (from `.symlinks/plugins/heic_to_jpg/ios`)
   - image_cropper (from `.symlinks/plugins/image_cropper/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
@@ -64,13 +91,19 @@ SPEC REPOS:
     - Cache
     - GoogleMaps
     - Imaginary
+    - libwebp
     - Lightbox
+    - Mantle
+    - SDWebImage
+    - SDWebImageWebPCoder
     - Toast
     - TOCropViewController
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
+  flutter_image_compress:
+    :path: ".symlinks/plugins/flutter_image_compress/ios"
   flutter_images_picker:
     :path: ".symlinks/plugins/flutter_images_picker/ios"
   flutter_keyboard_visibility:
@@ -83,6 +116,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/geolocator_apple/ios"
   google_maps_flutter:
     :path: ".symlinks/plugins/google_maps_flutter/ios"
+  heic_to_jpg:
+    :path: ".symlinks/plugins/heic_to_jpg/ios"
   image_cropper:
     :path: ".symlinks/plugins/image_cropper/ios"
   image_picker_ios:
@@ -101,6 +136,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Cache: 48762993ec44e1d93483c4d4a13edd18452326f4
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  flutter_image_compress: fd2b476345226e1a10ea352fa306af95704642c1
   flutter_images_picker: 7c4dc9e397fd3f4bd2fda44ea517bfdbee3131e4
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   fluttertoast: 16fbe6039d06a763f3533670197d01fc73459037
@@ -108,11 +144,16 @@ SPEC CHECKSUMS:
   geolocator_apple: cc556e6844d508c95df1e87e3ea6fa4e58c50401
   google_maps_flutter: c59fc576c0d0c7f4dc4bd63832c862d22d5a7c6d
   GoogleMaps: 008e2c80e38605b56b560e8deb73d4194ff30bef
+  heic_to_jpg: cce9d6463ab11852a7393daa61be23f98a951c64
   image_cropper: 60c2789d1f1a78c873235d4319ca0c34a69f2d98
   image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
   Imaginary: 18c5bba364229eef383b925199db442e71d175e1
+  libwebp: 98a37e597e40bfdb4c911fc98f2c53d0b12d05fc
   Lightbox: d317750e4132bfb871a5307cfe0a2c7d6a583c65
+  Mantle: c5aa8794a29a022dfbbfc9799af95f477a69b62d
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
+  SDWebImage: a47aea9e3d8816015db4e523daff50cfd294499d
+  SDWebImageWebPCoder: f93010f3f6c031e2f8fb3081ca4ee6966c539815
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de

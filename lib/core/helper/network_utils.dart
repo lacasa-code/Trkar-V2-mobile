@@ -25,6 +25,7 @@ class NetworkUtil {
     Map? headers,
     bool withHeader = true,
   }) async {
+    log('url is $url');
     Response? response;
     log('lang ${specificLangCode ?? Helper.currentLanguage}');
     try {
@@ -75,7 +76,7 @@ class NetworkUtil {
       //   log("response bbb: " + e.response.toString());
       // } else {}
     }
-    return response == null ? null : handleResponse(response, context);
+    return response == null ? null : handleResponse(response, context, url);
   }
 
   Future<Response?> post(String url,
@@ -84,6 +85,7 @@ class NetworkUtil {
       FormData? body,
       bool withHeader = true,
       encoding}) async {
+    log('url is $url');
     Response? response;
 
     dio.options.baseUrl = "http://trkar-v2.lacasacode.com/api/";
@@ -120,7 +122,7 @@ class NetworkUtil {
     } on DioError catch (e) {
       log(' from post ${e.error} + message ${e.message}');
       if (e.response != null) {
-        log('response : => ${e.response?.data}');
+        log('$url response : => ${e.response?.data}');
         response = e.response;
       }
       // var prefs = context.read(sharedPreferences).prefs;
@@ -139,13 +141,13 @@ class NetworkUtil {
       //   log("response bb: " + e.response.toString());
       // } else {}
     }
-    return response == null ? null : handleResponse(response, context);
+    return response == null ? null : handleResponse(response, context, url);
   }
 
   Future<Response?> handleResponse(
-      Response response, BuildContext? context) async {
+      Response response, BuildContext? context, String url) async {
     final int? statusCode = response.statusCode;
-    log("response: ..." + response.toString());
+    log("$url response: ..." + response.toString());
     if (response.statusCode! >= 500 || response.data['success'] != null) {
       log('ssdsdsdsd yup');
       // if (response.data.runtimeType == String &&

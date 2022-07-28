@@ -115,6 +115,12 @@ class ProductAdvancedOptionsView extends StatelessWidget {
                 ],
                 maxLines: 1,
               ),
+              CreateProductFieldTile(
+                title: 'wholesale_price',
+                validator: createProductCubit.wholeSaleValidate,
+                controller: createProductCubit.wholesalePriceController,
+                maxLines: 1,
+              ),
             ],
             CreateProductFieldTile(
               title: 'actual_product_price',

@@ -82,7 +82,7 @@ class Data {
   String? slug;
   String? detailsAr;
   String? detailsEn;
-  num? price;
+  String? price;
   String? actualPrice;
   String? discount;
   String? serialNumber;
@@ -109,7 +109,7 @@ class Data {
         slug: json["slug"],
         detailsAr: json["details_ar"],
         detailsEn: json["details_en"],
-        price: json["price"],
+        price: json["price"].toString(),
         actualPrice: json["actual_price"],
         discount: json["discount"],
         serialNumber: json["serial_number"],

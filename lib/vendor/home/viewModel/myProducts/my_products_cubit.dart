@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:trkar/categories/viewModel/parentOfSubCategory/parent_of_sub_category_cubit.dart';
 import 'package:trkar/core/components/result_dialog.dart';
+import 'package:trkar/vendor/createProduct/viewModel/deleteProduct/delete_product_cubit.dart';
 import 'package:trkar/vendor/createProduct/viewModel/getProductCompatibleModels/get_product_compatible_models_cubit.dart';
 import 'package:trkar/vendor/createProduct/viewModel/getProductImages/get_product_images_cubit.dart';
 import 'package:trkar/vendor/createProduct/viewModel/getProductQuantity/get_product_quantity_cubit.dart';
@@ -43,9 +44,6 @@ class MyProductsCubit extends Cubit<MyProductsState> {
                   ),
                 ),
                 BlocProvider(
-                  create: (context) => StoreBranchesCubit(),
-                ),
-                BlocProvider(
                   create: (context) => GetProductCompatibleModelsCubit(),
                 ),
                 BlocProvider(
@@ -63,10 +61,15 @@ class MyProductsCubit extends Cubit<MyProductsState> {
                 BlocProvider(
                   create: (context) => ParentOfSubCategoryCubit(),
                 ),
+                BlocProvider(
+                  create: (context) => DeleteProductCubit(
+                    productId: product?.id,
+                  ),
+                ),
               ],
               child: CreateProductView(
                 key: ValueKey(
-                  index,
+                  '$index--${product?.id}',
                 ),
               ),
             );
@@ -101,6 +104,26 @@ class MyProductsCubit extends Cubit<MyProductsState> {
         ),
       );
       emit(MyProductsError());
+    }
+  }
+
+  void insertNewProduct({
+    Map<String, dynamic>? productJson,
+  }) {
+    _products?.insert(0, Product.fromJson(productJson!));
+
+    emit(MyProductsListStateChanged());
+  }
+
+  void deleteProductById(
+    int? productId,
+  ) {
+    var index =
+        _products?.indexWhere((element) => element.id == productId) ?? -1;
+    log('index $index');
+    if (index >= 0) {
+      _products?.removeAt(index);
+      emit(MyProductsListStateChanged());
     }
   }
 }

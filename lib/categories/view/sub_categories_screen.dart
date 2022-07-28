@@ -73,6 +73,7 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
 
   @override
   void initState() {
+    log('subCatId => ${widget.parentId}');
     filterCarsCubit = context.read<FilterCarsCubit>();
     searchCubit = context.read<SearchCubit>()
       ..getCarMades(
@@ -87,6 +88,7 @@ class _SubCategoriesScreenState extends State<SubCategoriesScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       key: scaffoldKey,
       drawer: const MyDrawer(),

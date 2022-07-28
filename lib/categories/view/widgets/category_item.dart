@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:trkar/core/helper/helper.dart';
 
 class CategoryItem extends StatelessWidget {
   const CategoryItem({
@@ -18,6 +19,7 @@ class CategoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log('image is =>$categoryImage');
     return InkWell(
       onTap: onPressed,
       child: Card(
@@ -35,7 +37,7 @@ class CategoryItem extends StatelessWidget {
           child: isListView
               ? ListTile(
                   leading: Image.network(
-                    categoryImage ?? '',
+                    Helper.storageDomainUrl + (categoryImage ?? ''),
                     fit: BoxFit.cover,
                     width: ScreenUtil().setWidth(55),
                     errorBuilder: (_, __, ___) => Image.asset(
@@ -59,7 +61,7 @@ class CategoryItem extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Image.network(
-                      categoryImage ?? '',
+                      Helper.storageDomainUrl + (categoryImage ?? ''),
                       fit: BoxFit.cover,
                       // width: double.infinity,
                       height: ScreenUtil().setHeight(100),

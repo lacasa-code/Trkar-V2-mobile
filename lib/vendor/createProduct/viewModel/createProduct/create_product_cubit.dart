@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:textfield_tags/textfield_tags.dart';
+import 'package:trkar/Addresses/viewModel/myAddresses/my_addresses_cubit.dart';
 import 'package:trkar/categories/viewModel/parentOfSubCategory/parent_of_sub_category_cubit.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
 import 'package:trkar/filterCars/viewModel/carMades/filter_cars_cubit.dart';
@@ -14,6 +15,7 @@ import 'package:trkar/vendor/createProduct/viewModel/getProductCompatibleModels/
 import 'package:trkar/vendor/createProduct/viewModel/getProductImages/get_product_images_cubit.dart';
 import 'package:trkar/vendor/createProduct/viewModel/getProductQuantity/get_product_quantity_cubit.dart';
 import 'package:trkar/vendor/createProduct/viewModel/getProductTags/get_product_tags_cubit.dart';
+import 'package:trkar/vendor/home/viewModel/myProducts/my_products_cubit.dart';
 import 'package:trkar/vendor/home/viewModel/productDetails/product_details_cubit.dart';
 
 import '../../../../core/components/result_dialog.dart';
@@ -66,6 +68,7 @@ class CreateProductCubit extends Cubit<CreateProductState> {
       _productTypeId = int.tryParse(
         product?.productTypeId ?? '',
       );
+
       categoryId = int.parse(
         product?.categoryId ?? '0',
       );
@@ -73,7 +76,6 @@ class CreateProductCubit extends Cubit<CreateProductState> {
         product?.subcategoryId ?? '',
       );
       log('subCat is now $_subcategoryId subCat e ${product?.subcategoryId}');
-    
 
       emit(ProductDataFetched());
     }
@@ -105,6 +107,7 @@ class CreateProductCubit extends Cubit<CreateProductState> {
   var productTagController = TextfieldTagsController();
   var priceController = TextEditingController();
   var minimumQuantityController = TextEditingController();
+  var wholesalePriceController = TextEditingController();
   String? productUploadedImage;
   List<String> productTags = [];
   List<ProductImagesModel> _additionalImages = [];
@@ -221,6 +224,13 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     return null;
   }
 
+  String? wholeSaleValidate(String? v) {
+    if (v!.isEmpty) {
+      return 'wholesale_price_required'.translate.toTitleCase;
+    }
+    return null;
+  }
+
   String? minimumQuantityValidate(String? v) {
     if (v!.isEmpty) {
       return 'minimum_quantity_required'.translate.toTitleCase;
@@ -281,6 +291,9 @@ class CreateProductCubit extends Cubit<CreateProductState> {
   ViewMode _viewMode = ViewMode.basicInformation;
   File? _pickedImage;
   List<int> get categoryIds => [..._categoryIds];
+  List<int> get initialCategoryIds => [
+        ..._categoryIds.getRange(1, _categoryIds.length).toList(),
+      ];
   File? get pickedImage => _pickedImage;
   int? get productTypeId => _productTypeId;
   ViewMode get viewMode => _viewMode;
@@ -320,8 +333,16 @@ class CreateProductCubit extends Cubit<CreateProductState> {
         }
       }
     } else {
-      _categoryIds.add(categoryId);
+      if (index == _categoryIds.length - 1) {
+        _categoryIds[index] = (categoryId);
+      } else {
+        _categoryIds.add(categoryId);
+      }
+      // try {
+      // } catch (e) {
+      // }
     }
+    log('new ids $_categoryIds');
     emit(CategoryDropDownStateChanged());
   }
 
@@ -379,7 +400,13 @@ class CreateProductCubit extends Cubit<CreateProductState> {
           'details_ar': descArController.text,
           'details_en': descEnController.text,
           'actual_price': actualPriceController.text,
-          'product_type_id': productTypeId,
+          if (product == null) ...{
+            'product_type_id': productTypeId,
+            if (productTypeId == 2) ...{
+              'minimum_quntity': minimumQuantityController.text,
+              'wholesale_price': wholesalePriceController.text,
+            },
+          },
           if (discountController.text.isEmpty) ...{
             'discount': discountController.text,
           },
@@ -398,9 +425,6 @@ class CreateProductCubit extends Cubit<CreateProductState> {
             'car_made_id': carMadeId,
             'car_model_id': carModelId,
             'car_engine_id': carEngineId,
-          },
-          if (productTypeId == 2) ...{
-            'minimum_quntity': minimumQuantityController.text,
           },
         },
       );
@@ -434,15 +458,18 @@ class CreateProductCubit extends Cubit<CreateProductState> {
           );
         }
         for (var i = 0; i < productTagController.getTags!.length; i++) {
-          var index = context
-                  .read<ProductDetailsCubit>()
-                  .productData
-                  ?.productTags
-                  ?.indexWhere(
-                    (element) =>
-                        element.name == productTagController.getTags![i],
-                  ) ??
-              -1;
+          int index = 0;
+          try {
+            index = context
+                    .read<ProductDetailsCubit>()
+                    .productData
+                    ?.productTags
+                    ?.indexWhere(
+                      (element) =>
+                          element.name == productTagController.getTags![i],
+                    ) ??
+                -1;
+          } catch (_) {}
           if (index >= 1) {
             continue;
           }
@@ -480,6 +507,11 @@ class CreateProductCubit extends Cubit<CreateProductState> {
         Fluttertoast.showToast(
           msg: createProductData.message ?? '',
         );
+        if (product == null) {
+          context.read<MyProductsCubit>().insertNewProduct(
+                productJson: createProductData.data?.toJson(),
+              );
+        }
         emit(CreateProductDone());
         Future.delayed(
           const Duration(
@@ -491,6 +523,11 @@ class CreateProductCubit extends Cubit<CreateProductState> {
                 context,
                 viewMode: ViewMode.basicInformation,
               );
+              var tags = productTagController.getTags!;
+              productTagController = TextfieldTagsController();
+              for (var i = 0; i < tags.length; i++) {
+                productTagController.addTag = tags[i];
+              }
             } else {
               context.read<HomeCubit>().deleteByIndex(
                     pageIndex,
@@ -874,6 +911,7 @@ class CreateProductCubit extends Cubit<CreateProductState> {
         );
       }
     }
+    emit(CategoryDropDownStateChanged());
   }
 
   Future<void> getProductData(
@@ -913,6 +951,13 @@ class CreateProductCubit extends Cubit<CreateProductState> {
         context,
       );
       return;
+    }
+    if (_productTypeId == 2) {
+      minimumQuantityController.text = productDetailsCubit
+              .productData?.productWholesale?.first.minimumQuantity ??
+          '';
+      wholesalePriceController.text =
+          productDetailsCubit.productData?.productWholesale?.first.price ?? '';
     }
     await filtersCubit.getManufacturer(
       context,
@@ -999,6 +1044,7 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     productTagController.dispose();
     priceController.dispose();
     minimumQuantityController.dispose();
+    wholesalePriceController.dispose();
 
     for (var i = 0; i < _branchQuantityFields.length; i++) {
       var field = _branchQuantityFields[i];

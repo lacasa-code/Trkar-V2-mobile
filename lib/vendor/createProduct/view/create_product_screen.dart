@@ -1,10 +1,12 @@
 import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:trkar/categories/model/sub_categories_model.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
 import 'package:trkar/core/components/custom_new_dialog.dart';
@@ -18,7 +20,8 @@ import 'package:trkar/vendor/createProduct/view/widgets/vendor_search_view.dart'
 import 'package:trkar/vendor/createProduct/viewModel/createProduct/create_product_cubit.dart';
 import 'package:trkar/vendor/createProduct/viewModel/productsType/products_type_cubit.dart';
 import 'package:trkar/vendor/createProduct/viewModel/storeBranches/store_branches_cubit.dart';
-import '../../../categories/model/categories_model.dart';
+import 'package:trkar/vendor/home/viewModel/productDetails/product_details_cubit.dart';
+import '../../../categories/model/categories_model.dart' as cat;
 import '../../../core/components/loader_widget.dart';
 import '../../../core/extensions/string.dart';
 import '../../../core/components/register_field.dart';
@@ -79,8 +82,7 @@ class _CreateProductViewState extends State<CreateProductView> {
   void initState() {
     subCategoriesCubit = context.read<SubCategoriesCubit>();
 
-    storeBranchesCubit = context.read<StoreBranchesCubit>()
-      ..getVendorStore(context);
+    storeBranchesCubit = context.read<StoreBranchesCubit>();
     createProductCubit = context.read<CreateProductCubit>()
       ..getAllCarModels(context);
     categoriesCubit = context.read<CategoriesCubit>();
@@ -92,7 +94,9 @@ class _CreateProductViewState extends State<CreateProductView> {
 
   @override
   Widget build(BuildContext context) {
-    // if(createProductCubit.viewMode==ViewMode.)
+    if (createProductCubit.viewMode == ViewMode.allInformation && kDebugMode) {
+      log('id is ${createProductCubit.categoryIds}');
+    }
     return BlocBuilder<CreateProductCubit, CreateProductState>(
       builder: (context, state) {
         return SafeArea(
@@ -168,7 +172,7 @@ class _CreateProductViewState extends State<CreateProductView> {
                                             (element) =>
                                                 element.id ==
                                                 createProductCubit.categoryId,
-                                            orElse: () => Category(),
+                                            orElse: () => cat.Categories(),
                                           )
                                           .name
                                       : null,
@@ -228,22 +232,30 @@ class _CreateProductViewState extends State<CreateProductView> {
                                           )!
                                           .isNotEmpty,
                                       child: CreateProductDropdownTile(
-                                        initialValue: subCategoriesCubit
-                                                .getSubCategoryByParentId(
-                                                  createProductCubit
-                                                      .categoryIds[index],
-                                                )!
-                                                .isNotEmpty
+                                        initialValue: index <=
+                                                    createProductCubit
+                                                            .initialCategoryIds
+                                                            .length -
+                                                        1 &&
+                                                subCategoriesCubit
+                                                    .getSubCategoryByParentId(
+                                                      createProductCubit
+                                                              .initialCategoryIds[
+                                                          index],
+                                                    )!
+                                                    .isNotEmpty
                                             ? (Helper.currentLanguage == 'ar'
                                                 ? subCategoriesCubit
-                                                    .getSpicificCategoryById(
+                                                    .getSpecificCategoryById(
                                                         createProductCubit
-                                                            .categoryIds[index])
+                                                                .initialCategoryIds[
+                                                            index])
                                                     .nameAr
                                                 : subCategoriesCubit
-                                                    .getSpicificCategoryById(
+                                                    .getSpecificCategoryById(
                                                         createProductCubit
-                                                            .categoryIds[index])
+                                                                .initialCategoryIds[
+                                                            index])
                                                     .nameEn)
                                             : null,
                                         key: ValueKey(createProductCubit
@@ -278,17 +290,12 @@ class _CreateProductViewState extends State<CreateProductView> {
                                             return;
                                           }
                                           var categoryId = subCategoriesCubit
-                                              .getSubCategoryByParentId(
-                                                createProductCubit
-                                                    .categoryIds[index],
-                                              )!
-                                              .firstWhere((element) =>
-                                                  (Helper.currentLanguage ==
-                                                          'ar' &&
-                                                      element.nameAr == v) ||
-                                                  (Helper.currentLanguage ==
-                                                          'en' &&
-                                                      element.nameEn == v))
+                                              .subCategories
+                                              .firstWhere(
+                                                  (element) =>
+                                                      element.nameAr == v ||
+                                                      element.nameEn == v,
+                                                  orElse: () => SubCategory())
                                               .id;
                                           var hasSubCategories =
                                               await subCategoriesCubit

@@ -30,9 +30,7 @@ class HomeCubit extends Cubit<HomeState> {
               pageIndex: _createProductView.length - 1,
             ),
           ),
-          BlocProvider(
-            create: (context) => StoreBranchesCubit(),
-          ),
+         
         ],
         child: CreateProductView(
           key: ValueKey(

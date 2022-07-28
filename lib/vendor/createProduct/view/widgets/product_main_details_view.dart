@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:trkar/core/components/delete_dialog.dart';
+import 'package:trkar/core/components/loader_widget.dart';
 import 'package:trkar/vendor/createProduct/viewModel/createProduct/create_product_cubit.dart';
+import 'package:trkar/vendor/createProduct/viewModel/deleteProduct/delete_product_cubit.dart';
 import 'package:trkar/vendor/home/viewModel/home/home_cubit.dart';
 
 import '../../../../core/components/register_field.dart';
@@ -26,10 +30,29 @@ class ProductMainDetailsView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             createProductCubit.product != null
-                ? Checkbox(
-                    visualDensity: VisualDensity(horizontal: 0, vertical: 0),
-                    value: false,
-                    onChanged: (v) {},
+                ? BlocBuilder<DeleteProductCubit, DeleteProductState>(
+                    builder: (context, state) {
+                      if (state is DeleteProductLoading) {
+                        return const LoaderWidget();
+                      }
+                      return IconButton(
+                        onPressed: () => showDialog(
+                          context: context,
+                          builder: (_) => DeleteDialog(
+                            onDeleted: () => context
+                                .read<DeleteProductCubit>()
+                                .deleteProduct(context),
+                          ),
+                        ),
+                        padding: EdgeInsets.zero,
+                        icon: Transform.scale(
+                          scale: 0.6,
+                          child: SvgPicture.asset(
+                            'assets/icons/svg/vendor/delete.svg',
+                          ),
+                        ),
+                      );
+                    },
                   )
                 : InkWell(
                     onTap: () => context.read<HomeCubit>().deleteByIndex(

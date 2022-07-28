@@ -351,5 +351,8 @@
     "compatible_models": "الموديلات المتوافقة",
     "no_items_to_display": "لا توجد عناصر لعرضها في الوقت الحالي! \n انقر فوق ",
     "to_add_new_products": "لإضافة منتجات جديدة",
-    "one_image_warning": "يجب ترك صورة واحدة على الأقل"
+    "one_image_warning": "يجب ترك صورة واحدة على الأقل",
+    "delete_confirm": "هل أنت متأكد أنك تريد حذف هذا العنصر ؟",
+    "wholesale_price": "سعر بالجملة",
+    "wholesale_price_required": "سعر بالجملة مطلوب"
 }

@@ -28,7 +28,7 @@ class SubCategoryCard extends StatelessWidget {
         child: Column(
           children: [
             Image.network(
-              categoryImage ?? '',
+              Helper.storageDomainUrl + (categoryImage ?? ''),
               fit: BoxFit.cover,
               width: ScreenUtil().setWidth(55),
               errorBuilder: (_, __, ___) => Image.asset(

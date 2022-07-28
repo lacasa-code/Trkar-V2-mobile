@@ -57,8 +57,8 @@ class ProductData {
   List<dynamic>? productAttributes;
   List<ProductImageElement>? productImages;
   List<ProductImageElement>? productTags;
-  List<dynamic>? productWholesale;
-  List<ProductComptailbleModel>? productCompatibleModels;
+  List<ProductWholesale>? productWholesale;
+  List<ProductCompatibleModel>? productCompatibleModels;
   List<ProductQuantity>? productQuantity;
   List<dynamic>? productReviews;
   List<dynamic>? productQuestion;
@@ -82,12 +82,13 @@ class ProductData {
                 .map((x) => ProductImageElement.fromJson(x))),
         productWholesale: json["product wholesale"] == null
             ? null
-            : List<dynamic>.from(json["product wholesale"].map((x) => x)),
+            : List<ProductWholesale>.from(json["product wholesale"]
+                .map((x) => ProductWholesale.fromJson(x))),
         productCompatibleModels: json["product comptailble models"] == null
             ? null
-            : List<ProductComptailbleModel>.from(
+            : List<ProductCompatibleModel>.from(
                 json["product comptailble models"]
-                    .map((x) => ProductComptailbleModel.fromJson(x))),
+                    .map((x) => ProductCompatibleModel.fromJson(x))),
         productQuantity: json["product quantity"] == null
             ? null
             : List<ProductQuantity>.from(json["product quantity"]
@@ -262,8 +263,8 @@ class Product {
       };
 }
 
-class ProductComptailbleModel {
-  ProductComptailbleModel({
+class ProductCompatibleModel {
+  ProductCompatibleModel({
     this.id,
     this.productId,
     this.carModelId,
@@ -289,8 +290,8 @@ class ProductComptailbleModel {
   String? status;
   String? carMadeId;
 
-  factory ProductComptailbleModel.fromJson(Map<String, dynamic> json) =>
-      ProductComptailbleModel(
+  factory ProductCompatibleModel.fromJson(Map<String, dynamic> json) =>
+      ProductCompatibleModel(
         id: json["id"],
         productId: json["product_id"],
         carModelId: json["car_model_id"],
@@ -411,6 +412,51 @@ class ProductQuantity {
         "quantity_reminder": quantityReminder,
         "product_id": productId,
         "branch_id": branchId,
+        "deleted_at": deletedAt,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+      };
+}
+
+class ProductWholesale {
+  ProductWholesale({
+    this.id,
+    this.price,
+    this.minimumQuantity,
+    this.productId,
+    this.deletedAt,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  int? id;
+  String? price;
+  String? minimumQuantity;
+  String? productId;
+  dynamic deletedAt;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+
+  factory ProductWholesale.fromJson(Map<String, dynamic> json) =>
+      ProductWholesale(
+        id: json["id"],
+        price: json["price"],
+        minimumQuantity: json["minimum_quntity"],
+        productId: json["product_id"],
+        deletedAt: json["deleted_at"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "price": price,
+        "minimum_quntity": minimumQuantity,
+        "product_id": productId,
         "deleted_at": deletedAt,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),

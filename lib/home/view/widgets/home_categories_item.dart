@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../core/helper/helper.dart';
+
 class HomeCategoryItem extends StatelessWidget {
   const HomeCategoryItem({
     Key? key,
@@ -35,7 +37,8 @@ class HomeCategoryItem extends StatelessWidget {
                 placeholder: const AssetImage(
                   'assets/icons/trkarLogoWhite.png',
                 ),
-                image: NetworkImage(imagePath ?? ''),
+                image:
+                    NetworkImage(Helper.storageDomainUrl + (imagePath ?? '')),
                 width: ScreenUtil().setWidth(100),
                 height: ScreenUtil().setHeight(100),
                 fit: BoxFit.cover,

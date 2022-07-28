@@ -21,7 +21,7 @@ class CategoriesModel {
   bool? status;
   String? message;
   int? code;
-  List<Category>? data;
+  List<Categories>? data;
 
   factory CategoriesModel.fromJson(Map<String, dynamic> json) =>
       CategoriesModel(
@@ -30,8 +30,8 @@ class CategoriesModel {
         code: json["code"],
         data: json["data"] == null
             ? null
-            : List<Category>.from(
-                json["data"].map((x) => Category.fromJson(x))),
+            : List<Categories>.from(
+                json["data"].map((x) => Categories.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -44,8 +44,8 @@ class CategoriesModel {
       };
 }
 
-class Category {
-  Category({
+class Categories {
+  Categories({
     this.id,
     this.name,
     this.slug,
@@ -61,7 +61,7 @@ class Category {
   String? parentId;
   dynamic status;
 
-  factory Category.fromJson(Map<String, dynamic> json) => Category(
+  factory Categories.fromJson(Map<String, dynamic> json) => Categories(
         id: json["id"],
         name: json["name"],
         slug: json["slug"],

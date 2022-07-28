@@ -63,8 +63,8 @@ class CategoriesCubit extends Cubit<CategoriesState> {
   }
 
   int? categoryId;
-  List<Category>? _category = [];
-  List<Category>? _allCategory = [];
+  List<Categories>? _category = [];
+  List<Categories>? _allCategory = [];
   final List<int> _categoriesScreenSubCatIds = [
     // motorcycle parts ..
     519,
@@ -114,36 +114,19 @@ class CategoriesCubit extends Cubit<CategoriesState> {
     517,
     516,
   ];
-  Category? get selectedCategory => _category?.firstWhere(
+  Categories? get selectedCategory => _category?.firstWhere(
         (element) => element.id == categoryId,
       );
-  List<Category> get category => [
+  List<Categories> get category => [
         ...?_category,
       ];
-  List<Category> get mainCategory => [
+  List<Categories> get mainCategory => [
         ...?_allCategory?.where((e) => e.parentId == '0').toList(),
       ];
 
-  onTabBarChanging({
-    required BuildContext context,
-    required int index,
-  }) {
-    log('hi From NewMessage');
-    if (mainCategory.isNotEmpty) {
-      context.read<SearchCubit>().getCarMades(
-            context,
-            categoryId: mainCategory[index].id,
-          );
-      emit(TabBarChanged());
-    }
-  }
 
-  double getTabBarSize(int index) => ScreenUtil().setHeight(81.15 *
-      ((subCategories(mainCategory[index].id ?? 0).length > 40
-          ? 40
-          : subCategories(mainCategory[index].id ?? 0).length)));
-  List<Category> get homeCategories {
-    List<Category> _myCat = [];
+  List<Categories> get homeCategories {
+    List<Categories> _myCat = [];
     for (var i = 0; i < _homeCategoriesIds.length; i++) {
       var index = _allCategory!
           .indexWhere((element) => element.id == _homeCategoriesIds[i]);
@@ -162,8 +145,8 @@ class CategoriesCubit extends Cubit<CategoriesState> {
     // ];
   }
 
-  List<Category> get categoriesScreenSubCat {
-    List<Category> _myCat = [];
+  List<Categories> get categoriesScreenSubCat {
+    List<Categories> _myCat = [];
     for (var i = 0; i < _categoriesScreenSubCatIds.length; i++) {
       var index = _allCategory!
           .indexWhere((element) => element.id == _categoriesScreenSubCatIds[i]);
@@ -182,13 +165,13 @@ class CategoriesCubit extends Cubit<CategoriesState> {
     // ];
   }
 
-  List<Category> get allCategory => [...?_allCategory];
+  List<Categories> get allCategory => [...?_allCategory];
 
-  List<Category> subCategories(int parentId) => _allCategory!
+  List<Categories> subCategories(int parentId) => _allCategory!
       .where((element) => element.parentId == parentId.toString())
       .toList();
 
-  List<Category> get subCategory => [
+  List<Categories> get subCategory => [
         ...?_category
             ?.where((e) => e.parentId == categoryId.toString())
             .toList(),

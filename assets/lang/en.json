@@ -353,5 +353,8 @@
     "engine_required": "Engine Required",
     "no_items_to_display": "There are no items to display at the moment! \n click at ",
     "to_add_new_products": "to add new products",
-    "one_image_warning": "At least one image must be left"
+    "one_image_warning": "At least one image must be left",
+    "delete_confirm": "Are you sure you want to delete this item ?",
+    "wholesale_price": "wholesale Price",
+    "wholesale_price_required": "wholesale Price Required"
 }

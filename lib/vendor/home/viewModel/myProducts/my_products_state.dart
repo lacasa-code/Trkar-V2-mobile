@@ -7,6 +7,8 @@ class MyProductsInitial extends MyProductsState {}
 
 class MyProductsLoading extends MyProductsState {}
 
+class MyProductsListStateChanged extends MyProductsState {}
+
 class MyProductsError extends MyProductsState {}
 
 class MyProductsDone extends MyProductsState {}

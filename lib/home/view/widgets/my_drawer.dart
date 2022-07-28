@@ -4,6 +4,8 @@ import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
 import 'package:trkar/home/view/widgets/sub_cat_card.dart';
 
+import '../../../core/helper/helper.dart';
+
 class MyDrawer extends StatefulWidget {
   const MyDrawer({Key? key}) : super(key: key);
 
@@ -41,7 +43,7 @@ class _MyDrawerState extends State<MyDrawer> {
                             leading: Transform.scale(
                               scale: 0.7,
                               child: Image.network(
-                                e.image ?? '',
+                                Helper.storageDomainUrl + (e.image ?? ''),
                                 errorBuilder: (_, __, ___) => Image.asset(
                                   'assets/icons/edit_note.png',
                                 ),

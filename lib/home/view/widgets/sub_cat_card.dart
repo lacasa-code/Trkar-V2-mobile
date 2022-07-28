@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
+import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/core/router/router.gr.dart';
 
 class SubCatCard extends StatefulWidget {
@@ -61,7 +62,7 @@ class _SubCatCardState extends State<SubCatCard> {
                       }
                     },
                     leading: Image.network(
-                      widget.image ?? '',
+                      Helper.storageDomainUrl + (widget.image ?? ''),
                       errorBuilder: (_, __, ___) => Image.asset(
                         'assets/icons/edit_note.png',
                       ),
@@ -78,7 +79,7 @@ class _SubCatCardState extends State<SubCatCard> {
                 leading: Transform.scale(
                   scale: 1,
                   child: Image.network(
-                    widget.image ?? '',
+                    Helper.storageDomainUrl + (widget.image ?? ''),
                     errorBuilder: (_, __, ___) => Image.asset(
                       'assets/icons/edit_note.png',
                     ),

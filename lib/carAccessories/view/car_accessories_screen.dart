@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,6 +62,7 @@ class _CarAccessoriesScreenState extends State<CarAccessoriesScreen>
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
+    log('catID=>  ${subCategoriesCubit.parentId}');
     return Scaffold(
       key: scaffoldKey,
       drawer: const MyDrawer(),

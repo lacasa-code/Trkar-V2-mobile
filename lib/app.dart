@@ -5,6 +5,7 @@ import 'package:trkar/addressesData/viewModel/countries/countries_cubit.dart';
 import 'package:trkar/auth/viewModel/logout/logout_cubit.dart';
 import 'package:trkar/auth/viewModel/validateToken/validate_token_cubit.dart';
 import 'package:trkar/categories/viewModel/categories/categories_cubit.dart';
+import 'package:trkar/categories/viewModel/mainCategoriesWithChildren/main_category_with_children_cubit.dart';
 import 'package:trkar/categories/viewModel/subCategories/sub_categories_cubit.dart';
 import 'package:trkar/core/helper/app_localization.dart';
 import 'package:trkar/core/router/router.gr.dart';
@@ -53,6 +54,9 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<SubCategoriesCubit>(
           create: (context) => SubCategoriesCubit(),
         ),
+        BlocProvider<MainCategoryWithChildrenCubit>(
+          create: (context) => MainCategoryWithChildrenCubit(),
+        ),
       ],
       child:
           /**      MaterialApp(
@@ -89,7 +93,7 @@ class _MyAppState extends State<MyApp> {
         routeInformationParser: _appRouter.defaultRouteParser(),
         debugShowCheckedModeBanner: false,
         title: 'Trkar',
-        
+
         theme: ThemeData(
           // This is the theme of your application.
           //

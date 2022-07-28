@@ -17,6 +17,8 @@ import 'package:flutter/material.dart';
 
 class Helper {
   static String get appBaseUrl => 'http://trkar-v2.lacasacode.com';
+  static String get storageDomainUrl =>
+      'http://trkar-v2.lacasacode.com/storage/';
   static String get currentLanguage => localization.currentLanguage.toString();
   static Alignment get appAlignment =>
       currentLanguage == 'ar' ? Alignment.centerRight : Alignment.centerLeft;
@@ -121,7 +123,8 @@ class Helper {
         )
         .toList();
   }
-   static Future<File> compressAndGetFile(
+
+  static Future<File> compressAndGetFile(
     File pickedFile,
   ) async {
     File file = pickedFile;

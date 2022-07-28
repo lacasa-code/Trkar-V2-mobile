@@ -10,12 +10,22 @@ import 'package:trkar/core/helper/helper.dart';
 import 'package:trkar/core/router/router.gr.dart';
 import 'package:trkar/core/themes/screen_utility.dart';
 import 'package:trkar/vendor/createProduct/viewModel/productsType/products_type_cubit.dart';
+import 'package:trkar/vendor/createProduct/viewModel/storeBranches/store_branches_cubit.dart';
 import 'package:trkar/vendor/home/viewModel/home/home_cubit.dart';
+import '../../../categories/viewModel/parentOfSubCategory/parent_of_sub_category_cubit.dart';
 import '../../../core/extensions/string.dart';
 import 'package:auto_route/auto_route.dart';
 
 import '../../../filterCars/viewModel/carMades/filter_cars_cubit.dart';
+import '../../createProduct/view/create_product_screen.dart';
+import '../../createProduct/viewModel/createProduct/create_product_cubit.dart';
+import '../../createProduct/viewModel/deleteProduct/delete_product_cubit.dart';
+import '../../createProduct/viewModel/getProductCompatibleModels/get_product_compatible_models_cubit.dart';
+import '../../createProduct/viewModel/getProductImages/get_product_images_cubit.dart';
+import '../../createProduct/viewModel/getProductQuantity/get_product_quantity_cubit.dart';
+import '../../createProduct/viewModel/getProductTags/get_product_tags_cubit.dart';
 import '../viewModel/myProducts/my_products_cubit.dart';
+import '../viewModel/productDetails/product_details_cubit.dart';
 import 'widgets/add_product_fab.dart';
 import 'widgets/empty_product_helper.dart';
 
@@ -37,6 +47,9 @@ class VendorHomeScreen extends StatefulWidget implements AutoRouteWrapper {
         ),
         BlocProvider(
           create: (context) => ProductsTypeCubit(),
+        ),
+        BlocProvider(
+          create: (context) => StoreBranchesCubit(),
         ),
       ],
       child: this,
@@ -64,6 +77,7 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
       ..getCarYears(context)
       ..getOriginCountries(context);
     homeCubit = context.read<HomeCubit>();
+    context.read<StoreBranchesCubit>().getVendorStore(context);
     super.initState();
   }
 
@@ -161,7 +175,10 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
                           ],
                         ),
                         if (productState is MyProductsLoading) ...[
-                          const LoaderWidget(),
+                          const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: LoaderWidget(),
+                          ),
                         ] else if (myProductsCubit.products.isEmpty) ...[
                           const EmptyProductHelper(),
                         ],
@@ -169,13 +186,60 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
                           children: [
                             Column(
                               children: List.generate(
-                                myProductsCubit.productsView.length,
-                                (index) {
-                                  var createProductView =
-                                      myProductsCubit.productsView[index];
-                                  return createProductView;
+                                myProductsCubit.products.length,
+                                (
+                                  index,
+                                ) {
+                                  var product = myProductsCubit.products[index];
+                                  return MultiBlocProvider(
+                                    key: ValueKey(
+                                      '${product.slug}-${product.id}',
+                                    ),
+                                    providers: [
+                                      BlocProvider(
+                                        create: (context) => CreateProductCubit(
+                                          pageIndex: index,
+                                          product: product,
+                                        ),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) =>
+                                            GetProductCompatibleModelsCubit(),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) =>
+                                            GetProductQuantityCubit(),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) =>
+                                            GetProductImagesCubit(),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) =>
+                                            GetProductTagsCubit(),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) =>
+                                            ProductDetailsCubit(),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) =>
+                                            ParentOfSubCategoryCubit(),
+                                      ),
+                                      BlocProvider(
+                                        create: (context) => DeleteProductCubit(
+                                          productId: product.id,
+                                        ),
+                                      ),
+                                    ],
+                                    child: CreateProductView(
+                                      key: ValueKey(
+                                        '${product.slug}',
+                                      ),
+                                    ),
+                                  );
                                 },
-                              ),
+                              ).toList(),
                             ),
                             const BoxHelper(
                               height: 160,

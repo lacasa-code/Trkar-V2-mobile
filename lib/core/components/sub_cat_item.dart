@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:trkar/core/helper/helper.dart';
 
 class SubCategoryItem extends StatelessWidget {
   const SubCategoryItem({
@@ -18,7 +19,7 @@ class SubCategoryItem extends StatelessWidget {
       child: Column(
         children: [
           Image.network(
-            imagePath ?? '',
+            Helper.storageDomainUrl + (imagePath ?? ''),
             height: ScreenUtil().setHeight(100),
             width: ScreenUtil().setWidth(100),
             errorBuilder: (_, __, ___) => Image.asset(
